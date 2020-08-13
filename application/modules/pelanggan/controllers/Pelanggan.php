@@ -10,7 +10,7 @@ class Pelanggan extends MX_Controller
   function index()
   {
     $data['title']      = 'Data Pelanggan Master POS';
-    $data['contents']   = 'pelanggan';
-    $this->load->view('templates/core', $data);
+    // $data['contents']   = 'pelanggan';
+    $this->load->view('pelanggan', $data);
   }
 }

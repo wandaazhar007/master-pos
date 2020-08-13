@@ -23,7 +23,6 @@
 
   <!-- Page container -->
   <div class="page-container">
-
     <!-- Page content -->
     <div class="page-content">
 
@@ -41,7 +40,10 @@
   <!-- Footer -->
   <?php $this->load->view('templates/footer') ?>
   <!-- /footer -->
-
+  <script>
+    var base_url = '<?php echo base_url() ?>';
+  </script>
+  <script type="text/javascript" src="<?php echo base_url() ?>assets/js/azApp.js"></script>
 </body>
 
 </html>
