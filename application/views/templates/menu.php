@@ -14,7 +14,7 @@
       </li>
 
       <li class="dropdown mega-menu mega-menu-wide">
-        <a href="<?php echo base_url('pelanggan') ?>">Pelanggan</a>
+        <a href="<?php echo base_url('customer') ?>">Pelanggan</a>
       </li>
 
       <li class="dropdown">

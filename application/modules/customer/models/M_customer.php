@@ -1,13 +1,13 @@
 <?php
-class M_supplier extends CI_Model
+class M_customer extends CI_Model
 {
 
   // DataTables list table
   function datatables_getAllTable()
   {
-    $column_order   = ['idsupplier', 'name', 'phone', 'address'];
-    $column_search  = ['idsupplier', 'name', 'phone', 'address'];
-    $def_order      = ['idsupplier' => 'desc'];
+    $column_order   = ['idcustomer', 'name', 'phone', 'address'];
+    $column_search  = ['idcustomer', 'name', 'phone', 'address'];
+    $def_order      = ['idcustomer' => 'desc'];
 
     $this->_sql();
     $this->query_datatables($column_order, $column_search, $def_order);
@@ -19,10 +19,11 @@ class M_supplier extends CI_Model
 
   function _sql()
   {
-    $this->db->select("idsupplier,name,address,phone,description,created", false);
-    $this->db->from("supplier");
-    $this->db->order_by("idsupplier", "desc");
-    // $this->db->query("SELECT * FROM `tb_user` ORDER BY `id` DESC");
+    $this->db->select("idcustomer,name,address,phone,email,gender,created", false);
+    $this->db->from("customer");
+    $this->db->order_by("idcustomer", "desc");
+    //   ->order_by('idcostumer', 'desc');
+    // return $this->db->query("SELECT * FROM `customer` ORDER BY `idcustomer` DESC")->result_array();
   }
 
   function query_datatables($column_order, $column_search, $def_order)
@@ -59,13 +60,14 @@ class M_supplier extends CI_Model
 
   function countFiltered()
   {
-    $column_order       = ['idsupplier', 'name', 'phone'];
+    $column_order       = ['idcustomer', 'name', 'email', 'phone'];
     $column_search      = [
-      'idsupplier',
+      'idcustomer',
       'name',
+      'email',
       'phone'
     ];
-    $def_order          = ['idsupplier' => 'desc'];
+    $def_order          = ['idcustomer' => 'desc'];
 
     $this->_sql();
     $this->query_datatables($column_order, $column_search, $def_order);
@@ -73,8 +75,8 @@ class M_supplier extends CI_Model
     return $query->num_rows();
   }
 
-  function getDetailById($idsupplier)
+  function getDetailById($idcustomer)
   {
-    return $this->db->query("SELECT * FROM `supplier` WHERE `supplier`.`idsupplier` = '$idsupplier'")->result_array();
+    return $this->db->query("SELECT * FROM `customer` WHERE `customer`.`idcustomer` = '$idcustomer'")->result_array();
   }
 }

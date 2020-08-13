@@ -1,13 +1,13 @@
 <?php
-class M_supplier extends CI_Model
+class M_data_produk extends CI_Model
 {
 
   // DataTables list table
-  function datatables_getAllTable()
+  function datatables_getAllTableDataProduk()
   {
-    $column_order   = ['idsupplier', 'name', 'phone', 'address'];
-    $column_search  = ['idsupplier', 'name', 'phone', 'address'];
-    $def_order      = ['idsupplier' => 'desc'];
+    $column_order   = ['idproduct', 'name', 'phone', 'address'];
+    $column_search  = ['idproduct', 'name', 'phone', 'address'];
+    $def_order      = ['idproduct' => 'desc'];
 
     $this->_sql();
     $this->query_datatables($column_order, $column_search, $def_order);
@@ -19,10 +19,9 @@ class M_supplier extends CI_Model
 
   function _sql()
   {
-    $this->db->select("idsupplier,name,address,phone,description,created", false);
-    $this->db->from("supplier");
-    $this->db->order_by("idsupplier", "desc");
-    // $this->db->query("SELECT * FROM `tb_user` ORDER BY `id` DESC");
+    $this->db->select("idproduct,name,barcode,persentase,description,price_selling,idproduct_unit,idproduct_category,price,created,createdBy", false);
+    $this->db->from("product");
+    $this->db->order_by("idproduct", "desc");
   }
 
   function query_datatables($column_order, $column_search, $def_order)
@@ -59,13 +58,14 @@ class M_supplier extends CI_Model
 
   function countFiltered()
   {
-    $column_order       = ['idsupplier', 'name', 'phone'];
+    $column_order       = ['idproduct', 'name', 'idproduct_unit', 'idproduct_category'];
     $column_search      = [
-      'idsupplier',
+      'idproduct',
       'name',
-      'phone'
+      'idproduct_unit',
+      'idproduct_kategori'
     ];
-    $def_order          = ['idsupplier' => 'desc'];
+    $def_order          = ['idproduct' => 'desc'];
 
     $this->_sql();
     $this->query_datatables($column_order, $column_search, $def_order);
@@ -73,8 +73,8 @@ class M_supplier extends CI_Model
     return $query->num_rows();
   }
 
-  function getDetailById($idsupplier)
+  function getDetailById($idproduct)
   {
-    return $this->db->query("SELECT * FROM `supplier` WHERE `supplier`.`idsupplier` = '$idsupplier'")->result_array();
+    return $this->db->query("SELECT * FROM `product` WHERE `product`.`idproduct` = '$idproduct'")->result_array();
   }
 }

@@ -15,15 +15,14 @@
   <?php echo $this->session->flashdata('message') ?>
   <div class="text-danger" style="display: inline;">
     <?php echo form_error('name') ?>
-    <?php echo form_error('idproduct_category') ?>
-    <?php echo form_error('idproduct_unit') ?>
-    <?php echo form_error('price') ?>
-    <?php echo form_error('persentase') ?>
-    <?php echo form_error('price_selling') ?>
+    <?php echo form_error('phone') ?>
+    <?php echo form_error('address') ?>
+    <?php echo form_error('gender') ?>
+    <?php echo form_error('email') ?>
   </div>
   <div class="panel panel-flat">
     <div class="panel-heading" style="text-decoration: none;">
-      <button class="tombol-tambah" data-toggle="modal" data-target="#modal_form_data_produk"><i class="fa fa-plus"></i> &nbsp;Tambah Produk</button>
+      <button class="tombol-tambah" data-toggle="modal" data-target="#modal_form_pelanggan"><i class="fa fa-plus"></i> &nbsp;Tambah Pelanggan</button>
       <div class="heading-elements">
         <ul class="icons-list">
           <li><a data-action="collapse"></a></li>
@@ -32,17 +31,12 @@
         </ul>
       </div>
     </div>
-    <table class="table datatable-responsive" id="tableDataProduk">
+    <table class="table datatable-responsive" id="tableCustomer">
       <thead>
         <tr>
           <th>No</th>
-          <th>Kode Barcode</th>
-          <th>Nama Produk</th>
-          <th>Harga Asli</th>
-          <th>Persentase</th>
-          <th>Harga Jual</th>
-          <th>Kategori</th>
-          <th>Satuan</th>
+          <th>Nama Pelanggan</th>
+          <th>No Handphone</th>
           <th>Alamat</th>
           <th class="text-center">Aksi</th>
         </tr>
@@ -53,74 +47,52 @@
 
 
 <!-- Note: Modal Form Input Customer | Author: wandaazhar@gmail.com -->
-<div id="modal_form_data_produk" class="modal fade">
+<div id="modal_form_pelanggan" class="modal fade">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h5 class="modal-title">Input Data Produk</h5>
+        <h5 class="modal-title">Input Data Pelanggan</h5>
       </div>
       <hr>
 
-      <form action="<?php echo base_url('produk/save') ?>" method="post">
+      <form action="<?php echo base_url('customer/save') ?>" method="post">
         <div class="modal-body">
           <div class="form-group">
             <div class="row">
               <div class="col-sm-6" style="margin-bottom: 10px;">
-                <label>Nama Produk</label>
-                <input type="text" name="name" placeholder="Masukan Nama Produk" class="form-control" required>
+                <label>Nama Pelanggan</label>
+                <input type="text" name="name" placeholder="Masukan Nama Pelanggan" class="form-control" required>
                 <small class="text-danger"><?php echo form_error('name') ?></small>
               </div>
 
-              <div class="col-sm-3" style="margin-bottom: 10px;">
-                <label>Kode Barcode</label>
-                <input type="text" name="barcode" class="form-control" required readonly>
-                <small class="text-danger"><?php echo form_error('barcode') ?></small>
-              </div>
-
-              <div class="col-sm-3">
-                <label>Persentase</label>
-                <input type="number" name="barcode" class="form-control" placeholder="0%" required>
-                <small class="text-danger"><?php echo form_error('barcode') ?></small>
-              </div>
-
-
               <div class="col-sm-6" style="margin-bottom: 10px;">
-                <label>Harga Asli</label>
-                <input type="text" name="price" placeholder="Rp. ..." class="form-control" required>
-                <small class="text-danger"><?php echo form_error('price') ?></small>
+                <label>No Handphone</label>
+                <input type="text" name="phone" placeholder="Masukan No Handphone Pelanggan" class="form-control" required>
+                <small class="text-danger"><?php echo form_error('phone') ?></small>
               </div>
 
               <div class="col-sm-6" style="margin-bottom: 10px;">
-                <label>Harga Jual</label>
-                <input type="text" name="price" placeholder="Rp. ..." class="form-control" required readonly>
-                <small class="text-danger"><?php echo form_error('price_selling') ?></small>
+                <label>Alamat Email</label>
+                <input type="text" name="email" placeholder="Masukan Email Pelanggan" class="form-control" required>
+                <small class="text-danger"><?php echo form_error('email') ?></small>
               </div>
 
               <div class="col-sm-6" style="margin-bottom: 10px;">
-                <label>Kategori Produk</label>
-                <select data-placeholder="Pilih Kategori Produk..." class="select select2-hidden-accessible" tabindex="-1" aria-hidden="true" name="gender">
+                <label>Jenis Kelamin</label>
+                <select data-placeholder="Pilih jenis kelamin..." class="select select2-hidden-accessible" tabindex="-1" aria-hidden="true" name="gender">
                   <option></option>
-                  <optgroup label="Pilih Kategori Produk">
+                  <optgroup label="Pilih jenis kelamin">
                     <option value="laki-laki">Laki-Laki</option>
-                  </optgroup>
-                </select>
-              </div>
-
-              <div class="col-sm-6" style="margin-bottom: 10px;">
-                <label>Kategori Produk</label>
-                <select data-placeholder="Pilih Kategori Produk..." class="select select2-hidden-accessible" tabindex="-1" aria-hidden="true" name="gender">
-                  <option></option>
-                  <optgroup label="Pilih Kategori Produk">
-                    <option value="laki-laki">Laki-Laki</option>
+                    <option value="perempuan">Perempuan</option>
                   </optgroup>
                 </select>
               </div>
 
               <div class="col-sm-12">
-                <label>Keterangan</label>
-                <textarea name="address" class="form-control" id="" cols="5" rows="5" placeholder="Masukan keterangan produk"></textarea>
-                <small class="text-danger"><?php echo form_error('description') ?></small>
+                <label>Alamat</label>
+                <textarea name="address" class="form-control" id="" cols="5" rows="5" placeholder="Masukan alamat pelanggan"></textarea>
+                <small class="text-danger"><?php echo form_error('address') ?></small>
               </div>
             </div>
           </div>
@@ -141,17 +113,17 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h5 class="modal-title">Edit Data Produk</h5>
+        <h5 class="modal-title">Edit Pelanggan</h5>
       </div>
       <div class="modal-body">
-        <div id="data_produk_result"></div>
+        <div id="customer_result"></div>
       </div>
     </div>
   </div>
 </div>
 
 <!-- Note: Modal Form Edit Customer | Author: wandaazhar@gmail.com -->
-<div class="modal fade" id="modal_delete_data_produk">
+<div class="modal fade" id="modal_delete_customer">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -159,7 +131,7 @@
         <!-- <h5 class="modal-title">Apakah Anda yakin ?</h5> -->
       </div>
       <div class="modal-body">
-        <div id="delete_data_produk_result"></div>
+        <div id="delete_customer_result"></div>
       </div>
     </div>
   </div>
