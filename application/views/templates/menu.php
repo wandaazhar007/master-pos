@@ -33,8 +33,8 @@
           <i class="icon-make-group position-left"></i>Stok <span class="caret"></span>
         </a>
         <ul class="dropdown-menu width-250">
-          <li><a href="<?php echo base_url('stok/stokMasuk') ?>"><i class="icon-align-center-horizontal"></i>Stok Masuk</a></li>
-          <li><a href="<?php echo base_url('stok/stokKeluar') ?>"><i class="icon-align-center-horizontal"></i>Stok Keluar</a></li>
+          <li><a href="<?php echo base_url('product_stock') ?>"><i class="icon-align-center-horizontal"></i>Stok Masuk</a></li>
+          <li><a href="<?php echo base_url('product_stock/out') ?>"><i class="icon-align-center-horizontal"></i>Stok Keluar</a></li>
         </ul>
       </li>
 

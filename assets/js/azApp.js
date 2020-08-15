@@ -212,6 +212,47 @@ $(document).ready(function () {
 	});
 });
 
+
+//~ Datatable serverside Stok Produk/ product_unit ~//
+var save_method; //for save method string
+var oTable;
+$(document).ready(function () {
+	oTable = $('#tableProductStockMasuk').DataTable({
+		"processing": true,
+		"serverSide": true,
+		//"lengthChange": false,
+		//"displayLength" : 20,
+		"order": [],
+		"autoWidth": false,
+		"ajax": {
+			"url": base_url + "/product_stock/getAllTable/",
+			"type": "POST"
+		},
+		"bDestroy": true,
+		"aLengthMenu": [
+			[10, 50, 100],
+			[10, 50, 100]
+		], // Combobox Limit
+		"columnDefs": [{
+				"targets": [0],
+				"searchable": true,
+				"sortable": true
+			},
+			{
+				"targets": [1],
+				"searchable": true,
+				"sortable": true
+			},
+			{
+				"targets": [2],
+				"searchable": true,
+				"sortable": true
+			}
+		],
+
+	});
+});
+
 /* Note: Function untuk modal update supplier | Author: wandaazhar@gmail.com */
 $(document).ready(function () {
 	$('#tableSupplier').on('click', '.view_supplier', function () {
@@ -285,6 +326,25 @@ $(document).ready(function () {
 				console.log('yes');
 				$('#product_unit_result').html(data);
 				$('#modal_product_unit').modal('show');
+			}
+		}); //end ajax
+	});
+});
+
+/* Note: Function untuk modal Stock Produk | Author: wandaazhar@gmail.com */
+$(document).ready(function () {
+	$('#tableProductStockMasuk').on('click', '.view_product_stock', function () {
+		var idproduct_stock = $(this).attr('id');
+		$.ajax({
+			url: base_url + "product_stock/showFormUpdate",
+			method: "POST",
+			data: {
+				idproduct_stock: idproduct_stock
+			},
+			success: function (data) {
+				console.log('yes');
+				$('#product_stock_result').html(data);
+				$('#modal_product_stock').modal('show');
 			}
 		}); //end ajax
 	});
@@ -439,6 +499,26 @@ $(document).ready(function () {
 				console.log('yes');
 				$('#delete_product_unit_result').html(data);
 				$('#modal_delete_product_unit').modal('show');
+			}
+		}); //end ajax
+	});
+});
+
+
+// Note: Function untuk modal delete Stok Masuk produk | Author: wandaazhar@gmail.com
+$(document).ready(function () {
+	$('#tableProductStockMasuk').on('click', '.view_hapus', function () {
+		var idproduct_stock = $(this).attr('id');
+		$.ajax({
+			url: base_url + "product_stock/showModalDelete",
+			method: "POST",
+			data: {
+				idproduct_stock: idproduct_stock
+			},
+			success: function (data) {
+				console.log('yes');
+				$('#delete_product_stock_result').html(data);
+				$('#modal_delete_product_stock').modal('show');
 			}
 		}); //end ajax
 	});

@@ -1,18 +1,20 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
 
-class Product_unit extends MX_Controller
+class Product_stock extends MX_Controller
 {
   function __construct()
   {
     parent::__construct();
     $this->load->library('datatables');
-    $this->load->model('m_product_unit', 'model');
+    $this->load->model('m_product_stock', 'model');
   }
 
   function index()
   {
-    $data['title']      = 'Satuan Produk Master POS';
-    $data['contents']   = 'product_unit';
+    $data['title']      = 'Stok Produk Master POS';
+    $data['contents']   = 'product_stock';
+    $data['getProduct'] = $this->model->getProduct();
+    $data['getSupplier'] = $this->model->getSupplier();
     $this->load->view('templates/core', $data);
   }
 
@@ -25,17 +27,26 @@ class Product_unit extends MX_Controller
     foreach ($list as $value) {
       $queryAction = '
         <a href="#">
-          <button class="tombol-hapus view_hapus pull-right" id="' . $value['idproduct_unit'] . '"><i class="fa fa-trash"></i>&nbsp;hapus</button>
+          <button class="tombol-hapus view_hapus pull-right" id="' . $value['idproduct_stock'] . '"><i class="fa fa-trash"></i>&nbsp;hapus</button>
         </a>
         <a href="#">
-          <button style="margin-right: 5px;" class="tombol-edit view_product_unit pull-right" id="' . $value['idproduct_unit'] . '"><i class="fa fa-pencil"></i>&nbsp;edit</button>
+          <button style="margin-right: 5px;" class="tombol-edit view_product_stock pull-right" id="' . $value['idproduct_stock'] . '"><i class="fa fa-pencil"></i>&nbsp;edit</button>
         </a>
         ';
-      // <button class="tombol-hapus view_delete_product_unit" id="tombol-delete-product_unit"><i class="fa fa-trash"></i>&nbsp;hapus</button>
+      $a = strtotime($value['stock_date']);
+      $tgl = date('d F Y', $a);
+      // var_dump($a);
+      // die;
+      // <button class="tombol-hapus view_delete_product_stock" id="tombol-delete-product_stock"><i class="fa fa-trash"></i>&nbsp;hapus</button>
 
       $row = array();
       $row[] = $no++;
+      $row[] = $tgl;
+      $row[] = $value['barcode'];
       $row[] = $value['name'];
+      $row[] = $value['detail'];
+      $row[] = $value['name_supplier'];
+      $row[] = $value['total'];
       $row[] = $queryAction;
       $data[] = $row;
     }
@@ -52,9 +63,8 @@ class Product_unit extends MX_Controller
   {
     $this->load->library('form_validation');
     $name    = htmlspecialchars($this->input->post('name', true));
-    $this->form_validation->set_rules('name', 'Nama Pelanggan', 'required|is_unique[product_unit.name]', [
-      'required'  => 'Satuan Produk belum diisi!',
-      'is_unique'  => 'Satuan Produk ' . $name . ' sudah ada di database'
+    $this->form_validation->set_rules('name', 'Nama Produk', 'required', [
+      'required'  => 'Nama pelanggan belum diisi!'
     ]);
 
     if ($this->form_validation->run() == true) {
@@ -66,34 +76,37 @@ class Product_unit extends MX_Controller
         'created'   => date('Y-m-d h:i:s')
       ];
 
-      $this->db->insert('product_unit', $data);
+      $this->db->insert('product_stock', $data);
       $this->session->set_flashdata('message', '<div class="alert alert-success alert-styled-left alert-arrow-left alert-bordered">
       <button type="button" class="close" data-dismiss="alert"><span>×</span><span class="sr-only">Close</span></button>
-        <span class="text-semibold">Yeay!</span> Satuan produk ' . $name . ' berhasil ditambahkan.
+        <span class="text-semibold">Yeay!</span> Kategori ' . $name . ' berhasil ditambahkan.
       </div>');
-      redirect('product_unit');
+      redirect('product_stock');
     } else {
-      $data['title']      = 'Satuan Produk Master POS';
-      $data['contents']   = 'product_unit';
+      $data['title']      = 'Kategori Produk Master POS';
+      $data['contents']   = 'product_stock';
+      $data['getProduct'] = $this->model->getProduct();
+      $data['getSupplier'] = $this->model->getSupplier();
+
       $this->load->view('templates/core', $data);
     }
   }
 
   function showFormUpdate()
   {
-    $idproduct_unit = $this->input->post('idproduct_unit');
-    if (isset($idproduct_unit) and !empty($idproduct_unit)) {
-      $query = $this->model->getDetailById($idproduct_unit);
+    $idproduct_stock = $this->input->post('idproduct_stock');
+    if (isset($idproduct_stock) and !empty($idproduct_stock)) {
+      $query = $this->model->getDetailById($idproduct_stock);
       $output = '';
       foreach ($query as $i) :
         $output .= '
       
-    <form action="' . base_url('product_unit/update') . '" method="post">
+    <form action="' . base_url('product_stock/update') . '" method="post">
       <div class="form-group">
         <div class="row">
           <div class="col-sm-12">
-            <label>Nama Satuan Produk</label>
-            <input type="hidden" name="idproduct_unit" value="' . $i['idproduct_unit'] . '" class="form-control" required>
+            <label>Nama Kategori Produk</label>
+            <input type="hidden" name="idproduct_stock" value="' . $i['idproduct_stock'] . '" class="form-control" required>
             <input type="text" name="name" value="' . $i['name'] . '" class="form-control" required>
           </div>
           <div class="col-sm-12" style="margin-top: 10px;">
@@ -114,7 +127,7 @@ class Product_unit extends MX_Controller
 
   function update()
   {
-    $idproduct_unit = htmlspecialchars($this->input->post('idproduct_unit', true));
+    $idproduct_stock = htmlspecialchars($this->input->post('idproduct_stock', true));
     $name       = htmlspecialchars($this->input->post('name', true));
 
     $data = [
@@ -123,30 +136,30 @@ class Product_unit extends MX_Controller
       'created'   => date('Y-m-d h:i:s')
     ];
 
-    $this->db->where('idproduct_unit', $idproduct_unit);
-    $this->db->update('product_unit', $data);
+    $this->db->where('idproduct_stock', $idproduct_stock);
+    $this->db->update('product_stock', $data);
     $this->session->set_flashdata('message', '<div class="alert alert-success alert-styled-left alert-arrow-left alert-bordered">
     <button type="button" class="close" data-dismiss="alert"><span>×</span><span class="sr-only">Close</span></button>
-    <span class="text-semibold">Yeay!</span> Satuan Produk ' . $name . ' berhasil diupdate.
+    <span class="text-semibold">Yeay!</span> Kategori ' . $name . ' berhasil diupdate.
   </div>');
-    redirect('product_unit');
+    redirect('product_stock');
   }
 
   function showModalDelete()
   {
-    $idproduct_unit = $this->input->post('idproduct_unit');
-    if (isset($idproduct_unit) and !empty($idproduct_unit)) {
-      $query = $this->model->getDetailById($idproduct_unit);
+    $idproduct_stock = $this->input->post('idproduct_stock');
+    if (isset($idproduct_stock) and !empty($idproduct_stock)) {
+      $query = $this->model->getDetailById($idproduct_stock);
       $output = '';
       foreach ($query as $i) :
         $output .= '
           <div class="row">
           <div class="col-sm-12 text-center">
-            <p>Apakah Anda yakin akan menghapus Satuan Produk</p>
+            <p>Apakah Anda yakin akan menghapus kategori</p>
             <h6 class="text-bold" style="margin-top: -10px;">' . $i['name'] . '</h6>
           </div>
             <div class="col-sm-12 text-center">
-              <a href="' . base_url('product_unit/delete/') . $i['idproduct_unit'] . '">
+              <a href="' . base_url('product_stock/delete/') . $i['idproduct_stock'] . '">
                 <button type="submit" class="tombol-tambah"><i class="fa fa-check"></i>&nbsp;Ya, Hapus</button>
                 <button type="button" class="tombol-modal-hapus" data-dismiss="modal"><i class="fa fa-close"></i>&nbsp;Tidak!</button>
               </a>
@@ -161,24 +174,24 @@ class Product_unit extends MX_Controller
     }
   }
 
-  function delete($idproduct_unit)
+  function delete($idproduct_stock)
   {
-    $query = $this->db->get_where('product', ['idproduct_unit' => $idproduct_unit])->row_array();
-    $queryproduct_unit = $this->db->get_where('product_unit', ['idproduct_unit' => $idproduct_unit])->row_array();
-    if ($query['idproduct_unit'] == $idproduct_unit) {
+    $query = $this->db->get_where('product', ['idproduct' => $idproduct_stock])->row_array();
+    $queryProduct_stock = $this->db->get_where('product_stock', ['idproduct_stock' => $idproduct_stock])->row_array();
+    if ($query['idproduct_stock'] == $idproduct_stock) {
       $this->session->set_flashdata('message', '<div class="alert alert-danger alert-styled-left alert-arrow-left alert-bordered">
       <button type="button" class="close" data-dismiss="alert"><span>×</span><span class="sr-only">Close</span></button>
-      <span class="text-semibold">Ups!</span> Satuan Produk <b><i>' . $queryproduct_unit['name'] . '</i></b> sudah pernah digunakan!.
+      <span class="text-semibold">Ups!</span> produk <b><i>' . $queryProduct_stock['name'] . '</i></b> sudah pernah digunakan!.
     </div>');
-      redirect('product_unit');
+      redirect('product_stock');
     } else {
-      $this->db->where('idproduct_unit', $idproduct_unit);
-      $this->db->delete('product_unit');
+      $this->db->where('idproduct_stock', $idproduct_stock);
+      $this->db->delete('product_stock');
       $this->session->set_flashdata('message', '<div class="alert alert-success alert-styled-left alert-arrow-left alert-bordered">
       <button type="button" class="close" data-dismiss="alert"><span>×</span><span class="sr-only">Close</span></button>
-      <span class="text-semibold">Yeay!</span> Satuan Produk ' . $queryproduct_unit['name'] . 'berhasil dihapus!.
+      <span class="text-semibold">Yeay!</span> riwayat stok produk berhasil dihapus!.
     </div>');
-      redirect('product_unit');
+      redirect('product_stock');
     }
   }
 }

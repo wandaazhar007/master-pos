@@ -54,7 +54,7 @@
         <div class="modal-body">
           <div class="form-group">
             <div class="row">
-              <div class="col-sm-6" style="margin-bottom: 10px;">
+              <div class="col-sm-12" style="margin-bottom: 10px;">
                 <label>Nama Kategori</label>
                 <input type="text" name="name" placeholder="Masukan Nama Pelanggan" class="form-control" required>
                 <small class="text-danger"><?php echo form_error('name') ?></small>

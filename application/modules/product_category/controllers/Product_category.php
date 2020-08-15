@@ -91,8 +91,8 @@ class Product_category extends MX_Controller
     <form action="' . base_url('product_category/update') . '" method="post">
       <div class="form-group">
         <div class="row">
-          <div class="col-sm-6">
-            <label>Nama product_category</label>
+          <div class="col-sm-12">
+            <label>Nama Kategori Produk</label>
             <input type="hidden" name="idproduct_category" value="' . $i['idproduct_category'] . '" class="form-control" required>
             <input type="text" name="name" value="' . $i['name'] . '" class="form-control" required>
           </div>
