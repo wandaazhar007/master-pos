@@ -5,8 +5,8 @@ class M_data_produk extends CI_Model
   // DataTables list table
   function datatables_getAllTableDataProduk()
   {
-    $column_order   = ['idproduct', 'name', 'phone', 'address'];
-    $column_search  = ['idproduct', 'name', 'phone', 'address'];
+    $column_order   = ['idproduct', 'name', 'price', 'barcode'];
+    $column_search  = ['idproduct', 'name', 'price', 'barcode'];
     $def_order      = ['idproduct' => 'desc'];
 
     $this->_sql();
@@ -58,12 +58,24 @@ class M_data_produk extends CI_Model
 
   function countFiltered()
   {
-    $column_order       = ['idproduct', 'name', 'idproduct_unit', 'idproduct_category'];
-    $column_search      = [
+    $column_order = [
       'idproduct',
       'name',
-      'idproduct_unit',
-      'idproduct_kategori'
+      'price',
+      'barcode',
+      'persentase',
+      'price_selling',
+      'description'
+    ];
+
+    $column_search = [
+      'idproduct',
+      'name',
+      'price',
+      'barcode',
+      'persentase',
+      'price_selling',
+      'description'
     ];
     $def_order          = ['idproduct' => 'desc'];
 
@@ -76,5 +88,10 @@ class M_data_produk extends CI_Model
   function getDetailById($idproduct)
   {
     return $this->db->query("SELECT * FROM `product` WHERE `product`.`idproduct` = '$idproduct'")->result_array();
+  }
+
+  function getBarcode()
+  {
+    return $this->db->query("SELECT `idproduct` FROM `product`")->num_rows();
   }
 }

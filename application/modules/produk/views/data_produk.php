@@ -43,7 +43,7 @@
           <th>Harga Jual</th>
           <th>Kategori</th>
           <th>Satuan</th>
-          <th>Alamat</th>
+          <th>Deskripsi</th>
           <th class="text-center">Aksi</th>
         </tr>
       </thead>
@@ -74,7 +74,7 @@
 
               <div class="col-sm-3" style="margin-bottom: 10px;">
                 <label>Kode Barcode</label>
-                <input type="text" name="barcode" class="form-control" required readonly>
+                <input type="text" name="barcode" class="form-control" value="<?php echo 'AZ-' . $getBarcode ?>" required readonly>
                 <small class="text-danger"><?php echo form_error('barcode') ?></small>
               </div>
 

@@ -157,7 +157,7 @@ class Wandalibs
   {
     $CI = &get_instance();
     $email  = $CI->session->userdata('email');
-    $query  = $CI->db->get_where('tb_user', ['email' => $email])->row_array();
+    $query  = $CI->db->get_where('tb_user_admin', ['email' => $email])->row_array();
     $dataSession = [
       'id'        => $query['id'],
       'email'     => $query['email'],
@@ -174,7 +174,7 @@ class Wandalibs
     $CI->session->unset_userdata('active');
     $CI->session->unset_userdata('foto');
     $CI->session->unset_userdata('date_created');
-    // $CI->session->sess_destroy($dataSession);
+    $CI->session->sess_destroy($dataSession);
     $CI->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show">
             <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
               <i class="nc-icon nc-simple-remove"></i>

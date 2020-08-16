@@ -5,6 +5,7 @@ class Produk extends MX_Controller
   function __construct()
   {
     parent::__construct();
+    $this->wandalibs->_checkLoginSession();
     $this->load->library('datatables');
     $this->load->model('m_data_produk', 'model');
   }
@@ -13,6 +14,7 @@ class Produk extends MX_Controller
   {
     $data['title']      = 'Data Produk Master POS';
     $data['contents']   = 'data_produk';
+    $data['getBarcode'] = $this->model->getBarcode();
     $this->load->view('templates/core', $data);
   }
 
@@ -32,6 +34,10 @@ class Produk extends MX_Controller
         </a>
         ';
       // <button class="tombol-hapus view_delete_customer" id="tombol-delete-customer"><i class="fa fa-trash"></i>&nbsp;hapus</button>
+      $queryCategory = $this->db->get_where('product_category', ['idproduct_category' => $value['idproduct_category']])->row_array();
+      $queryUnit = $this->db->get_where('product_unit', ['idproduct_unit' => $value['idproduct_unit']])->row_array();
+      $category = $queryCategory['name'];
+      $unit = $queryUnit['name'];
 
 
       $row = array();
@@ -39,10 +45,10 @@ class Produk extends MX_Controller
       $row[] = $value['barcode'];
       $row[] = $value['name'];
       $row[] = $value['price'];
-      $row[] = $value['persentase'];
+      $row[] = $value['persentase'] . '%';
       $row[] = $value['price_selling'];
-      $row[] = $value['idproduct_category'];
-      $row[] = $value['idproduct_unit'];
+      $row[] = $category;
+      $row[] = $unit;
       $row[] = $value['description'];
       $row[] = $queryAction;
       $data[] = $row;

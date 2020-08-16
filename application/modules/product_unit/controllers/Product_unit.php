@@ -5,6 +5,7 @@ class Product_unit extends MX_Controller
   function __construct()
   {
     parent::__construct();
+    $this->wandalibs->_checkLoginSession();
     $this->load->library('datatables');
     $this->load->model('m_product_unit', 'model');
   }

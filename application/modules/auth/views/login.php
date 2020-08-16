@@ -43,25 +43,28 @@
       <div class="content-wrapper">
 
         <!-- Simple login form -->
-        <form action="#" method="post">
+        <form action="<?php echo base_url('auth/login') ?>" method="post">
           <div class="panel panel-body login-form">
             <div class="text-center">
               <div class="icon-object border-slate-300 text-slate-300"><i class="icon-reading"></i></div>
               <h5 class="content-group">Login to your account <small class="display-block">Enter your credentials below</small></h5>
+              <?php echo $this->session->flashdata('message') ?>
             </div>
 
             <div class="form-group has-feedback has-feedback-left">
-              <input type="text" class="form-control" placeholder="Username">
+              <input type="text" class="form-control" placeholder="Email" name="email" autocomplete="off">
               <div class="form-control-feedback">
                 <i class="icon-user text-muted"></i>
               </div>
+              <small class="text-danger text-italic"><?php echo form_error('email') ?></small>
             </div>
 
             <div class="form-group has-feedback has-feedback-left">
-              <input type="password" class="form-control" placeholder="Password">
+              <input type="password" class="form-control" placeholder="Password" name="password" autocomplete="off">
               <div class="form-control-feedback">
                 <i class="icon-lock2 text-muted"></i>
               </div>
+              <small class="text-danger text-italic"><?php echo form_error('password') ?></small>
             </div>
 
             <div class="form-group">
