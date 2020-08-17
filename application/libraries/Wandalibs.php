@@ -97,6 +97,7 @@ class Wandalibs
             <i class="icon fa fa-check"></i><b>Berhasil</b> Login! &nbsp;
             Selamat Datang <b>' . $nama . '</b>
             </div>');
+      // echo 'test';
       redirect('dashboard');
     } elseif ($query['email'] != $email) {
       $CI->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible">

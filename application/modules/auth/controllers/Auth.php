@@ -6,8 +6,8 @@ class Auth extends MX_Controller
   {
     parent::__construct();
 
-    // $this->wandalibs->redirectLoginExist();
-    // $this->wandalibs->_checkLoginSession();
+    $this->wandalibs->redirectLoginExist();
+    // $this->wandalibs->_checkLosginSession();
   }
 
   function index()

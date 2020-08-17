@@ -11,19 +11,19 @@
   <link href="<?php echo base_url() ?>assets/css/core.css" rel="stylesheet" type="text/css">
   <link href="<?php echo base_url() ?>assets/css/components.css" rel="stylesheet" type="text/css">
   <link href="<?php echo base_url() ?>assets/css/colors.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="<?php echo base_url() ?>assets/css/az_app.css">
   <!-- /global stylesheets -->
 
   <!-- Core JS files -->
+  <script type="text/javascript" src="<?php echo base_url() ?>assets/js/core/libraries/jquery-3.5.1.js"></script>
   <script type="text/javascript" src="<?php echo base_url() ?>assets/js/plugins/loaders/pace.min.js"></script>
   <script type="text/javascript" src="<?php echo base_url() ?>assets/js/core/libraries/jquery.min.js"></script>
-  <script type="text/javascript" src="<?php echo base_url() ?>assets/js/core/libraries/jquery-3.5.1.js"></script>
   <!-- <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script> -->
   <script type="text/javascript" src="<?php echo base_url() ?>assets/js/core/libraries/bootstrap.min.js"></script>
   <script type="text/javascript" src="<?php echo base_url() ?>assets/js/plugins/loaders/blockui.min.js"></script>
   <script type="text/javascript" src="<?php echo base_url() ?>assets/js/plugins/ui/nicescroll.min.js"></script>
   <script type="text/javascript" src="<?php echo base_url() ?>assets/js/plugins/ui/drilldown.js"></script>
   <script type="text/javascript" src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
-  <link rel="stylesheet" href="<?php echo base_url() ?>assets/css/az_app.css">
 
 
   <!-- <script type="text/javascript" src="<?php //echo base_url() 

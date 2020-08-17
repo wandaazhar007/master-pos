@@ -60,9 +60,9 @@
 
     <ul class="nav navbar-nav navbar-right">
       <li>
-        <a href="changelog.html">
+        <a href="#">
           <i class="icon-history position-left"></i>
-          Changelog
+          Log
           <span class="label label-inline position-right bg-success-400">1.6</span>
         </a>
       </li>
@@ -75,11 +75,8 @@
         </a>
 
         <ul class="dropdown-menu dropdown-menu-right">
-          <li><a href="#"><i class="icon-user-lock"></i> Account security</a></li>
-          <li><a href="#"><i class="icon-statistics"></i> Analytics</a></li>
-          <li><a href="#"><i class="icon-accessibility"></i> Accessibility</a></li>
-          <li class="divider"></li>
-          <li><a href="#"><i class="icon-gear"></i> All settings</a></li>
+          <li><a href="<?= base_url('user'); ?>"><i class="icon-user"></i>Pengguna</a></li>
+          <li><a href="<?= base_url('option'); ?>"><i class="icon-gear"></i>Options</a></li>
         </ul>
       </li>
     </ul>

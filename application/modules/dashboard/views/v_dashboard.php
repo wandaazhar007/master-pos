@@ -1,18 +1,13 @@
-<link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">
-<link href="assets/css/icons/icomoon/styles.css" rel="stylesheet" type="text/css">
-<link href="assets/css/bootstrap.css" rel="stylesheet" type="text/css">
-<link href="assets/css/core.css" rel="stylesheet" type="text/css">
-<link href="assets/css/components.css" rel="stylesheet" type="text/css">
-<link href="assets/css/colors.css" rel="stylesheet" type="text/css">
-<!-- /global stylesheets -->
+<!-- Theme JS files -->
+<script type="text/javascript" src="<?php echo base_url() ?>assets/js/plugins/tables/datatables/datatables.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url() ?>assets/js/plugins/tables/datatables/extensions/responsive.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url() ?>assets/js/plugins/forms/selects/select2.min.js"></script>
 
-<!-- Core JS files -->
-<script type="text/javascript" src="assets/js/plugins/loaders/pace.min.js"></script>
-<script type="text/javascript" src="assets/js/core/libraries/jquery.min.js"></script>
-<script type="text/javascript" src="assets/js/core/libraries/bootstrap.min.js"></script>
-<script type="text/javascript" src="assets/js/plugins/loaders/blockui.min.js"></script>
-<script type="text/javascript" src="assets/js/plugins/ui/nicescroll.min.js"></script>
-<script type="text/javascript" src="assets/js/plugins/ui/drilldown.js"></script>
+<script type="text/javascript" src="<?php echo base_url() ?>assets/js/core/libraries/jquery_ui/interactions.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url() ?>assets/js/plugins/forms/selects/select2.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url() ?>assets/js/core/app.js"></script>
+<script type="text/javascript" src="<?php echo base_url() ?>assets/js/pages/datatables_responsive.js"></script>
+<script type="text/javascript" src="<?php echo base_url() ?>assets/js/pages/form_select2.js"></script>
 <div class="content-wrapper">
   <div class="row">
     <div class="col-lg-6">
