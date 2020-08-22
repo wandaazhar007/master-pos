@@ -13,7 +13,7 @@ class User extends MX_Controller
   function index()
   {
     $data['title']      = 'Data Pengguna Master POS';
-    $data['contents']   = 'list_user2';
+    $data['contents']   = 'list_user';
     $data['getAll']     = $this->model->getAll();
     $this->load->view('templates/core', $data);
   }
@@ -104,7 +104,7 @@ class User extends MX_Controller
         'created'       => date('Y-m-d h:i:s')
       ];
 
-      // $this->db->insert('user', $data);
+      $this->db->insert('user', $data);
       //     $this->session->set_flashdata('message', '<div class="alert alert-success alert-styled-left alert-arrow-left alert-bordered">
       //   <button type="button" class="close" data-dismiss="alert"><span>×</span><span class="sr-only">Close</span></button>
       //   <span class="text-semibold">Yeay!</span> Data pengguna atas nama ' . $name . ' berhasil ditambahkan.
@@ -115,9 +115,8 @@ class User extends MX_Controller
       </div>');
       redirect('user');
     } else {
-      // redirect('user');
       $data['title']      = 'Data Pengguna Master POS';
-      $data['contents']   = 'list_user2';
+      $data['contents']   = 'list_user';
       $this->load->view('templates/core', $data);
     }
   }
@@ -167,15 +166,15 @@ class User extends MX_Controller
 
   function update()
   {
-    $iduser = htmlspecialchars($this->input->post('iduser', true));
+    $iduser     = htmlspecialchars($this->input->post('iduser', true));
     $name       = htmlspecialchars($this->input->post('name', true));
     $phone      = htmlspecialchars($this->input->post('phone', true));
-    $akses     = htmlspecialchars($this->input->post('akses', true));
+    $akses      = htmlspecialchars($this->input->post('akses', true));
 
     $data = [
       'name'      => $name,
       'phone'     => $phone,
-      'akses'   => $akses,
+      'akses'     => $akses,
       // 'createdby' => $this->session->userdata('name'),
     ];
 

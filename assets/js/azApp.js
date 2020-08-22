@@ -97,7 +97,7 @@ $(document).ready(function () {
 		"order": [],
 		"autoWidth": false,
 		"ajax": {
-			"url": base_url + "/produk/getAllTable/",
+			"url": base_url + "/product/getAllTable/",
 			// "url": "http://localhost/master-pos/supplier/getAllTable/",
 			"type": "POST"
 		},
@@ -125,6 +125,11 @@ $(document).ready(function () {
 				"targets": [3],
 				"searchable": true,
 				"sortable": true
+			},
+			{
+				"targets": [4],
+				"searchable": true,
+				"sortable": true
 			}
 		],
 
@@ -132,7 +137,7 @@ $(document).ready(function () {
 });
 
 
-//~ Datatable serverside Kategori Prduk ~//
+//~ Datatable serverside Kategori Produk ~//
 var save_method; //for save method string
 var oTable;
 $(document).ready(function () {
@@ -213,7 +218,7 @@ $(document).ready(function () {
 });
 
 
-//~ Datatable serverside Stok Produk/ product_unit ~//
+//~ Datatable serverside Stok Masuk Produk ~//
 var save_method; //for save method string
 var oTable;
 $(document).ready(function () {
@@ -392,6 +397,26 @@ $(document).ready(function () {
 });
 
 
+/* Note: Function untuk modal Data Produk | Author: wandaazhar@gmail.com */
+$(document).ready(function () {
+	$('#tableDataProduk').on('click', '.view_data_produk', function () {
+		var idproduct = $(this).attr('id');
+		$.ajax({
+			url: base_url + "product/showFormUpdate",
+			method: "POST",
+			data: {
+				idproduct: idproduct
+			},
+			success: function (data) {
+				console.log('yes');
+				$('#product_result').html(data);
+				$('#modal_product').modal('show');
+			}
+		}); //end ajax
+	});
+});
+
+
 /* Note: Function untuk modal User/Pengguna | Author: wandaazhar@gmail.com */
 $(document).ready(function () {
 	$('#tableUser').on('click', '.view_user', function () {
@@ -512,7 +537,7 @@ $(document).ready(function () {
 	$('#tableDataProduk').on('click', '.view_hapus', function () {
 		var idproduct = $(this).attr('id');
 		$.ajax({
-			url: base_url + "produk/showModalDelete",
+			url: base_url + "product/showModalDelete",
 			method: "POST",
 			data: {
 				idproduct: idproduct

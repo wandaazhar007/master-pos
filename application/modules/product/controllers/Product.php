@@ -1,27 +1,30 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
 
-class Produk extends MX_Controller
+class Product extends MX_Controller
 {
   function __construct()
   {
     parent::__construct();
     $this->wandalibs->_checkLoginSession();
     $this->load->library('datatables');
-    $this->load->model('m_data_produk', 'model');
+    $this->load->model('m_data_product', 'model');
   }
 
-  function dataProduk()
+  function dataProduct()
   {
     $data['title']      = 'Data Produk Master POS';
-    $data['contents']   = 'data_produk';
+    $data['contents']   = 'data_product';
     $data['getBarcode'] = $this->model->getBarcode();
+    $data['getCategoryProduct'] = $this->wandalibs->getCategoryProduct();
+    $data['getUnitProduct'] = $this->wandalibs->getUnitProduct();
+
     $this->load->view('templates/core', $data);
   }
 
   function getAllTable()
   {
 
-    $list = $this->model->datatables_getAllTableDataProduk();
+    $list = $this->model->datatables_getAllTableDataProduct();
     $data = array();
     $no = 1;
     foreach ($list as $value) {
@@ -34,22 +37,32 @@ class Produk extends MX_Controller
         </a>
         ';
       // <button class="tombol-hapus view_delete_customer" id="tombol-delete-customer"><i class="fa fa-trash"></i>&nbsp;hapus</button>
-      $queryCategory = $this->db->get_where('product_category', ['idproduct_category' => $value['idproduct_category']])->row_array();
-      $queryUnit = $this->db->get_where('product_unit', ['idproduct_unit' => $value['idproduct_unit']])->row_array();
+      $queryCategory  = $this->db->get_where('product_category', ['idproduct_category' => $value['idproduct_category']])->row_array();
+      $queryUnit      = $this->db->get_where('product_unit', ['idproduct_unit' => $value['idproduct_unit']])->row_array();
       $category = $queryCategory['name'];
       $unit = $queryUnit['name'];
+      $queryStock     = $this->db->get_where('product_stock', ['idproduct' => $value['idproduct']])->row_array();
 
+      if ($queryStock['total'] == NULL) {
+        $stock = '<span class="badge badge-danger">Kosong</span> <a href="' . base_url('product_stock/addFromProduct/') . $value['barcode'] . '"><span class="badge badge-success"><i class="fa fa-plus"></i></span></a>';
+      } else {
+        if ($queryStock['total'] <= 10) {
+          $stock = '<span class="badge badge-warning">' . $queryStock['total'] . '</span> <a href="' . base_url('product_stock/addFromProduct/') . $value['barcode'] . '"><span class="badge badge-success"><i class="fa fa-plus"></i></span></a>';
+        } else {
+          $stock = '<span class="badge badge-success">' . $queryStock['total'] . '</span> <a href="' . base_url('product_stock/addFromProduct/') . $value['barcode'] . '"><span class="badge badge-success"><i class="fa fa-plus"></i></span></a>';
+        }
+      }
 
       $row = array();
       $row[] = $no++;
       $row[] = $value['barcode'];
       $row[] = $value['name'];
-      $row[] = $value['price'];
+      $row[] = $this->wandalibs->rupiah($value['price']);
       $row[] = $value['persentase'] . '%';
-      $row[] = $value['price_selling'];
+      $row[] = $this->wandalibs->rupiah($value['price_selling']);
       $row[] = $category;
       $row[] = $unit;
-      $row[] = $value['description'];
+      $row[] = $stock;
       $row[] = $queryAction;
       $data[] = $row;
     }
@@ -65,24 +78,26 @@ class Produk extends MX_Controller
   function save()
   {
     $this->load->library('form_validation');
-    $email    = htmlspecialchars($this->input->post('email', true));
-    $this->form_validation->set_rules('name', 'Nama Pelanggan', 'required', [
-      'required'  => 'Nama pelanggan belum diisi!'
+    $this->form_validation->set_rules('name', 'Nama Produk', 'required', [
+      'required'  => 'Nama produk belum diisi!'
     ]);
     $this->form_validation->set_rules('idproduct_unit', 'Unit Produk', 'required', [
-      'required'  => 'Nama pelanggan belum diisi!'
+      'required'  => 'Satuan produk belum diisi!'
     ]);
     $this->form_validation->set_rules('idproduct_category', 'Kategori Produk', 'required', [
-      'required'  => 'Nama pelanggan belum diisi!'
+      'required'  => 'Kategori produk belum diisi!'
     ]);
     $this->form_validation->set_rules('barcode', 'Kode Barcode', 'required|trim', [
-      'required'  => 'Nomor Telepon/Handphone pelanggan belum diisi'
+      'required'  => 'Kode barcode belum terisi'
     ]);
-    $this->form_validation->set_rules('price', 'Jenis Kelamin', 'required|trim', [
+    $this->form_validation->set_rules('price', 'Harga Beli Produk', 'required|trim', [
       'required'  => 'Harga belum dipilih'
     ]);
     $this->form_validation->set_rules('persentase', 'Persentase', 'required|trim', [
       'required'  => 'Persentase belum ditentukan'
+    ]);
+    $this->form_validation->set_rules('price_selling', 'Harga Beli Produk', 'required|trim', [
+      'required'  => 'Harga Jual belum terisi'
     ]);
 
     if ($this->form_validation->run() == true) {
@@ -102,19 +117,23 @@ class Produk extends MX_Controller
         'price'             => $price,
         'persentase'        => $persentase,
         'price_selling'     => $price_selling,
-        // 'createdby' => $this->session->userdata('name'),
+        'createdby'         => $this->session->userdata('nama'),
         'created'           => date('Y-m-d h:i:s')
       ];
 
       $this->db->insert('product', $data);
       $this->session->set_flashdata('message', '<div class="alert alert-success alert-styled-left alert-arrow-left alert-bordered">
     <button type="button" class="close" data-dismiss="alert"><span>×</span><span class="sr-only">Close</span></button>
-    <span class="text-semibold">Yeay!</span> Data produk ' . $name . ' berhasil ditambahkan.
-  </div>');
-      redirect('product/dataProduk');
+      <span class="text-semibold">Yeay!</span> Data produk ' . $name . ' berhasil ditambahkan. Silahkan isi stok produk <a href="' . base_url('product_stock/addFromProduct/') . $barcode . '">disini</a>
+    </div>');
+      redirect('product/dataProduct');
     } else {
       $data['title']      = 'Data Produk Master POS';
-      $data['contents']   = 'data_produk';
+      $data['contents']   = 'data_product';
+      $data['getBarcode'] = $this->model->getBarcode();
+      $data['getCategoryProduct'] = $this->wandalibs->getCategoryProduct();
+      $data['getUnitProduct'] = $this->wandalibs->getUnitProduct();
+
       $this->load->view('templates/core', $data);
     }
   }
@@ -122,64 +141,97 @@ class Produk extends MX_Controller
   function showFormUpdate()
   {
     $idproduct = $this->input->post('idproduct');
+    $queryCategory['name'] = $this->wandalibs->getCategoryProductArray();
+    $queryUnit = $this->wandalibs->getUnitProduct();
+
+    // var_dump($queryCategory);
+    // die;
     if (isset($idproduct) and !empty($idproduct)) {
       $query = $this->model->getDetailById($idproduct);
+
       $output = '';
       foreach ($query as $i) :
+
+        $output .= '
+        <script type="text/javascript" src="' .  base_url() . 'assets/js/plugins/forms/selects/select2.min.js"></script>
+        <script type="text/javascript" src="' .  base_url() . 'assets/js/pages/form_select2.js"></script>
+        ';
         $output .= '
       
-    <form action="' . base_url('product/update') . '" method="post">
-      <div class="form-group">
-        <div class="row">
-          <div class="col-sm-6">
-            <label>Nama Produk</label>
-            <input type="hidden" name="idproduct" value="' . $i['idproduct'] . '" class="form-control" required>
-            <input type="text" name="name" value="' . $i['barcode'] . '" class="form-control" required>
-          </div>
+        <form action="' . base_url('product/update') . '" method="post">
+        <div class="modal-body">
+          <div class="form-group">
+            <div class="row">
+              <div class="col-sm-6" style="margin-bottom: 10px;">
+                <label>Nama Produk</label>
+                <input type="text" name="name" value="' . $i['name'] . '" placeholder="Masukan Nama Produk" class="form-control" required>
+                <small class="text-danger">' . form_error('name') . '</small>
+              </div>
 
-          <div class="col-sm-6">
-            <label>No Handphone</label>
-            <input type="text" name="phone" value="' . $i['name'] . '" class="form-control" required>
-          </div>
-          
-          <div class="col-sm-6">
-            <label>Satuan Produk</label>
-            <input type="text" name="phone" value="' . $i['idproduct_unit'] . '" class="form-control" required>
-          </div>
-          
-          <div class="col-sm-6">
-            <label>Kategory Produk</label>
-            <input type="text" name="phone" value="' . $i['idproduct_category'] . '" class="form-control" required>
-          </div>
-          
-          <div class="col-sm-6">
-            <label>Harga Beli</label>
-            <input type="text" name="phone" value="' . $i['price'] . '" class="form-control" required>
-          </div>
-          
-          <div class="col-sm-6">
-            <label>Persentase</label>
-            <input type="text" name="phone" value="' . $i['persentase'] . '" class="form-control" required>
-          </div>
-          
-          <div class="col-sm-6">
-            <label>Harga Jual</label>
-            <input type="text" name="phone" value="' . $i['price_selling'] . '" class="form-control" required>
-          </div>
+              <div class="col-sm-3" style="margin-bottom: 10px;">
+                <label>Kode Barcode</label>
+                <input type="text" name="barcode" value="' . $i['barcode'] . '" class="form-control" value="" required readonly>
+                <small class="text-danger">' . form_error('barcode') . '</small>
+              </div>
 
-          <div class="col-sm-12">
-            <label>Deskripsi Produk</label>
-            <textarea name="alamat" class="form-control" id="" cols="5" rows="5">' . $i['description'] . '</textarea>
-          </div>
-          <div class="col-sm-12" style="margin-top: 10px;">
-          <button type="submit" class="tombol-tambah pull-right"><i class="fa fa-save"></i>&nbsp;Update</button>
+              <div class="col-sm-3">
+                <label>Persentase</label>
+                <input type="number" name="pesentase" value="' . $i['persentase'] . '" class="form-control" placeholder="0%" required>
+                <small class="text-danger">' . form_error('persentase') . '</small>
+              </div>
+
+
+              <div class="col-sm-6" style="margin-bottom: 10px;">
+                <label>Harga Asli</label>
+                <input type="number" name="price" value="' . $this->wandalibs->rupiah($i['price']) . '" placeholder="Rp. ..." class="form-control" required>
+                <small class="text-danger">' . form_error('price') . '</small>
+              </div>
+
+              <div class="col-sm-6" style="margin-bottom: 10px;">
+                <label>Harga Jual</label>
+                <input type="text" name="price_selling" value="' . $this->wandalibs->rupiah($i['price_selling']) . '" placeholder="Rp. ..." class="form-control" required readonly>
+                <small class="text-danger">' . form_error('price_selling') . '</small>
+              </div>
+
+              <div class="col-sm-6" style="margin-bottom: 10px;">
+                <div class="form-group">
+                  <label>Kategori Produk</label>
+                  <select class="select-search select2-hidden-accessible" tabindex="-1" aria-hidden="true" name="idproduct_category">
+                    <optgroup label="Pilih Kategory Produk">
+                        <option value="">' . $queryCategory . '</option>
+                    </optgroup>
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-sm-6" style="margin-bottom: 10px;">
+                <div class="form-group">
+                  <label>Satuan Produk</label>
+                  <select class="select-search select2-hidden-accessible" tabindex="-1" aria-hidden="true" name="idproduct_unit">
+                    <optgroup label="Pilih Satuan Produk">
+                      <option value=""></option>
+                      
+                    </optgroup>
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-sm-12">
+                <label>Keterangan</label>
+                <textarea name="description" class="form-control" id="" cols="5" rows="5" placeholder="Masukan keterangan produk (Jika diperlukan)">' . $i['description'] . '</textarea>
+                <small class="text-danger">' . form_error('description') . '</small>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </form>
+        <div class="modal-footer">
+          <button type="button" class="tombol-modal-hapus" data-dismiss="modal">Close</button>
+          <button type="submit" class="tombol-tambah"><i class="fa fa-save"></i>&nbsp; Simpan</button>
+        </div>
+      </form>
                 ';
 
-      endforeach;
+      endforeach;;
       echo $output;
     } else {
       echo 'not founds';
@@ -206,7 +258,7 @@ class Produk extends MX_Controller
       'price'             => $price,
       'persentase'        => $persentase,
       'price_selling'     => $price_selling,
-      // 'createdby' => $this->session->userdata('name'),
+      'createdby'         => $this->session->userdata('nama'),
       'created'           => date('Y-m-d h:i:s')
 
     ];
@@ -234,7 +286,7 @@ class Produk extends MX_Controller
             <h6 class="text-bold" style="margin-top: -10px;">' . $i['name'] . ' ?</h6>
           </div>
             <div class="col-sm-12 text-center">
-              <a href="' . base_url('produk/delete/') . $i['idproduct'] . '">
+              <a href="' . base_url('product/delete/') . $i['idproduct'] . '">
                 <button type="submit" class="tombol-tambah"><i class="fa fa-check"></i>&nbsp;Ya, Hapus</button>
                 <button type="button" class="tombol-modal-hapus" data-dismiss="modal"><i class="fa fa-close"></i>&nbsp;Tidak!</button>
                 </a>
@@ -260,7 +312,7 @@ class Produk extends MX_Controller
       <button type="button" class="close" data-dismiss="alert"><span>×</span><span class="sr-only">Close</span></button>
       <span class="text-semibold">Ups!</span> Anda tidak dapat menghapusnya. Data product <b><i>' . $queryproduct['name'] . '</i></b> sudah ada yang terjual!.
     </div>');
-      redirect('produk/dataProduk');
+      redirect('product/dataProduct');
     } else {
       $this->db->where('idproduct', $idproduct);
       $this->db->delete('product');
@@ -268,7 +320,7 @@ class Produk extends MX_Controller
       <button type="button" class="close" data-dismiss="alert"><span>×</span><span class="sr-only">Close</span></button>
       <span class="text-semibold">Yeay!</span> Data produk ' . $queryproduct['name'] . 'berhasil dihapus!.
     </div>');
-      redirect('produk/dataProduk');
+      redirect('product/dataProduct');
     }
   }
 }

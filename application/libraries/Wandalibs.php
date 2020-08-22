@@ -19,10 +19,18 @@ class Wandalibs
   function _checkLoginSession()
   {
     $CI = &get_instance();
-    if (!empty($CI->session->userdata('email'))) {
+    if (empty($CI->session->userdata('email'))) {
       // redirect('dashboard');
-    } else {
       redirect('auth/login');
+    }
+  }
+
+  /* Note: Function untuk mengecek jika user masih memiliki session maka tidak bisa masuk ke halaman login  | Author: wandaazhar@gmail.com */
+  function redirectLoginExist()
+  {
+    $CI = &get_instance();
+    if ($CI->session->userdata('nama')) {
+      redirect('dashboard');
     }
   }
 
@@ -61,15 +69,6 @@ class Wandalibs
     ];
 
     $CI->db->insert('history_login', $data);
-  }
-
-  /* Note: Function untuk mengecek jika user masih memiliki session maka tidak bisa masuk ke halaman login  | Author: wandaazhar@gmail.com */
-  function redirectLoginExist()
-  {
-    $CI = &get_instance();
-    if ($CI->session->userdata('nama')) {
-      redirect('dashboard');
-    }
   }
 
   /* Note: Function untuk proses login yang ada di controller Auth | Author: wandaazhar@gmail.com */
@@ -158,7 +157,7 @@ class Wandalibs
   {
     $CI = &get_instance();
     $email  = $CI->session->userdata('email');
-    $query  = $CI->db->get_where('tb_user_admin', ['email' => $email])->row_array();
+    $query  = $CI->db->get_where('tb_user', ['email' => $email])->row_array();
     $dataSession = [
       'id'        => $query['id'],
       'email'     => $query['email'],
@@ -175,7 +174,7 @@ class Wandalibs
     $CI->session->unset_userdata('active');
     $CI->session->unset_userdata('foto');
     $CI->session->unset_userdata('date_created');
-    $CI->session->sess_destroy($dataSession);
+    // $CI->session->sess_destroy($dataSession);
     $CI->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show">
             <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
               <i class="nc-icon nc-simple-remove"></i>
@@ -447,364 +446,59 @@ class Wandalibs
     }
   }
 
-  /* Note: Function untuk menghitung jumlah pesan masuk bidang penunjang | Author: wandaazhar@gmail.com */
-  function countAllPesanPenunjang()
+  function getIdTransactionGroup()
   {
-    $CI = &get_instance();
-    $query = $CI->db->query("SELECT `pesan`.`id` FROM `pesan` WHERE `pesan`.`bidang` = 'penunjang' AND `pesan`.`tgl_forward` IS NOT NULL");
-    if ($query->num_rows() > 0) {
-      return $query->num_rows();
-    } else {
-      return 0;
+    return $this->db->query("SELECT MAX(`idtransaction_group`) AS `id_trans` FROM `transaction`")->row_array();
+  }
+  function rupiah($angka)
+  {
+    $hasil_rupiah = number_format($angka, 0, ',', '.');
+    return $hasil_rupiah;
+  }
+
+  function getAllProduct()
+  {
+    return $this->db->query("SELECT `product`.`idproduct`, `product`.`name` FROM `product`")->result_array();
+  }
+
+  function getAllProductForModal()
+  {
+    $query = $this->db->query("SELECT `product`.`idproduct`, `product`.`name` FROM `product`")->result_array();
+    $output = '';
+    foreach ($query as $i) {
+      $output .= '
+        <option value="' . $i['idproduct'] . '">' . $i['name'] . '</option>
+      ';
+    }
+    return $output;
+  }
+
+  function getCategoryProduct()
+  {
+    return $this->db->query("SELECT `product_category`.`idproduct_category`, `product_category`.`name` FROM `product_category`")->result_array();
+  }
+
+  function getCategoryProductArray()
+  {
+    $query = $this->db->query("SELECT `product_category`.`idproduct_category`, `product_category`.`name` FROM `product_category`")->result_array();
+    foreach ($query as $i) {
+      // $query = $i['name'];
+      return $i;
     }
   }
 
-  /* Note: Function untuk menghitung jumlah pesan masuk bidang keperawatan | Author: wandaazhar@gmail.com */
-  function countAllPesanKeperawatan()
+  function getUnitProduct()
   {
-    $CI = &get_instance();
-    $query = $CI->db->query("SELECT `pesan`.`id` FROM `pesan` WHERE `pesan`.`bidang` = 'keperawatan' AND `pesan`.`tgl_forward` IS NOT NULL");
-    if ($query->num_rows() > 0) {
-      return $query->num_rows();
-    } else {
-      return 0;
-    }
+    return $this->db->query("SELECT `product_unit`.`idproduct_unit`, `product_unit`.`name` FROM `product_unit`")->result_array();
   }
 
-  /* Note: Function untuk menghitung jumlah pesan masuk bidang yanmed | Author: wandaazhar@gmail.com */
-  function countAllPesanYanmed()
+  function getAllSupplier()
   {
-    $CI = &get_instance();
-    $query = $CI->db->query("SELECT `pesan`.`id` FROM `pesan` WHERE `pesan`.`tgl_forward` IS NOT NULL AND `pesan`.`bidang` = 'pelayanan medis'");
-    if ($query->num_rows() > 0) {
-      return $query->num_rows();
-    } else {
-      return 0;
-    }
+    return $this->db->query("SELECT `supplier`.`idsupplier`, `supplier`.`name` FROM `supplier`")->result_array();
   }
 
-  function countAllPesanBelumBalasYanmed()
+  function getProductById($barcode)
   {
-    $CI = &get_instance();
-    return $CI->db->query("SELECT `pesan`.`id` FROM `pesan` WHERE `pesan`.`tgl_forward` IS NOT NULL AND `pesan`.`tgl_balas` IS NULL  AND `pesan`.`bidang` = 'pelayanan medis'")->num_rows();
-  }
-
-  function countAllPesanSedangProsesYanmed()
-  {
-    $CI = &get_instance();
-    return $CI->db->query("SELECT `pesan`.`id` FROM `pesan` WHERE `pesan`.`tgl_balas` IS NOT NULL AND `pesan`.`tgl_selesai` IS NULL AND `pesan`.`bidang` = 'pelayanan medis'")->num_rows();
-  }
-
-  function countAllPesanSelesaiYanmed()
-  {
-    $CI = &get_instance();
-    return $CI->db->query("SELECT `pesan`.`id` FROM `pesan` WHERE `pesan`.`tgl_selesai` IS NOT NULL AND `pesan`.`bidang` = 'pelayanan medis'")->num_rows();
-  }
-
-  /* Note: menhitung pesan penunjang | Author: wandaazhar@gmail.com */
-  function countAllPesanBelumBalasPenunjang()
-  {
-    $CI = &get_instance();
-    return $CI->db->query("SELECT `pesan`.`id` FROM `pesan` WHERE `pesan`.`tgl_forward` IS NOT NULL AND `pesan`.`tgl_balas` IS NULL  AND `pesan`.`bidang` = 'penunjang'")->num_rows();
-  }
-
-  function countAllPesanSedangProsesPenunjang()
-  {
-    $CI = &get_instance();
-    return $CI->db->query("SELECT `pesan`.`id` FROM `pesan` WHERE `pesan`.`tgl_balas` IS NOT NULL AND `pesan`.`tgl_selesai` IS NULL AND `pesan`.`bidang` = 'penunjang'")->num_rows();
-  }
-
-  function countAllPesanSelesaiPenunjang()
-  {
-    $CI = &get_instance();
-    return $CI->db->query("SELECT `pesan`.`id` FROM `pesan` WHERE `pesan`.`tgl_selesai` IS NOT NULL AND `pesan`.`bidang` = 'penunjang'")->num_rows();
-  }
-
-  /* Note: menhitung pesan keperawatan | Author: wandaazhar@gmail.com */
-  function countAllPesanBelumBalasKeperawatan()
-  {
-    $CI = &get_instance();
-    return $CI->db->query("SELECT `pesan`.`id` FROM `pesan` WHERE `pesan`.`tgl_forward` IS NOT NULL AND `pesan`.`tgl_balas` IS NULL  AND `pesan`.`bidang` = 'penunjang'")->num_rows();
-  }
-
-  function countAllPesanSedangProsesKeperawatan()
-  {
-    $CI = &get_instance();
-    return $CI->db->query("SELECT `pesan`.`id` FROM `pesan` WHERE `pesan`.`tgl_balas` IS NOT NULL AND `pesan`.`tgl_selesai` IS NULL AND `pesan`.`bidang` = 'penunjang'")->num_rows();
-  }
-
-  function countAllPesanSelesaiKeperawatan()
-  {
-    $CI = &get_instance();
-    return $CI->db->query("SELECT `pesan`.`id` FROM `pesan` WHERE `pesan`.`tgl_selesai` IS NOT NULL AND `pesan`.`bidang` = 'penunjang'")->num_rows();
-  }
-
-
-  /* Note: Function untuk menghitung jumlah pesan masuk bidang umum | Author: wandaazhar@gmail.com */
-  function countAllPesanUmum()
-  {
-    $CI = &get_instance();
-    $query = $CI->db->query("SELECT `pesan`.`id` FROM `pesan` WHERE `pesan`.`tgl_forward` IS NOT NULL AND `pesan`.`bidang` = 'umum'");
-    if ($query->num_rows() > 0) {
-      return $query->num_rows();
-    } else {
-      return 0;
-    }
-  }
-
-  function countAllPesanBelumBalasUmum()
-  {
-    $CI = &get_instance();
-    return $CI->db->query("SELECT `pesan`.`id` FROM `pesan` WHERE `pesan`.`tgl_forward` IS NOT NULL AND `pesan`.`tgl_balas` IS NULL  AND `pesan`.`bidang` = 'umum'")->num_rows();
-  }
-
-  function countAllPesanSedangProsesUmum()
-  {
-    $CI = &get_instance();
-    return $CI->db->query("SELECT `pesan`.`id` FROM `pesan` WHERE `pesan`.`tgl_balas` IS NOT NULL AND `pesan`.`tgl_selesai` IS NULL AND `pesan`.`bidang` = 'umum'")->num_rows();
-  }
-
-  function countAllPesanSelesaiUmum()
-  {
-    $CI = &get_instance();
-    return $CI->db->query("SELECT `pesan`.`id` FROM `pesan` WHERE `pesan`.`tgl_selesai` IS NOT NULL AND `pesan`.`bidang` = 'umum'")->num_rows();
-  }
-
-
-  /* Note: Function untuk menghitung jumlah keseluruhan pesan masuk berdasarkan user_access dari session user admin | Author: wandaazhar@gmail.com */
-  function countAllInbox()
-  {
-    $CI = &get_instance();
-
-    if ($CI->session->userdata('user_access') == 'administrator') {
-      $query = $CI->db->query("SELECT `pesan`.`id` FROM `pesan`");
-      if ($query->num_rows() > 0) {
-        return $query->num_rows();
-      } else {
-        return 0;
-      }
-    }
-    if ($CI->session->userdata('user_access') == 'yanmed') {
-      $query = $CI->db->query("SELECT `pesan`.`id` FROM `pesan` WHERE `pesan`.`bidang` = 'yanmed' AND `pesan`.`tgl_forward` IS NOT NULL");
-      if ($query->num_rows() > 0) {
-        return $query->num_rows();
-      } else {
-        return 0;
-      }
-    }
-    if ($CI->session->userdata('user_access') == 'penunjang') {
-      $query = $CI->db->query("SELECT `pesan`.`id` FROM `pesan` WHERE `pesan`.`bidang` = 'penunjang' AND `pesan`.`tgl_forward` IS NOT NULL");
-      if ($query->num_rows() > 0) {
-        return $query->num_rows();
-      } else {
-        return 0;
-      }
-    }
-    if ($CI->session->userdata('user_access') == 'umum') {
-      $query = $CI->db->query("SELECT `pesan`.`id` FROM `pesan` WHERE `pesan`.`bidang` = 'umum' AND `pesan`.`tgl_forward` IS NOT NULL");
-      if ($query->num_rows() > 0) {
-        return $query->num_rows();
-      } else {
-        return 0;
-      }
-    }
-    if ($CI->session->userdata('user_access') == 'keperawatan') {
-      $query = $CI->db->query("SELECT `pesan`.`id` FROM `pesan` WHERE `pesan`.`bidang` = 'keperawatan' AND `pesan`.`tgl_forward` IS NOT NULL");
-      if ($query->num_rows() > 0) {
-        return $query->num_rows();
-      } else {
-        return 0;
-      }
-    }
-  }
-
-  function countAllOutbox()
-  {
-    $CI = &get_instance();
-    return $CI->db->query("SELECT `pesan`.`id` FROM `pesan` WHERE `pesan`.`pesan_keluar` IS NOT NULL")->num_rows();
-  }
-
-  function countAllPesanByEmailUser($email)
-  {
-    $CI = &get_instance();
-    return $CI->db->query("SELECT `pesan`.`id` FROM `pesan` WHERE `pesan`.`email` = '$email'")->num_rows();
-  }
-  function countAllPesanByIdUser($id_user)
-  {
-    $CI = &get_instance();
-    return $CI->db->query("SELECT `pesan`.`id` FROM `pesan` WHERE `pesan`.`id_user` = '$id_user'")->num_rows();
-  }
-
-  /* Note: Function untuk menghitung lamanya waktu balas pesan masuk berdasarkan hari | Author: wandaazhar@gmail.com */
-  function akumulasiByDay($tgl_masuk, $tgl_selesai_int)
-  {
-    $diff = $tgl_selesai_int - $tgl_masuk;
-    return round($diff / (60 * 60 * 24));
-  }
-
-  /* Note: Function untuk menghitung lamanya waktu balas pesan masuk berdasarkan jam | Author: wandaazhar@gmail.com */
-  function akumulasiByHour($tgl_masuk, $tgl_selesai_int)
-  {
-    $diff = $tgl_selesai_int - $tgl_masuk;
-    $totalHari = $diff / (60 * 60);
-    $result = round($totalHari / 60);
-
-    return $result;
-  }
-
-  /* Note: Function untuk menghitung lamanya waktu balas pesan masuk berdasarkan menit | Author: wandaazhar@gmail.com */
-  function akumulasiByMinute($tgl_masuk, $tgl_selesai_int)
-  {
-    $diff = $tgl_selesai_int - $tgl_masuk;
-    $totalHari = $diff / (60 * 24);
-    $result = round($totalHari / 60);
-
-    return $result;
-  }
-
-  // function sendAkumulasiByDay($tgl_masuk, $tgl_selesai_int)
-  // {
-  //  $tglMasuk = $this->akumulasiByDay($tgl_masuk, $tgl_selesai_int);
-  //  $day = 7;
-  //  if($day >)
-  // }
-
-  function countAllPesanBelumDibalas()
-  {
-    $CI = &get_instance();
-    return $CI->db->query("SELECT `pesan`.`id` FROM `pesan` WHERE `pesan`.`tgl_balas` IS NULL AND  `pesan`.`pesan_masuk` IS NOT NULL")->num_rows();
-  }
-
-  function countAllPesanSedangDiproses()
-  {
-    $CI = &get_instance();
-    return $CI->db->query("SELECT `pesan`.`id` FROM `pesan` WHERE `pesan`.`tgl_balas` IS NOT NULL AND  `pesan`.`pesan_masuk` IS NOT NULL")->num_rows();
-  }
-
-  function countAllPesanSudahSelesai()
-  {
-    $CI = &get_instance();
-    return $CI->db->query("SELECT `pesan`.`id` FROM `pesan` WHERE `pesan`.`tgl_selesai` IS NOT NULL AND  `pesan`.`pesan_masuk` IS NOT NULL")->num_rows();
-  }
-  function countAllPesan()
-  {
-    $CI = &get_instance();
-    return $CI->db->query("SELECT `pesan`.`id` FROM `pesan`")->num_rows();
-  }
-
-  function getAllUserAdmin()
-  {
-    $CI = &get_instance();
-    return $CI->db->query("SELECT * FROM `tb_user_admin` ORDER BY `id` DESC LIMIT 5")->result_array();
-  }
-
-  function getFotoProfileAdmin($id)
-  {
-    return $this->db->query("SELECT * FROM `tb_user_admin` WHERE `tb_user_admin`.`id` = '$id'")->result_array();
-  }
-
-  function getHistoryAdmin($id)
-  {
-    return $this->db->query("SELECT * FROM `tb_user_admin` WHERE `tb_user_admin`.`id` = '$id'")->result_array();
-  }
-
-  function getAllPesan()
-  {
-    return $this->db->query("SELECT `pesan`.`id`, `pesan`.`tgl_masuk`, `pesan`.`status_proses`, `tb_user`.`id` AS 'id_user', `tb_user`.`nama`, `tb_user`.`email` FROM `pesan` INNER JOIN `tb_user` ON `pesan`.`id_user` = `tb_user`.`id`
-    WHERE `pesan`.`status_proses` IS NOT NULL
-    ORDER BY `pesan`.`id` 
-    DESC LIMIT 3")->result_array();
-  }
-
-  function getAllPesanYanmed()
-  {
-    return $this->db->query("SELECT `pesan`.`id`, `pesan`.`tgl_masuk`, `pesan`.`status_proses`, `tb_user`.`id` AS 'id_user', `tb_user`.`nama`, `tb_user`.`email` FROM `pesan` INNER JOIN `tb_user` ON `pesan`.`id_user` = `tb_user`.`id`
-    WHERE `pesan`.`status_proses` IS NOT NULL AND `pesan`.`tgl_forward` IS NOT NULL AND `pesan`.`bidang` = 'pelayanan medis'
-    ORDER BY `pesan`.`id` 
-    DESC LIMIT 3")->result_array();
-  }
-
-  function getAllPesanPenunjang()
-  {
-    return $this->db->query("SELECT `pesan`.`id`, `pesan`.`tgl_masuk`, `pesan`.`status_proses`, `tb_user`.`id` AS 'id_user', `tb_user`.`nama`, `tb_user`.`email` FROM `pesan` INNER JOIN `tb_user` ON `pesan`.`id_user` = `tb_user`.`id`
-    WHERE `pesan`.`status_proses` IS NOT NULL AND `pesan`.`tgl_forward` IS NOT NULL AND `pesan`.`bidang` = 'penunjang'
-    ORDER BY `pesan`.`id` 
-    DESC LIMIT 3")->result_array();
-  }
-
-  function getAllPesanKeperawatan()
-  {
-    return $this->db->query("SELECT `pesan`.`id`, `pesan`.`tgl_masuk`, `pesan`.`status_proses`, `tb_user`.`id` AS 'id_user', `tb_user`.`nama`, `tb_user`.`email` FROM `pesan` INNER JOIN `tb_user` ON `pesan`.`id_user` = `tb_user`.`id`
-    WHERE `pesan`.`status_proses` IS NOT NULL AND `pesan`.`tgl_forward` IS NOT NULL AND `pesan`.`bidang` = 'keperawatan'
-    ORDER BY `pesan`.`id` 
-    DESC LIMIT 3")->result_array();
-  }
-
-  function getAllPesanUmum()
-  {
-    return $this->db->query("SELECT `pesan`.`id`, `pesan`.`tgl_masuk`, `pesan`.`status_proses`, `tb_user`.`id` AS 'id_user', `tb_user`.`nama`, `tb_user`.`email` FROM `pesan` INNER JOIN `tb_user` ON `pesan`.`id_user` = `tb_user`.`id`
-    WHERE `pesan`.`status_proses` IS NOT NULL AND `pesan`.`tgl_forward` IS NOT NULL AND `pesan`.`bidang` = 'umum'
-    ORDER BY `pesan`.`id` 
-    DESC LIMIT 3")->result_array();
-  }
-
-
-  function getAllPesanSudahSelesai()
-  {
-    return $this->db->query("SELECT `pesan`.`id`, `pesan`.`tgl_masuk`, `pesan`.`status_proses`, `tb_user`.`id` AS 'id_user', `tb_user`.`nama`, `tb_user`.`email` FROM `pesan` INNER JOIN `tb_user` ON `pesan`.`id_user` = `tb_user`.`id`
-    WHERE `pesan`.`status_proses` = 'sudah selesai'
-    ORDER BY `pesan`.`id` 
-    DESC LIMIT 3")->result_array();
-  }
-
-  function getAllPesanBelumDibalas()
-  {
-    return $this->db->query("SELECT `pesan`.`id`, `pesan`.`tgl_masuk`, `pesan`.`status_proses`, `tb_user`.`id` AS 'id_user', `tb_user`.`nama`, `tb_user`.`email` FROM `pesan` INNER JOIN `tb_user` ON `pesan`.`id_user` = `tb_user`.`id`
-    WHERE `pesan`.`status_proses` = 'sudah diterima'
-    ORDER BY `pesan`.`id` 
-    DESC LIMIT 3")->result_array();
-  }
-
-  function getAllPesanSedangDiproses()
-  {
-    return $this->db->query("SELECT `pesan`.`id`, `pesan`.`tgl_masuk`, `pesan`.`status_proses`, `tb_user`.`id` AS 'id_user', `tb_user`.`nama`, `tb_user`.`email` FROM `pesan` INNER JOIN `tb_user` ON `pesan`.`id_user` = `tb_user`.`id`
-    WHERE `pesan`.`status_proses` = 'sedang diproses'
-    ORDER BY `pesan`.`id` 
-    DESC LIMIT 3")->result_array();
-  }
-
-  function getPesanBelumBalasUmumById($id)
-  {
-  }
-
-
-  function getPesanBelumDibalasYanmed()
-  {
-    return $this->db->query("SELECT `pesan`.`id`, `pesan`.`tgl_masuk`, `pesan`.`status_proses`, `tb_user`.`id` AS 'id_user', `tb_user`.`nama`, `tb_user`.`email` FROM `pesan` INNER JOIN `tb_user` ON `pesan`.`id_user` = `tb_user`.`id`
-    WHERE `pesan`.`status_proses` = 'belum dibalas'
-    ORDER BY `pesan`.`id` 
-    DESC LIMIT 3")->result_array();
-  }
-
-  function echoBidang($bidang)
-  {
-    if ($bidang == 'pelayanan medis') {
-      echo '<div class="badge badge-danger">Yanmed</div>';
-    } elseif ($bidang == 'penunjang') {
-      echo '<div class="badge badge-primary">Penunjang</div>';
-    } elseif ($bidang == 'keperawatan') {
-      echo '<div class="badge badge-success">Keperawatan</div>';
-    } elseif ($bidang == 'umum') {
-      echo '<div class="badge badge-warning">Umum</div>';
-    }
-  }
-
-  function belumDibalas($tgl_balas)
-  {
-    if ($tgl_balas == NULL) {
-      echo '<div class="badge badge-danger">Belum Dibalas</div>';
-    } else {
-      echo '<div class="badge badge-success">Sudah Dibalas</div>';
-    }
+    return $this->db->query("SELECT `product`.`idproduct`, `product`.`name`, `product`.`barcode` FROM `product` WHERE `product`.`barcode` = '$barcode'")->result_array();
   }
 }

@@ -5,9 +5,9 @@ class Auth extends MX_Controller
   function __construct()
   {
     parent::__construct();
-
-    $this->wandalibs->redirectLoginExist();
-    // $this->wandalibs->_checkLosginSession();
+    if ($this->session->userdata('nama')) {
+      redirect('dashboard');
+    }
   }
 
   function index()

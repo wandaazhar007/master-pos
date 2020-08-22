@@ -10,6 +10,15 @@
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/pages/form_select2.js"></script>
 <div class="content-wrapper">
   <div class="row">
+    <div class="container">
+      <div class="panel panel-body login-form">
+        <div class="text-center">
+          <div class="icon-object border-slate-300 text-slate-300"><i class="icon-reading"></i></div>
+          <h5 class="content-group">Login to your account <small class="display-block">Enter your credentials below</small></h5>
+          <?php echo $this->session->flashdata('message') ?>
+        </div>
+      </div>
+    </div>
     <div class="col-lg-6">
       <div class="panel panel-flat">
         <div class="panel-heading">

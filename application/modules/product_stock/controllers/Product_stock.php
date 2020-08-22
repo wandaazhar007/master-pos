@@ -12,10 +12,11 @@ class Product_stock extends MX_Controller
 
   function index()
   {
-    $data['title']      = 'Stok Produk Master POS';
-    $data['contents']   = 'product_stock';
-    $data['getProduct'] = $this->model->getProduct();
-    $data['getSupplier'] = $this->model->getSupplier();
+    $data['title']          = 'Stok Produk Master POS';
+    $data['contents']       = 'product_stock';
+    $data['getAllProduct']  = $this->wandalibs->getAllProduct();
+    $data['getAllSupplier'] = $this->wandalibs->getAllSupplier();
+
     $this->load->view('templates/core', $data);
   }
 
@@ -35,19 +36,28 @@ class Product_stock extends MX_Controller
         </a>
         ';
       $a = strtotime($value['stock_date']);
-      $tgl = date('d F Y', $a);
-      // var_dump($a);
-      // die;
-      // <button class="tombol-hapus view_delete_product_stock" id="tombol-delete-product_stock"><i class="fa fa-trash"></i>&nbsp;hapus</button>
+      $tgl = date('d F Y | h:i', $a);
+
+      $queryStock     = $this->db->get_where('product_stock', ['idproduct' => $value['idproduct']])->row_array();
+
+      if ($queryStock['total'] == NULL) {
+        $stock = '<span class="badge badge-danger">Kosong</span> <span class="badge badge-success"><i class="fa fa-plus"></i></span>';
+      } else {
+        if ($queryStock['total'] <= 10) {
+          $stock = '<span class="badge badge-warning">' . $queryStock['total'] . '</span> <span class="badge badge-success"><i class="fa fa-plus"></i></span>';
+        } else {
+          $stock = '<span class="badge badge-success">' . $queryStock['total'] . '</span> <span class="badge badge-success"><i class="fa fa-plus"></i></span>';
+        }
+      }
 
       $row = array();
       $row[] = $no++;
       $row[] = $tgl;
       $row[] = $value['barcode'];
       $row[] = $value['name'];
-      $row[] = $value['detail'];
+      // $row[] = $value['detail'];
       $row[] = $value['name_supplier'];
-      $row[] = $value['total'];
+      $row[] = $stock;
       $row[] = $queryAction;
       $data[] = $row;
     }
@@ -63,31 +73,39 @@ class Product_stock extends MX_Controller
   function save()
   {
     $this->load->library('form_validation');
-    $name    = htmlspecialchars($this->input->post('name', true));
-    $this->form_validation->set_rules('name', 'Nama Produk', 'required', [
-      'required'  => 'Nama pelanggan belum diisi!'
+    $this->form_validation->set_rules('idproduct', 'Nama Produk', 'required', [
+      'required'  => 'Nama produk belum diisi!'
+    ]);
+    $this->form_validation->set_rules('total', 'Jumlah', 'required|trim', [
+      'required'  => 'Jumlah stock belum diisi'
     ]);
 
     if ($this->form_validation->run() == true) {
-      $name     = htmlspecialchars($this->input->post('name', true));
+      $idproduct        = htmlspecialchars($this->input->post('idproduct', true));
+      $idsupplier       = htmlspecialchars($this->input->post('idsupplier', true));
+      $total            = htmlspecialchars($this->input->post('total', true));
 
+      $query = $this->db->get_where('product', ['idproduct' => $idproduct])->row_array();
+      $namaProduk = $query['name'];
       $data = [
-        'name'      => $name,
-        // 'createdby' => $this->session->userdata('name'),
-        'created'   => date('Y-m-d h:i:s')
+        'idproduct'         => $idproduct,
+        'idsupplier'        => $idsupplier,
+        'total'             => $total,
+        'createdby'         => $this->session->userdata('nama'),
+        'stock_date'        => date('Y-m-d h:i:s')
       ];
 
       $this->db->insert('product_stock', $data);
       $this->session->set_flashdata('message', '<div class="alert alert-success alert-styled-left alert-arrow-left alert-bordered">
       <button type="button" class="close" data-dismiss="alert"><span>×</span><span class="sr-only">Close</span></button>
-        <span class="text-semibold">Yeay!</span> Kategori ' . $name . ' berhasil ditambahkan.
+        <span class="text-semibold">Yeay!</span> Stok Produk ' . $namaProduk . ' berhasil ditambah .
       </div>');
       redirect('product_stock');
     } else {
-      $data['title']      = 'Kategori Produk Master POS';
-      $data['contents']   = 'product_stock';
-      $data['getProduct'] = $this->model->getProduct();
-      $data['getSupplier'] = $this->model->getSupplier();
+      $data['title']          = 'Stok Produk Master POS';
+      $data['contents']       = 'product_stock';
+      $data['getAllProduct']  = $this->wandalibs->getAllProduct();
+      $data['getAllSupplier'] = $this->wandalibs->getAllSupplier();
 
       $this->load->view('templates/core', $data);
     }
@@ -193,6 +211,48 @@ class Product_stock extends MX_Controller
       <span class="text-semibold">Yeay!</span> riwayat stok produk berhasil dihapus!.
     </div>');
       redirect('product_stock');
+    }
+  }
+
+  function addFromProduct($barcode)
+  {
+    $this->load->library('form_validation');
+    $this->form_validation->set_rules('idproduct', 'Nama Produk', 'required', [
+      'required' => 'Nama produk belum diisi'
+    ]);
+    $this->form_validation->set_rules('total', 'Jumlah', 'required|trim', [
+      'required'  => 'Jumlah stock belum diisi'
+    ]);
+
+    if ($this->form_validation->run() == true) {
+      $idproduct        = htmlspecialchars($this->input->post('idproduct', true));
+      $idsupplier       = htmlspecialchars($this->input->post('idsupplier', true));
+      $total            = htmlspecialchars($this->input->post('total', true));
+
+      $query = $this->db->get_where('product', ['idproduct' => $idproduct])->row_array();
+      $namaProduk = $query['name'];
+      $data = [
+        'idproduct'         => $idproduct,
+        'idsupplier'        => $idsupplier,
+        'total'             => $total,
+        'createdby'         => $this->session->userdata('nama'),
+        'stock_date'        => date('Y-m-d h:i:s')
+      ];
+
+      $this->db->insert('product_stock', $data);
+      $this->session->set_flashdata('message', '<div class="alert alert-success alert-styled-left alert-arrow-left alert-bordered">
+      <button type="button" class="close" data-dismiss="alert"><span>×</span><span class="sr-only">Close</span></button>
+        <span class="text-semibold">Yeay!</span> Stok Produk ' . $namaProduk . ' berhasil ditambah .
+      </div>');
+      redirect('product/dataProduk');
+    } else {
+      $data['title']          = 'Stok Produk Master POS';
+      $data['contents']       = 'add_product_stock';
+      $data['getAllProduct']  = $this->wandalibs->getAllProduct();
+      $data['getAllSupplier'] = $this->wandalibs->getAllSupplier();
+      $data['getProductById'] = $this->wandalibs->getProductById($barcode);
+
+      $this->load->view('templates/core', $data);
     }
   }
 }

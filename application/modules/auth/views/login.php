@@ -68,7 +68,7 @@
             </div>
 
             <div class="form-group">
-              <button type="submit" class="btn btn-primary btn-block">Sign in <i class="icon-circle-right2 position-right"></i></button>
+              <button type="submit" class="btn btn-primary btn-block">Sign in <i class="icon-circle-right2"></i></button>
             </div>
           </div>
         </form>
@@ -85,7 +85,7 @@
 
 
   <!-- Footer -->
-  <div class="footer text-muted">
+  <div class="footer text-muted text-center">
     &copy; 2020. <a href="#">Wanda Azhar</a> by <a href="https://instagram.com/wanda_azharr/" target="_blank">natrium-tech</a>
   </div>
   <!-- /footer -->

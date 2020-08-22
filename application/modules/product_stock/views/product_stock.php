@@ -30,11 +30,11 @@
     <table class="table datatable-responsive" id="tableProductStockMasuk">
       <thead>
         <tr>
-          <th>No</th>
+          <th style="width: 10px;">No</th>
           <th>Tanggal</th>
           <th>Kode Barcode</th>
           <th>Nama Produk</th>
-          <th>Keterangan</th>
+          <!-- <th>Keterangan</th> -->
           <th>Nama Supplier</th>
           <th>Stock</th>
           <th class="text-center">Aksi</th>
@@ -61,11 +61,11 @@
               <div class="col-sm-6" style="margin-bottom: 10px;">
                 <div class="form-group">
                   <label>Nama Produk</label>
-                  <select class="select-search select2-hidden-accessible" tabindex="-1" aria-hidden="true" name="name">
+                  <select class="select-search select2-hidden-accessible" tabindex="-1" aria-hidden="true" name="idproduct">
                     <optgroup label="Pilih Nama Produk">
-                      <?php foreach ($getProduct as $i) : ?>
-                        <option value=""></option>
-                        <option value="<?php echo $i['name'] ?>"><?= $i['name']; ?></option>
+                      <option value=""></option>
+                      <?php foreach ($getAllProduct as $i) : ?>
+                        <option value="<?php echo $i['idproduct'] ?>"><?= $i['name']; ?></option>
                       <?php endforeach; ?>
                     </optgroup>
                   </select>
@@ -75,11 +75,11 @@
 
               <div class="col-sm-6" style="margin-bottom: 10px;">
                 <div class="form-group">
-                  <label>Detail</label>
-                  <select class="select-search select2-hidden-accessible" tabindex="-1" aria-hidden="true" name="name">
+                  <label>Jenis</label>
+                  <select class="select-search select2-hidden-accessible" tabindex="-1" aria-hidden="true" name="type">
                     <optgroup label="Pilih jenis stok">
-                      <option value="">Penambahan Stok</option>
-                      <option value="">Lain-Lain</option>
+                      <option value="stock masuk">Penambahan Stok</option>
+                      <option value="lain-lain">Lain-Lain</option>
                     </optgroup>
                   </select>
                 </div>
@@ -88,10 +88,10 @@
               <div class="col-sm-6" style="margin-bottom: 10px;">
                 <div class="form-group">
                   <label>Supplier</label>
-                  <select class="select-search select2-hidden-accessible" tabindex="-1" aria-hidden="true" name="supplier">
+                  <select class="select-search select2-hidden-accessible" tabindex="-1" aria-hidden="true" name="idsupplier">
                     <optgroup label="Pilih Nama Supplier">
-                      <?php foreach ($getSupplier as $i) : ?>
-                        <option value=""></option>
+                      <option value=""></option>
+                      <?php foreach ($getAllSupplier as $i) : ?>
                         <option value="<?php echo $i['idsupplier'] ?>"><?= $i['name']; ?></option>
                       <?php endforeach; ?>
                     </optgroup>
@@ -101,8 +101,8 @@
 
               <div class="col-sm-3" style="margin-bottom: 10px;">
                 <label>Jumlah</label>
-                <input type="number" name="jumlah" placeholder="0" class="form-control">
-                <small class="text-danger"><?php echo form_error('price_selling') ?></small>
+                <input type="number" name="total" placeholder="0" class="form-control">
+                <small class="text-danger"><?php echo form_error('total') ?></small>
               </div>
             </div>
           </div>

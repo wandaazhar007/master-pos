@@ -1,8 +1,6 @@
 <!-- Theme JS files -->
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/plugins/tables/datatables/datatables.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/plugins/tables/datatables/extensions/responsive.min.js"></script>
-<script type="text/javascript" src="<?php echo base_url() ?>assets/js/plugins/forms/selects/select2.min.js"></script>
-
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/core/libraries/jquery_ui/interactions.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/plugins/forms/selects/select2.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/core/app.js"></script>
@@ -36,14 +34,14 @@
       <thead>
         <tr>
           <th>No</th>
-          <th>Kode Barcode</th>
+          <th>Barcode</th>
           <th>Nama Produk</th>
           <th>Harga Asli</th>
-          <th>Persentase</th>
+          <th>Margin</th>
           <th>Harga Jual</th>
           <th>Kategori</th>
           <th>Satuan</th>
-          <th>Deskripsi</th>
+          <th>Stok</th>
           <th class="text-center">Aksi</th>
         </tr>
       </thead>
@@ -52,7 +50,7 @@
 </div>
 
 
-<!-- Note: Modal Form Input Customer | Author: wandaazhar@gmail.com -->
+<!-- Note: Modal Form Input product | Author: wandaazhar@gmail.com -->
 <div id="modal_form_data_produk" class="modal fade">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -62,7 +60,7 @@
       </div>
       <hr>
 
-      <form action="<?php echo base_url('produk/save') ?>" method="post">
+      <form action="<?php echo base_url('product/save') ?>" method="post">
         <div class="modal-body">
           <div class="form-group">
             <div class="row">
@@ -80,46 +78,54 @@
 
               <div class="col-sm-3">
                 <label>Persentase</label>
-                <input type="number" name="barcode" class="form-control" placeholder="0%" required>
-                <small class="text-danger"><?php echo form_error('barcode') ?></small>
+                <input type="number" name="persentase" id="persen" class="form-control" placeholder="0%" required>
+                <small class="text-danger"><?php echo form_error('persentase') ?></small>
               </div>
 
 
               <div class="col-sm-6" style="margin-bottom: 10px;">
                 <label>Harga Asli</label>
-                <input type="text" name="price" placeholder="Rp. ..." class="form-control" required>
+                <input type="text" name="price" id="hna" placeholder="Rp. ..." class="form-control" required>
                 <small class="text-danger"><?php echo form_error('price') ?></small>
               </div>
 
               <div class="col-sm-6" style="margin-bottom: 10px;">
                 <label>Harga Jual</label>
-                <input type="text" name="price" placeholder="Rp. ..." class="form-control" required readonly>
+                <input type="text" name="price_selling" id="hj" placeholder="Rp. ..." class="form-control" required>
                 <small class="text-danger"><?php echo form_error('price_selling') ?></small>
               </div>
 
               <div class="col-sm-6" style="margin-bottom: 10px;">
-                <label>Kategori Produk</label>
-                <select data-placeholder="Pilih Kategori Produk..." class="select select2-hidden-accessible" tabindex="-1" aria-hidden="true" name="gender">
-                  <option></option>
-                  <optgroup label="Pilih Kategori Produk">
-                    <option value="laki-laki">Laki-Laki</option>
-                  </optgroup>
-                </select>
+                <div class="form-group">
+                  <label>Kategori Produk</label>
+                  <select class="select-search select2-hidden-accessible" tabindex="-1" aria-hidden="true" name="idproduct_category">
+                    <optgroup label="Pilih Kategory Produk">
+                      <option value=""></option>
+                      <?php foreach ($getCategoryProduct as $i) : ?>
+                        <option value="<?php echo $i['idproduct_category'] ?>"><?= $i['name']; ?></option>
+                      <?php endforeach; ?>
+                    </optgroup>
+                  </select>
+                </div>
               </div>
 
               <div class="col-sm-6" style="margin-bottom: 10px;">
-                <label>Kategori Produk</label>
-                <select data-placeholder="Pilih Kategori Produk..." class="select select2-hidden-accessible" tabindex="-1" aria-hidden="true" name="gender">
-                  <option></option>
-                  <optgroup label="Pilih Kategori Produk">
-                    <option value="laki-laki">Laki-Laki</option>
-                  </optgroup>
-                </select>
+                <div class="form-group">
+                  <label>Satuan Produk</label>
+                  <select class="select-search select2-hidden-accessible" tabindex="-1" aria-hidden="true" name="idproduct_unit">
+                    <optgroup label="Pilih Satuan Produk">
+                      <option value=""></option>
+                      <?php foreach ($getUnitProduct as $i) : ?>
+                        <option value="<?php echo $i['idproduct_unit'] ?>"><?= $i['name']; ?></option>
+                      <?php endforeach; ?>
+                    </optgroup>
+                  </select>
+                </div>
               </div>
 
               <div class="col-sm-12">
                 <label>Keterangan</label>
-                <textarea name="address" class="form-control" id="" cols="5" rows="5" placeholder="Masukan keterangan produk"></textarea>
+                <textarea name="description" class="form-control" id="" cols="5" rows="5" placeholder="Masukan keterangan produk (Jika diperlukan)"></textarea>
                 <small class="text-danger"><?php echo form_error('description') ?></small>
               </div>
             </div>
@@ -135,8 +141,8 @@
 </div>
 
 
-<!-- Note: Modal Form Edit Customer | Author: wandaazhar@gmail.com -->
-<div class="modal fade" id="modal_customer">
+<!-- Note: Modal Form Edit Data Produk | Author: wandaazhar@gmail.com -->
+<div class="modal fade" id="modal_product">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -144,13 +150,13 @@
         <h5 class="modal-title">Edit Data Produk</h5>
       </div>
       <div class="modal-body">
-        <div id="data_produk_result"></div>
+        <div id="product_result"></div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Note: Modal Form Edit Customer | Author: wandaazhar@gmail.com -->
+<!-- Note: Modal Form Edit Produk | Author: wandaazhar@gmail.com -->
 <div class="modal fade" id="modal_delete_data_produk">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -164,3 +170,14 @@
     </div>
   </div>
 </div>
+
+<script>
+  var hna = document.getElementById('hna');
+  var persen = document.getElementById('persen');
+  var hj = document.getElementById('hj');
+
+  hna.addEventListener('keyup', function() {
+    var result = hna * persen;
+    console.log(result);
+  })
+</script>

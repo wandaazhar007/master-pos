@@ -22,7 +22,7 @@
           <i class="icon-make-group position-left"></i>Produk <span class="caret"></span>
         </a>
         <ul class="dropdown-menu width-250">
-          <li><a href="<?php echo base_url('produk/dataProduk') ?>"><i class="icon-align-center-horizontal"></i>Data Produk</a></li>
+          <li><a href="<?php echo base_url('product/dataProduct') ?>"><i class="icon-align-center-horizontal"></i>Data Produk</a></li>
           <li><a href="<?php echo base_url('product_category') ?>"><i class="icon-align-center-horizontal"></i>Kategori Produk</a></li>
           <li><a href="<?php echo base_url('product_unit') ?>"><i class="icon-flip-vertical3"></i>Satuan Produk</a></li>
         </ul>

@@ -1,13 +1,13 @@
 <?php
-class M_data_produk extends CI_Model
+class M_data_product extends CI_Model
 {
 
   // DataTables list table
-  function datatables_getAllTableDataProduk()
+  function datatables_getAllTableDataProduct()
   {
-    $column_order   = ['idproduct', 'name', 'price', 'barcode'];
-    $column_search  = ['idproduct', 'name', 'price', 'barcode'];
-    $def_order      = ['idproduct' => 'desc'];
+    $column_order   = ['product.idproduct', 'product.name', 'product.price', 'product.barcode', 'product.persentase', 'product.price_selling'];
+    $column_search  = ['product.idproduct', 'product.name', 'product.price', 'product.barcode', 'product.persentase', 'product.price_selling'];
+    $def_order      = ['product.idproduct' => 'desc'];
 
     $this->_sql();
     $this->query_datatables($column_order, $column_search, $def_order);
@@ -19,9 +19,10 @@ class M_data_produk extends CI_Model
 
   function _sql()
   {
-    $this->db->select("idproduct,name,barcode,persentase,description,price_selling,idproduct_unit,idproduct_category,price,created,createdBy", false);
+    $this->db->select("`product`.`idproduct`,`product`.`name`,`product`.`barcode`,`product`.`persentase`,`product`.`description`,`product`.`price_selling`,`product`.`idproduct_unit`,`product`.`idproduct_category`,`product`.`price`,`product`.`created`,`product`.`createdBy`, `product_stock`.`total`", false);
     $this->db->from("product");
-    $this->db->order_by("idproduct", "desc");
+    $this->db->join("product_stock", "product.idproduct_stock = product_stock.idproduct_stock", "left");
+    $this->db->order_by("product.idproduct", "desc");
   }
 
   function query_datatables($column_order, $column_search, $def_order)
@@ -59,23 +60,22 @@ class M_data_produk extends CI_Model
   function countFiltered()
   {
     $column_order = [
-      'idproduct',
-      'name',
-      'price',
-      'barcode',
-      'persentase',
-      'price_selling',
-      'description'
+      'product.idproduct',
+      'product.name',
+      'product.price',
+      'product.barcode',
+      'product.persentase',
+      'product.price_selling',
+      'product.description'
     ];
 
     $column_search = [
-      'idproduct',
-      'name',
-      'price',
-      'barcode',
-      'persentase',
-      'price_selling',
-      'description'
+      'product.idproduct',
+      'product.name',
+      'product.price',
+      'product.barcode',
+      'product.persentase',
+      'product.price_selling'
     ];
     $def_order          = ['idproduct' => 'desc'];
 
