@@ -30,6 +30,8 @@
         </ul>
       </div>
     </div>
+    <!-- <div id="hj"></div> -->
+
     <table class="table datatable-responsive" id="tableDataProduk">
       <thead>
         <tr>
@@ -48,6 +50,8 @@
     </table>
   </div>
 </div>
+
+
 
 
 <!-- Note: Modal Form Input product | Author: wandaazhar@gmail.com -->
@@ -70,9 +74,10 @@
                 <small class="text-danger"><?php echo form_error('name') ?></small>
               </div>
 
+              <?= $this->wandalibs->getBarcode(); ?>
               <div class="col-sm-3" style="margin-bottom: 10px;">
                 <label>Kode Barcode</label>
-                <input type="text" name="barcode" class="form-control" value="<?php echo 'AZ-' . $getBarcode ?>" required readonly>
+                <input type="text" name="barcode" class="form-control" value="<?php echo 'AZ-' . $this->wandalibs->getBarcode() ?>" required readonly>
                 <small class="text-danger"><?php echo form_error('barcode') ?></small>
               </div>
 
@@ -91,7 +96,7 @@
 
               <div class="col-sm-6" style="margin-bottom: 10px;">
                 <label>Harga Jual</label>
-                <input type="text" name="price_selling" id="hj" placeholder="Rp. ..." class="form-control" required>
+                <input type="text" name="price_selling" id="hj" placeholder="Rp. ..." class="form-control" readonly>
                 <small class="text-danger"><?php echo form_error('price_selling') ?></small>
               </div>
 
@@ -172,12 +177,42 @@
 </div>
 
 <script>
-  var hna = document.getElementById('hna');
-  var persen = document.getElementById('persen');
-  var hj = document.getElementById('hj');
+  document.getElementById('hna').addEventListener('keyup', function() {
+    const hna = parseInt(document.getElementById('hna').value);
+    const persen = parseInt(document.getElementById('persen').value);
+    const hj = document.getElementById('hj');
 
-  hna.addEventListener('keyup', function() {
-    var result = hna * persen;
-    console.log(result);
+    const result1 = (hna * persen) / 100;
+    const result2 = result1 + hna;
+    const result3 = Math.round(result2);
+
+    hj.setAttribute('value', result3);
+    // hj.innerHTML = result2;
+    // const inputHargaJual = document.createElement('input');
+    // const teks = document.createTextNode('coba create element');
+    // inputHargaJual.appendChild(teks);
+    // const posisi = document.getElementById('hj');
+    // posisi.appendChild(inputHargaJual);
+    // console.log(inputHargaJual);
+
+  })
+
+  document.getElementById('persen').addEventListener('keyup', function() {
+    const hna = parseInt(document.getElementById('hna').value);
+    const persen = parseInt(document.getElementById('persen').value);
+    const hj = document.getElementById('hj');
+
+    const result1 = (hna * persen) / 100;
+    const result2 = result1 + hna;
+    const result3 = Math.round(result2);
+
+    hj.setAttribute('value', result3);
+    // hj.innerHTML = result2;
+    // const inputHargaJual = document.createElement('input');
+    // const teks = document.createTextNode('coba create element');
+    // inputHargaJual.appendChild(teks);
+    // const posisi = document.getElementById('hj');
+    // posisi.appendChild(inputHargaJual);
+    // console.log(inputHargaJual);
   })
 </script>

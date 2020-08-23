@@ -14,7 +14,7 @@ class Product extends MX_Controller
   {
     $data['title']      = 'Data Produk Master POS';
     $data['contents']   = 'data_product';
-    $data['getBarcode'] = $this->model->getBarcode();
+    // $data['getBarcode'] = $this->wandalibs->getBarcode();
     $data['getCategoryProduct'] = $this->wandalibs->getCategoryProduct();
     $data['getUnitProduct'] = $this->wandalibs->getUnitProduct();
 
@@ -141,8 +141,12 @@ class Product extends MX_Controller
   function showFormUpdate()
   {
     $idproduct = $this->input->post('idproduct');
-    $queryCategory['name'] = $this->wandalibs->getCategoryProductArray();
-    $queryUnit = $this->wandalibs->getUnitProduct();
+    $category = $this->wandalibs->getCategoryProductArray();
+    // $queryUnit = $this->wandalibs->getUnitProduct();
+    // $queryCategory = $this->wandalibs->getCategoryProduct();
+    // foreach ($queryCategory as $u) {
+    //   return $u['name'];
+    // }
 
     // var_dump($queryCategory);
     // die;
@@ -198,7 +202,7 @@ class Product extends MX_Controller
                   <label>Kategori Produk</label>
                   <select class="select-search select2-hidden-accessible" tabindex="-1" aria-hidden="true" name="idproduct_category">
                     <optgroup label="Pilih Kategory Produk">
-                        <option value="">' . $queryCategory . '</option>
+                        <option value="">' .  $category . '</option>
                     </optgroup>
                   </select>
                 </div>

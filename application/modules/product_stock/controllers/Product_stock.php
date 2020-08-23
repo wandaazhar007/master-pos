@@ -231,6 +231,7 @@ class Product_stock extends MX_Controller
 
       $query = $this->db->get_where('product', ['idproduct' => $idproduct])->row_array();
       $namaProduk = $query['name'];
+
       $data = [
         'idproduct'         => $idproduct,
         'idsupplier'        => $idsupplier,
@@ -238,8 +239,19 @@ class Product_stock extends MX_Controller
         'createdby'         => $this->session->userdata('nama'),
         'stock_date'        => date('Y-m-d h:i:s')
       ];
+      // $this->db->insert('product_stock', $data);
 
-      $this->db->insert('product_stock', $data);
+      $query2 = $this->db->get_where('product_stock', ['idproduct_stock' => $idproduct])->row_array();
+      $idProdukStokTerakhir = $query2['idproduct_stock'];
+      var_dump($idProdukStokTerakhir);
+      die;
+
+      $data2 = [
+        'idproduct_stock' => $idProdukStokTerakhir
+      ];
+      // $this->db->where('idproduct', $idproduct);
+      // $this->db->update('product', $data2);
+
       $this->session->set_flashdata('message', '<div class="alert alert-success alert-styled-left alert-arrow-left alert-bordered">
       <button type="button" class="close" data-dismiss="alert"><span>×</span><span class="sr-only">Close</span></button>
         <span class="text-semibold">Yeay!</span> Stok Produk ' . $namaProduk . ' berhasil ditambah .

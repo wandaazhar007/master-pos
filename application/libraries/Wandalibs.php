@@ -446,6 +446,26 @@ class Wandalibs
     }
   }
 
+  function getBarcode()
+  {
+    $data =  $this->db->query("SELECT `idproduct` FROM `product` ORDER BY `idproduct` DESC LIMIT 1")->result_array();
+    foreach ($data as $i) {
+      return $i['idproduct'] + 1;
+    }
+    // echo $data->result_array();
+    // var_dump($data);
+    // die;
+    // return $data;
+    // echo json_encode($data);
+    // if ($data->num_rows() > 0) {
+    //   foreach ($data->result() as $row) {
+    //     $result[] = $row;
+    //   }
+
+    //   return $result;
+    // }
+  }
+
   function getIdTransactionGroup()
   {
     return $this->db->query("SELECT MAX(`idtransaction_group`) AS `id_trans` FROM `transaction`")->row_array();
@@ -478,13 +498,13 @@ class Wandalibs
     return $this->db->query("SELECT `product_category`.`idproduct_category`, `product_category`.`name` FROM `product_category`")->result_array();
   }
 
-  function getCategoryProductArray()
+  function getAllCategoryProductArray()
   {
     $query = $this->db->query("SELECT `product_category`.`idproduct_category`, `product_category`.`name` FROM `product_category`")->result_array();
     foreach ($query as $i) {
-      // $query = $i['name'];
-      return $i;
+      $result[] = $i;
     }
+    return $result;
   }
 
   function getUnitProduct()

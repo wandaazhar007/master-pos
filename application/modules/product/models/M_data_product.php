@@ -90,8 +90,8 @@ class M_data_product extends CI_Model
     return $this->db->query("SELECT * FROM `product` WHERE `product`.`idproduct` = '$idproduct'")->result_array();
   }
 
-  function getBarcode()
-  {
-    return $this->db->query("SELECT `idproduct` FROM `product`")->num_rows();
-  }
+  // function getBarcode()
+  // {
+  //   return $this->db->query("SELECT MAX(`idproduct`) FROM `product`")->result_array();
+  // }
 }
