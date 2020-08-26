@@ -39,7 +39,7 @@ class Customer extends MX_Controller
       $row[] = $no++;
       $row[] = $value['name'];
       $row[] = $value['phone'];
-      // $row[] = $value['email'];
+      $row[] = $value['email'];
       $row[] = $value['address'];
       $row[] = $queryAction;
       $data[] = $row;
@@ -89,8 +89,8 @@ class Customer extends MX_Controller
         'address'   => $address,
         'email'     => $email,
         'gender'    => $gender,
-        // 'createdby' => $this->session->userdata('name'),
-        'created'   => date('Y-m-d h:i:s')
+        'created_by' => $this->session->userdata('name'),
+        'date_created' => date('Y-m-d h:i:s')
       ];
 
       $this->db->insert('customer', $data);
@@ -128,6 +128,11 @@ class Customer extends MX_Controller
             <label>No Handphone</label>
             <input type="text" name="phone" value="' . $i['phone'] . '" class="form-control" required>
           </div>
+         
+          <div class="col-sm-6">
+            <label>Email</label>
+            <input type="text" name="email" value="' . $i['email'] . '" class="form-control" required>
+          </div>
 
           <div class="col-sm-12">
             <label>Alamat</label>
@@ -154,13 +159,16 @@ class Customer extends MX_Controller
     $idcustomer = htmlspecialchars($this->input->post('idcustomer', true));
     $name       = htmlspecialchars($this->input->post('name', true));
     $phone      = htmlspecialchars($this->input->post('phone', true));
+    $email      = htmlspecialchars($this->input->post('email', true));
     $alamat     = htmlspecialchars($this->input->post('alamat', true));
 
     $data = [
       'name'      => $name,
       'phone'     => $phone,
+      'email'     => $email,
       'address'   => $alamat,
-      // 'createdby' => $this->session->userdata('name'),
+      'updated_by' => $this->session->userdata('name'),
+      'updated' => date('Y-m-d h:i:s')
     ];
 
     $this->db->where('idcustomer', $idcustomer);
@@ -203,7 +211,7 @@ class Customer extends MX_Controller
 
   function delete($idcustomer)
   {
-    $query = $this->db->get_where('transaction_group', ['idcustomer' => $idcustomer])->row_array();
+    $query = $this->db->get_where('transaction', ['idcustomer' => $idcustomer])->row_array();
     $querycustomer = $this->db->get_where('customer', ['idcustomer' => $idcustomer])->row_array();
     if ($query['idcustomer'] == $idcustomer) {
       $this->session->set_flashdata('message', '<div class="alert alert-danger alert-styled-left alert-arrow-left alert-bordered">

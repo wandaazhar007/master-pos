@@ -5,9 +5,9 @@ class M_product_unit extends CI_Model
   // DataTables list table
   function datatables_getAllTable()
   {
-    $column_order   = ['idproduct_unit', 'name'];
-    $column_search  = ['idproduct_unit', 'name'];
-    $def_order      = ['idproduct_unit' => 'desc'];
+    $column_order   = ['idunit', 'name_unit', 'date_created'];
+    $column_search  = ['idunit', 'name_unit', 'date_created'];
+    $def_order      = ['idunit' => 'desc'];
 
     $this->_sql();
     $this->query_datatables($column_order, $column_search, $def_order);
@@ -19,9 +19,9 @@ class M_product_unit extends CI_Model
 
   function _sql()
   {
-    $this->db->select("idproduct_unit,name", false);
-    $this->db->from("product_unit");
-    $this->db->order_by("idproduct_unit", "desc");
+    $this->db->select("idunit, name_unit, date_created", false);
+    $this->db->from("unit");
+    $this->db->order_by("idunit", "desc");
   }
 
   function query_datatables($column_order, $column_search, $def_order)
@@ -58,9 +58,9 @@ class M_product_unit extends CI_Model
 
   function countFiltered()
   {
-    $column_order       = ['idproduct_unit', 'name'];
-    $column_search      = ['idproduct_unit', 'name'];
-    $def_order          = ['idproduct_unit' => 'desc'];
+    $column_order       = ['idunit', 'name_unit', 'date_created'];
+    $column_search      = ['idunit', 'name_unit', 'date_created'];
+    $def_order          = ['idunit' => 'desc'];
 
     $this->_sql();
     $this->query_datatables($column_order, $column_search, $def_order);
@@ -68,8 +68,8 @@ class M_product_unit extends CI_Model
     return $query->num_rows();
   }
 
-  function getDetailById($idproduct_unit)
+  function getDetailById($idunit)
   {
-    return $this->db->query("SELECT * FROM `product_unit` WHERE `product_unit`.`idproduct_unit` = '$idproduct_unit'")->result_array();
+    return $this->db->query("SELECT * FROM `unit` WHERE `unit`.`idunit` = '$idunit'")->result_array();
   }
 }

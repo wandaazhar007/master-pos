@@ -381,12 +381,12 @@ $(document).ready(function () {
 /* Note: Function untuk modal update Kategori Produk | Author: wandaazhar@gmail.com */
 $(document).ready(function () {
 	$('#tableProductCategory').on('click', '.view_product_category', function () {
-		var idproduct_category = $(this).attr('id');
+		var idcategory = $(this).attr('id');
 		$.ajax({
 			url: base_url + "product_category/showFormUpdate",
 			method: "POST",
 			data: {
-				idproduct_category: idproduct_category
+				idcategory: idcategory
 			},
 			success: function (data) {
 				console.log('yes');
@@ -401,12 +401,12 @@ $(document).ready(function () {
 /* Note: Function untuk modal update Satuan Produk | Author: wandaazhar@gmail.com */
 $(document).ready(function () {
 	$('#tableProductUnit').on('click', '.view_product_unit', function () {
-		var idproduct_unit = $(this).attr('id');
+		var idunit = $(this).attr('id');
 		$.ajax({
 			url: base_url + "product_unit/showFormUpdate",
 			method: "POST",
 			data: {
-				idproduct_unit: idproduct_unit
+				idunit: idunit
 			},
 			success: function (data) {
 				console.log('yes');
@@ -594,12 +594,12 @@ $(document).ready(function () {
 // Note: Function untuk modal konfirmasi delete kategori priduk | Author: wandaazhar@gmail.com
 $(document).ready(function () {
 	$('#tableProductCategory').on('click', '.view_hapus', function () {
-		var idproduct_category = $(this).attr('id');
+		var idcategory = $(this).attr('id');
 		$.ajax({
 			url: base_url + "product_category/showModalDelete",
 			method: "POST",
 			data: {
-				idproduct_category: idproduct_category
+				idcategory: idcategory
 			},
 			success: function (data) {
 				console.log('yes');
@@ -614,12 +614,12 @@ $(document).ready(function () {
 // Note: Function untuk modal satuan delete kategori priduk | Author: wandaazhar@gmail.com
 $(document).ready(function () {
 	$('#tableProductUnit').on('click', '.view_hapus', function () {
-		var idproduct_unit = $(this).attr('id');
+		var idunit = $(this).attr('id');
 		$.ajax({
 			url: base_url + "product_unit/showModalDelete",
 			method: "POST",
 			data: {
-				idproduct_unit: idproduct_unit
+				idunit: idunit
 			},
 			success: function (data) {
 				console.log('yes');

@@ -34,10 +34,11 @@
     <table class="table datatable-responsive" id="tableCustomer">
       <thead>
         <tr>
-          <th>No</th>
-          <th>Nama Pelanggan</th>
-          <th>No Handphone</th>
-          <th>Alamat</th>
+          <th style="width: 10px;">No</th>
+          <th style="width: 10px;">Nama Pelanggan</th>
+          <th style="width: 10px;">No Handphone</th>
+          <th style="width: 10px;">Email</th>
+          <th style="width: 10px;">Alamat</th>
           <th class="text-center">Aksi</th>
         </tr>
       </thead>

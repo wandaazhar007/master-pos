@@ -115,7 +115,7 @@ class Supplier extends MX_Controller
           <div class="col-sm-6">
             <label>Nama Supplier</label>
             <input type="hidden" name="idsupplier" value="' . $i['idsupplier'] . '" class="form-control" required>
-            <input type="text" name="name" value="' . $i['name_supplier'] . '" class="form-control" required>
+            <input type="text" name="name_supplier" value="' . $i['name_supplier'] . '" class="form-control" required>
           </div>
 
           <div class="col-sm-6">
@@ -155,30 +155,48 @@ class Supplier extends MX_Controller
 
   function update()
   {
-    $idsupplier       = htmlspecialchars($this->input->post('idsupplier', true));
-    $name_supplier    = htmlspecialchars($this->input->post('name_supplier', true));
-    $phone            = htmlspecialchars($this->input->post('phone', true));
-    $email            = htmlspecialchars($this->input->post('email', true));
-    $description      = htmlspecialchars($this->input->post('description', true));
-    $address          = htmlspecialchars($this->input->post('address', true));
+    $this->load->library('form_validation');
+    $this->form_validation->set_rules('name_supplier', 'Nama Supplier', 'required', [
+      'required'  => 'Nama supplier belum diisi!'
+    ]);
+    $this->form_validation->set_rules('phone', 'No Handphone', 'required|trim', [
+      'required'  => 'Nomor Telepon/Handphone supplier belum diisi'
+    ]);
+    $this->form_validation->set_rules('email', 'No Handphone', 'required|trim|valid_email', [
+      'required'  => 'Nomor Telepon/Handphone supplier belum diisi',
+      'vald_email'  => 'Format email tidak vaid!'
+    ]);
 
-    $data = [
-      'name_supplier' => $name_supplier,
-      'phone'         => $phone,
-      'address'       => $address,
-      'email'         => $email,
-      'description'   => $description,
-      'created_by'     => $this->session->userdata('name'),
-      'date_created'       => date('Y-m-d h:i:s')
-    ];
+    if ($this->form_validation->run() == false) {
+      $data['title']      = 'Data Supplier Master POS';
+      $data['contents']   = 'supplier';
+      $this->load->view('templates/core', $data);
+    } else {
+      $idsupplier       = htmlspecialchars($this->input->post('idsupplier', true));
+      $name_supplier    = htmlspecialchars($this->input->post('name_supplier', true));
+      $phone            = htmlspecialchars($this->input->post('phone', true));
+      $email            = htmlspecialchars($this->input->post('email', true));
+      $description      = htmlspecialchars($this->input->post('description', true));
+      $address          = htmlspecialchars($this->input->post('address', true));
 
-    $this->db->where('idsupplier', $idsupplier);
-    $this->db->update('supplier', $data);
-    $this->session->set_flashdata('message', '<div class="alert alert-success alert-styled-left alert-arrow-left alert-bordered">
+      $data = [
+        'name_supplier' => $name_supplier,
+        'phone'         => $phone,
+        'address'       => $address,
+        'email'         => $email,
+        'description'   => $description,
+        'created_by'     => $this->session->userdata('name'),
+        'date_created'       => date('Y-m-d h:i:s')
+      ];
+
+      $this->db->where('idsupplier', $idsupplier);
+      $this->db->update('supplier', $data);
+      $this->session->set_flashdata('message', '<div class="alert alert-success alert-styled-left alert-arrow-left alert-bordered">
     <button type="button" class="close" data-dismiss="alert"><span>×</span><span class="sr-only">Close</span></button>
     <span class="text-semibold">Yeay!</span> Data supplier atas nama ' . $name_supplier . ' berhasil diupdate.
   </div>');
-    redirect('supplier');
+      redirect('supplier');
+    }
   }
 
   function showModalDelete()

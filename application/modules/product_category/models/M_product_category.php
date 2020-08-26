@@ -5,9 +5,9 @@ class M_product_category extends CI_Model
   // DataTables list table
   function datatables_getAllTable()
   {
-    $column_order   = ['idproduct_category', 'name'];
-    $column_search  = ['idproduct_category', 'name'];
-    $def_order      = ['idproduct_category' => 'desc'];
+    $column_order   = ['idcategory', 'name_category', 'date_created'];
+    $column_search  = ['idcategory', 'name_category', 'date_created'];
+    $def_order      = ['idcategory' => 'desc'];
 
     $this->_sql();
     $this->query_datatables($column_order, $column_search, $def_order);
@@ -19,9 +19,9 @@ class M_product_category extends CI_Model
 
   function _sql()
   {
-    $this->db->select("idproduct_category,name", false);
-    $this->db->from("product_category");
-    $this->db->order_by("idproduct_category", "desc");
+    $this->db->select("idcategory, name_category, date_created ", false);
+    $this->db->from("category");
+    $this->db->order_by("idcategory", "desc");
   }
 
   function query_datatables($column_order, $column_search, $def_order)
@@ -58,9 +58,9 @@ class M_product_category extends CI_Model
 
   function countFiltered()
   {
-    $column_order       = ['idproduct_category', 'name'];
-    $column_search      = ['idproduct_category', 'name'];
-    $def_order          = ['idproduct_category' => 'desc'];
+    $column_order       = ['idcategory', 'name_category', 'date_created'];
+    $column_search      = ['idcategory', 'name_category', 'date_created'];
+    $def_order          = ['idcategory' => 'desc'];
 
     $this->_sql();
     $this->query_datatables($column_order, $column_search, $def_order);
@@ -68,8 +68,8 @@ class M_product_category extends CI_Model
     return $query->num_rows();
   }
 
-  function getDetailById($idproduct_category)
+  function getDetailById($idcategory)
   {
-    return $this->db->query("SELECT * FROM `product_category` WHERE `product_category`.`idproduct_category` = '$idproduct_category'")->result_array();
+    return $this->db->query("SELECT * FROM `category` WHERE `category`.`idcategory` = '$idcategory'")->result_array();
   }
 }

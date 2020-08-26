@@ -5,8 +5,8 @@ class M_customer extends CI_Model
   // DataTables list table
   function datatables_getAllTable()
   {
-    $column_order   = ['idcustomer', 'name', 'phone', 'address'];
-    $column_search  = ['idcustomer', 'name', 'phone', 'address'];
+    $column_order   = ['idcustomer', 'name', 'phone', 'address', 'email'];
+    $column_search  = ['idcustomer', 'name', 'phone', 'address', 'email'];
     $def_order      = ['idcustomer' => 'desc'];
 
     $this->_sql();

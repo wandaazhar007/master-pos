@@ -14,7 +14,7 @@
 <div class="content-wrapper">
   <?php echo $this->session->flashdata('message') ?>
   <div class="text-danger" style="display: inline;">
-    <?php echo form_error('name') ?>
+    <?php echo form_error('name_unit') ?>
   </div>
   <div class="panel panel-flat">
     <div class="panel-heading" style="text-decoration: none;">
@@ -30,9 +30,10 @@
     <table class="table datatable-responsive" id="tableProductUnit">
       <thead>
         <tr>
-          <th>No</th>
+          <th style="width: 10px;">No</th>
           <th>Satuan Produk</th>
-          <th class="text-center">Aksi</th>
+          <th style="text-align: center; width: 200px">Tanggal</th>
+          <th style="text-align: center; width: 200px">Aksi</th>
         </tr>
       </thead>
     </table>
@@ -56,8 +57,8 @@
             <div class="row">
               <div class="col-sm-12" style="margin-bottom: 10px;">
                 <label>Nama Satuan</label>
-                <input type="text" name="name" placeholder="Masukan Nama Satuan Produk" class="form-control" required>
-                <small class="text-danger"><?php echo form_error('name') ?></small>
+                <input type="text" name="name_unit" placeholder="Masukan Nama Satuan Produk" class="form-control" required>
+                <small class="text-danger"><?php echo form_error('name_unit') ?></small>
               </div>
             </div>
           </div>

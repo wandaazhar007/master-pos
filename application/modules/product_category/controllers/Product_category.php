@@ -26,17 +26,18 @@ class Product_category extends MX_Controller
     foreach ($list as $value) {
       $queryAction = '
         <a href="#">
-          <button class="tombol-hapus view_hapus pull-right" id="' . $value['idproduct_category'] . '"><i class="fa fa-trash"></i>&nbsp;hapus</button>
+          <button class="tombol-hapus view_hapus pull-right" id="' . $value['idcategory'] . '"><i class="fa fa-trash"></i>&nbsp;hapus</button>
         </a>
         <a href="#">
-          <button style="margin-right: 5px;" class="tombol-edit view_product_category pull-right" id="' . $value['idproduct_category'] . '"><i class="fa fa-pencil"></i>&nbsp;edit</button>
+          <button style="margin-right: 5px;" class="tombol-edit view_product_category pull-right" id="' . $value['idcategory'] . '"><i class="fa fa-pencil"></i>&nbsp;edit</button>
         </a>
         ';
       // <button class="tombol-hapus view_delete_product_category" id="tombol-delete-product_category"><i class="fa fa-trash"></i>&nbsp;hapus</button>
 
       $row = array();
       $row[] = $no++;
-      $row[] = $value['name'];
+      $row[] = $value['name_category'];
+      $row[] = $value['date_created'];
       $row[] = $queryAction;
       $data[] = $row;
     }
@@ -52,25 +53,25 @@ class Product_category extends MX_Controller
   function save()
   {
     $this->load->library('form_validation');
-    $name    = htmlspecialchars($this->input->post('name', true));
-    $this->form_validation->set_rules('name', 'Nama Pelanggan', 'required|is_unique[product_category.name]', [
-      'required'  => 'Nama pelanggan belum diisi!',
-      'is_unique'  => 'Kategori ' . $name . ' sudah ada di database'
+    $name_category    = htmlspecialchars($this->input->post('name_category', true));
+    $this->form_validation->set_rules('name_category', 'Nama Kategori', 'required|is_unique[category.name_category]', [
+      'required'  => 'Nama Kategori belum diisi!',
+      'is_unique'  => 'Kategori ' . $name_category . ' sudah ada di database'
     ]);
 
     if ($this->form_validation->run() == true) {
-      $name     = htmlspecialchars($this->input->post('name', true));
+      $name_category     = htmlspecialchars($this->input->post('name_category', true));
 
       $data = [
-        'name'      => $name,
-        // 'createdby' => $this->session->userdata('name'),
-        'created'   => date('Y-m-d h:i:s')
+        'name_category'   => $name_category,
+        'created_by'      => $this->session->userdata('nama'),
+        'date_created'    => date('Y-m-d h:i:s')
       ];
 
-      $this->db->insert('product_category', $data);
+      $this->db->insert('category', $data);
       $this->session->set_flashdata('message', '<div class="alert alert-success alert-styled-left alert-arrow-left alert-bordered">
       <button type="button" class="close" data-dismiss="alert"><span>×</span><span class="sr-only">Close</span></button>
-        <span class="text-semibold">Yeay!</span> Kategori ' . $name . ' berhasil ditambahkan.
+        <span class="text-semibold">Yeay!</span> Kategori ' . $name_category . ' berhasil ditambahkan.
       </div>');
       redirect('product_category');
     } else {
@@ -82,9 +83,9 @@ class Product_category extends MX_Controller
 
   function showFormUpdate()
   {
-    $idproduct_category = $this->input->post('idproduct_category');
-    if (isset($idproduct_category) and !empty($idproduct_category)) {
-      $query = $this->model->getDetailById($idproduct_category);
+    $idcategory = $this->input->post('idcategory');
+    if (isset($idcategory) and !empty($idcategory)) {
+      $query = $this->model->getDetailById($idcategory);
       $output = '';
       foreach ($query as $i) :
         $output .= '
@@ -94,8 +95,8 @@ class Product_category extends MX_Controller
         <div class="row">
           <div class="col-sm-12">
             <label>Nama Kategori Produk</label>
-            <input type="hidden" name="idproduct_category" value="' . $i['idproduct_category'] . '" class="form-control" required>
-            <input type="text" name="name" value="' . $i['name'] . '" class="form-control" required>
+            <input type="hidden" name="idcategory" value="' . $i['idcategory'] . '" class="form-control" required>
+            <input type="text" name="name_category" value="' . $i['name_category'] . '" class="form-control" required>
           </div>
           <div class="col-sm-12" style="margin-top: 10px;">
           <button type="submit" class="tombol-tambah pull-right"><i class="fa fa-save"></i>&nbsp;Update</button>
@@ -115,39 +116,39 @@ class Product_category extends MX_Controller
 
   function update()
   {
-    $idproduct_category = htmlspecialchars($this->input->post('idproduct_category', true));
-    $name       = htmlspecialchars($this->input->post('name', true));
+    $idcategory = htmlspecialchars($this->input->post('idcategory', true));
+    $name_category       = htmlspecialchars($this->input->post('name_category', true));
 
     $data = [
-      'name'      => $name,
-      // 'createdby' => $this->session->userdata('name'),
-      'created'   => date('Y-m-d h:i:s')
+      'name_category'   => $name_category,
+      'updated_by'     => $this->session->userdata('nama'),
+      'updated'         => date('Y-m-d h:i:s')
     ];
 
-    $this->db->where('idproduct_category', $idproduct_category);
-    $this->db->update('product_category', $data);
+    $this->db->where('idcategory', $idcategory);
+    $this->db->update('category', $data);
     $this->session->set_flashdata('message', '<div class="alert alert-success alert-styled-left alert-arrow-left alert-bordered">
     <button type="button" class="close" data-dismiss="alert"><span>×</span><span class="sr-only">Close</span></button>
-    <span class="text-semibold">Yeay!</span> Kategori ' . $name . ' berhasil diupdate.
+    <span class="text-semibold">Yeay!</span> Kategori ' . $name_category . ' berhasil diupdate.
   </div>');
     redirect('product_category');
   }
 
   function showModalDelete()
   {
-    $idproduct_category = $this->input->post('idproduct_category');
-    if (isset($idproduct_category) and !empty($idproduct_category)) {
-      $query = $this->model->getDetailById($idproduct_category);
+    $idcategory = $this->input->post('idcategory');
+    if (isset($idcategory) and !empty($idcategory)) {
+      $query = $this->model->getDetailById($idcategory);
       $output = '';
       foreach ($query as $i) :
         $output .= '
           <div class="row">
           <div class="col-sm-12 text-center">
             <p>Apakah Anda yakin akan menghapus kategori</p>
-            <h6 class="text-bold" style="margin-top: -10px;">' . $i['name'] . '</h6>
+            <h6 class="text-bold" style="margin-top: -10px;">' . $i['name_category'] . '</h6>
           </div>
             <div class="col-sm-12 text-center">
-              <a href="' . base_url('product_category/delete/') . $i['idproduct_category'] . '">
+              <a href="' . base_url('product_category/delete/') . $i['idcategory'] . '">
                 <button type="submit" class="tombol-tambah"><i class="fa fa-check"></i>&nbsp;Ya, Hapus</button>
                 <button type="button" class="tombol-modal-hapus" data-dismiss="modal"><i class="fa fa-close"></i>&nbsp;Tidak!</button>
               </a>
@@ -162,22 +163,22 @@ class Product_category extends MX_Controller
     }
   }
 
-  function delete($idproduct_category)
+  function delete($idcategory)
   {
-    $query = $this->db->get_where('product', ['idproduct_category' => $idproduct_category])->row_array();
-    $queryProduct_category = $this->db->get_where('product_category', ['idproduct_category' => $idproduct_category])->row_array();
-    if ($query['idproduct_category'] == $idproduct_category) {
+    $query = $this->db->get_where('product', ['idcategory' => $idcategory])->row_array();
+    $querycategory = $this->db->get_where('category', ['idcategory' => $idcategory])->row_array();
+    if ($query['idcategory'] == $idcategory) {
       $this->session->set_flashdata('message', '<div class="alert alert-danger alert-styled-left alert-arrow-left alert-bordered">
       <button type="button" class="close" data-dismiss="alert"><span>×</span><span class="sr-only">Close</span></button>
-      <span class="text-semibold">Ups!</span> Kategori <b><i>' . $queryProduct_category['name'] . '</i></b> sudah pernah digunakan!.
+      <span class="text-semibold">Ups!</span> Kategori <b><i>' . $querycategory['name'] . '</i></b> sudah pernah digunakan!.
     </div>');
       redirect('product_category');
     } else {
-      $this->db->where('idproduct_category', $idproduct_category);
-      $this->db->delete('product_category');
+      $this->db->where('idcategory', $idcategory);
+      $this->db->delete('category');
       $this->session->set_flashdata('message', '<div class="alert alert-success alert-styled-left alert-arrow-left alert-bordered">
       <button type="button" class="close" data-dismiss="alert"><span>×</span><span class="sr-only">Close</span></button>
-      <span class="text-semibold">Yeay!</span> Kategori ' . $queryProduct_category['name'] . 'berhasil dihapus!.
+      <span class="text-semibold">Yeay!</span> Kategori ' . $querycategory['name'] . 'berhasil dihapus!.
     </div>');
       redirect('product_category');
     }
