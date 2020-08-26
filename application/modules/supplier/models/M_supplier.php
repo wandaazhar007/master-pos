@@ -5,8 +5,8 @@ class M_supplier extends CI_Model
   // DataTables list table
   function datatables_getAllTable()
   {
-    $column_order   = ['idsupplier', 'name', 'phone', 'address'];
-    $column_search  = ['idsupplier', 'name', 'phone', 'address'];
+    $column_order   = ['idsupplier', 'name_supplier', 'phone', 'address'];
+    $column_search  = ['idsupplier', 'name_supplier', 'phone', 'address'];
     $def_order      = ['idsupplier' => 'desc'];
 
     $this->_sql();
@@ -19,7 +19,7 @@ class M_supplier extends CI_Model
 
   function _sql()
   {
-    $this->db->select("idsupplier,name,address,phone,description,created", false);
+    $this->db->select("idsupplier, name_supplier, address, phone, email, description, date_created", false);
     $this->db->from("supplier");
     $this->db->order_by("idsupplier", "desc");
     // $this->db->query("SELECT * FROM `tb_user` ORDER BY `id` DESC");
@@ -59,10 +59,10 @@ class M_supplier extends CI_Model
 
   function countFiltered()
   {
-    $column_order       = ['idsupplier', 'name', 'phone'];
+    $column_order       = ['idsupplier', 'name_supplier', 'phone'];
     $column_search      = [
       'idsupplier',
-      'name',
+      'name_supplier',
       'phone'
     ];
     $def_order          = ['idsupplier' => 'desc'];

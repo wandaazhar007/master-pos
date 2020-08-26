@@ -299,6 +299,46 @@ $(document).ready(function () {
 	});
 });
 
+//~ Datatable serverside Report Stock In ~//
+var save_method; //for save method string
+var oTable;
+$(document).ready(function () {
+	oTable = $('#tableReportStockIn').DataTable({
+		"processing": true,
+		"serverSide": true,
+		//"lengthChange": false,
+		//"displayLength" : 20,
+		"order": [],
+		"autoWidth": false,
+		"ajax": {
+			"url": base_url + "/report_stock_in/getAllTable/",
+			"type": "POST"
+		},
+		"bDestroy": true,
+		"aLengthMenu": [
+			[10, 50, 100],
+			[10, 50, 100]
+		], // Combobox Limit
+		"columnDefs": [{
+				"targets": [0],
+				"searchable": true,
+				"sortable": true
+			},
+			{
+				"targets": [1],
+				"searchable": true,
+				"sortable": true
+			},
+			{
+				"targets": [2],
+				"searchable": true,
+				"sortable": true
+			}
+		],
+
+	});
+});
+
 /* Note: Function untuk modal update supplier | Author: wandaazhar@gmail.com */
 $(document).ready(function () {
 	$('#tableSupplier').on('click', '.view_supplier', function () {
@@ -594,12 +634,12 @@ $(document).ready(function () {
 // Note: Function untuk modal delete Stok Masuk produk | Author: wandaazhar@gmail.com
 $(document).ready(function () {
 	$('#tableProductStockMasuk').on('click', '.view_hapus', function () {
-		var idproduct_stock = $(this).attr('id');
+		var idstock = $(this).attr('id');
 		$.ajax({
 			url: base_url + "product_stock/showModalDelete",
 			method: "POST",
 			data: {
-				idproduct_stock: idproduct_stock
+				idstock: idstock
 			},
 			success: function (data) {
 				console.log('yes');

@@ -80,20 +80,19 @@
                 <small class="text-danger"><?php echo form_error('code_product') ?></small>
               </div>
 
-              <div class="col-sm-3">
-                <label>Persentase</label>
-                <input type="number" name="persentase" id="persentase" class="form-control" placeholder="0%" required>
-                <small class="text-danger"><?php echo form_error('persentase') ?></small>
-              </div>
-
-
               <div class="col-sm-6" style="margin-bottom: 10px;">
                 <label>Harga Asli</label>
                 <input type="text" name="buying_price" id="buying_price" placeholder="Rp. ..." class="form-control" required>
                 <small class="text-danger"><?php echo form_error('buying_price') ?></small>
               </div>
 
-              <div class="col-sm-6" style="margin-bottom: 10px;">
+              <div class="col-sm-3">
+                <label>Persentase</label>
+                <input type="number" name="persentase" id="persentase" class="form-control" placeholder="0%" required>
+                <small class="text-danger"><?php echo form_error('persentase') ?></small>
+              </div>
+
+              <div class="col-sm-3" style="margin-bottom: 10px;">
                 <label>Harga Jual</label>
                 <input type="text" name="selling_price" id="selling_price" placeholder="Rp. ..." class="form-control" readonly>
                 <small class="text-danger"><?php echo form_error('selling_price') ?></small>
@@ -121,6 +120,20 @@
                       <option value=""></option>
                       <?php foreach ($getUnitProduct as $i) : ?>
                         <option value="<?php echo $i['idunit'] ?>"><?= $i['name_unit']; ?></option>
+                      <?php endforeach; ?>
+                    </optgroup>
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-sm-6" style="margin-bottom: 10px;">
+                <div class="form-group">
+                  <label>Supplier</label>
+                  <select class="select-search select2-hidden-accessible" tabindex="-1" aria-hidden="true" name="idsupplier">
+                    <optgroup label="Pilih Supplier">
+                      <option value=""></option>
+                      <?php foreach ($getAllSupplier as $i) : ?>
+                        <option value="<?php echo $i['idsupplier'] ?>"><?= $i['name_supplier']; ?></option>
                       <?php endforeach; ?>
                     </optgroup>
                   </select>

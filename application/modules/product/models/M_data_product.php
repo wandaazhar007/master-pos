@@ -5,8 +5,8 @@ class M_data_product extends CI_Model
   // DataTables list table
   function datatables_getAllTableDataProduct()
   {
-    $column_order   = ['product.idproduct', 'product.name'];
-    $column_search  = ['product.idproduct', 'product.name'];
+    $column_order   = ['product.idproduct', 'product.name', 'category.name_category', 'unit.name_unit'];
+    $column_search  = ['product.idproduct', 'product.name', 'category.name_category', 'unit.name_unit'];
     $def_order      = ['product.idproduct' => 'desc'];
 
     $this->_sql();
@@ -19,12 +19,11 @@ class M_data_product extends CI_Model
 
   function _sql()
   {
-    $this->db->select("`product`.`idproduct`, `product`.`name`, `product`.`code_product`, `category`.`name_category`, `unit`.`name_unit`, `stock`.`total`, `price`.`buying_price`, `price`.`persentase`, `price`.`selling_price`", false);
+    $this->db->select("`product`.`idproduct`, `product`.`code_product`, `product`.`stock_now`, `product`.`name`, `product`.`buying_price`, `product`.`persentase`, `product`.`selling_price`, `category`.`name_category`, `unit`.`name_unit`, `stock`.`idstock`", false);
     $this->db->from("product");
-    $this->db->join("category", "category.idcategory = product.idcategory");
-    $this->db->join("unit", "unit.idunit = product.idunit");
-    $this->db->join("price", "price.idprice = product.idprice");
-    $this->db->join("stock", "stock.idstock = product.idstock");
+    $this->db->join("category", "category.idcategory = product.idcategory", "left");
+    $this->db->join("unit", "unit.idunit = product.idunit", "left");
+    $this->db->join("stock", "stock.idstock = product.idstock", "left");
     // $this->db->join("product_stock", "product.idproduct_stock = product_stock.idproduct_stock", "left");
     $this->db->order_by("product.idproduct", "desc");
   }
@@ -66,13 +65,17 @@ class M_data_product extends CI_Model
     $column_order = [
       'product.idproduct',
       'product.name',
-      'product.price',
-      'product.kode_product',
+      'product.code_product',
+      'category.name_category',
+      'unit.name_unit'
     ];
 
     $column_search = [
       'product.idproduct',
       'product.name',
+      'product.code_product',
+      'category.name_category',
+      'unit.name_unit'
     ];
     $def_order          = ['idproduct' => 'desc'];
 

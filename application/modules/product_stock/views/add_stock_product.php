@@ -35,29 +35,18 @@
     <div class="row">
       <div class="tengah">
         <div class="col-md-3">
-          <form action="<?php echo base_url('product_stock/addFromProduct') ?>" method="post">
+          <form action="<?php echo base_url('product_stock/addStockProduct') ?>" method="post">
             <div class="modal-body">
               <div class="form-group">
                 <div class="row">
                   <div class="col-sm-12" style="margin-bottom: 10px;">
                     <?php foreach ($getProductById as $i) : ?>
-                      <h6 align="center" style="margin-bottom: -25px;"><?= $i['barcode']; ?></h6>
+                      <h6 align="center" style="margin-bottom: -25px;"><?= $i['code_product']; ?></h6>
                       <h3 align="center" style="margin-bottom: 10px;"><?= $i['name']; ?></h3>
                       <div class="form-group">
                         <input type="hidden" name="idproduct" value="<?php echo $i['idproduct'] ?>" class="form-control" readonly>
-                        <input type="hidden" name="barcode" value="<?php echo $i['barcode'] ?>" class="form-control" readonly>
+                        <input type="hidden" name="code_product" value="<?php echo $i['code_product'] ?>" class="form-control" readonly>
                         <input type="number" name="total" class="form-control" placeholder="Masukan jumlah stok disini" required>
-                      </div>
-
-                      <div class="form-group">
-                        <select class="select-search select2-hidden-accessible" data-placeholder="Pilih Supplier" tabindex="-1" aria-hidden="true" name="idsupplier">
-                          <optgroup label="Pilih Kategory Produk">
-                            <option value=""></option>
-                            <?php foreach ($getAllSupplier as $i) : ?>
-                              <option value="<?php echo $i['idsupplier'] ?>"><?= $i['name']; ?></option>
-                            <?php endforeach; ?>
-                          </optgroup>
-                        </select>
                       </div>
                     <?php endforeach; ?>
                   </div>
@@ -66,7 +55,7 @@
             </div>
             <div class="modal-footer" style="text-align: center;">
               <a href="<?php echo base_url('product/dataProduct') ?>"><button type="button" class="tombol-modal-hapus"><i class="fa fa-arrow-circle-left"></i>&nbsp; Cancel</button></a>
-              <button type="submit" class="tombol-tambah"><i class="fa fa-save"></i>&nbsp; Simpan</button>
+              <button type="submit" class="tombol-tambah"><i class="fa fa-save"></i>&nbsp; Tambah Stok</button>
             </div>
           </form>
         </div>

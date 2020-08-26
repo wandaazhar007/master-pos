@@ -1,13 +1,13 @@
 <?php
-class M_product_stock extends CI_Model
+class M_report_stock_in extends CI_Model
 {
 
   // DataTables list table
   function datatables_getAllTable()
   {
-    $column_order   = ['stock.idstock', 'name'];
-    $column_search  = ['stock.idstock', 'name'];
-    $def_order      = ['stock.idstock' => 'desc'];
+    $column_order   = ['idproduct_stock', 'name'];
+    $column_search  = ['idproduct_stock', 'name'];
+    $def_order      = ['idproduct_stock' => 'desc'];
 
     $this->_sql();
     $this->query_datatables($column_order, $column_search, $def_order);
@@ -62,9 +62,9 @@ class M_product_stock extends CI_Model
 
   function countFiltered()
   {
-    $column_order       = ['stock.idstock', 'name'];
-    $column_search      = ['stock.idstock', 'name'];
-    $def_order          = ['stock.idstock' => 'desc'];
+    $column_order       = ['idproduct_stock', 'name'];
+    $column_search      = ['idproduct_stock', 'name'];
+    $def_order          = ['idproduct_stock' => 'desc'];
 
     $this->_sql();
     $this->query_datatables($column_order, $column_search, $def_order);

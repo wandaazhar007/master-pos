@@ -519,6 +519,6 @@ class Wandalibs
 
   function getProductById($kode_product)
   {
-    return $this->db->query("SELECT `product`.`idproduct`, `product`.`name`, `product`.`kode_product` FROM `product` WHERE `product`.`kode_product` = '$kode_product'")->result_array();
+    return $this->db->query("SELECT `product`.`idproduct`, `product`.`name`, `product`.`code_product` FROM `product` WHERE `product`.`code_product` = '$kode_product'")->result_array();
   }
 }

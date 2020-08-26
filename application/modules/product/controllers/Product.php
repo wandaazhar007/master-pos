@@ -17,6 +17,7 @@ class Product extends MX_Controller
     // $data['getBarcode'] = $this->wandalibs->getBarcode();
     $data['getCategoryProduct'] = $this->wandalibs->getCategoryProduct();
     $data['getUnitProduct'] = $this->wandalibs->getUnitProduct();
+    $data['getAllSupplier'] = $this->wandalibs->getAllSupplier();
 
     $this->load->view('templates/core', $data);
   }
@@ -35,6 +36,17 @@ class Product extends MX_Controller
           <button style="margin-right: 5px;" class="tombol-edit view_data_produk pull-right" id="' . $value['idproduct'] . '"><i class="fa fa-pencil"></i>&nbsp;edit</button>
         </a>
         ';
+
+      if ($value['stock_now'] == NULL) {
+        $buttonAddStock = '
+        <span class="badge badge-danger">Kosong</span> <a href="' . base_url('product_stock/addStockProduct/') . $value['code_product'] . '"><span class="badge badge-success"><i class="fa fa-plus"></i></span></a>
+        ';
+      } else {
+        $buttonAddStock = '
+        <span class="badge badge-success">' . $value['stock_now'] . '</span> <a href="' . base_url('product_stock/updateStockProduct/') . $value['code_product'] . '"><span class="badge badge-success"><i class="fa fa-plus"></i></span></a>
+        <a href="' . base_url('product_stock/MinStockProduct/') . $value['code_product'] . '"><span class="badge badge-danger"><i class="fa fa-minus"></i></span></a>
+        ';
+      }
       // <button class="tombol-hapus view_delete_customer" id="tombol-delete-customer"><i class="fa fa-trash"></i>&nbsp;hapus</button>
       // $queryCategory  = $this->db->get_where('category', ['idproduct_category' => $value['idproduct_category']])->row_array();
       // $queryUnit      = $this->db->get_where('product_unit', ['idproduct_unit' => $value['idproduct_unit']])->row_array();
@@ -61,7 +73,7 @@ class Product extends MX_Controller
       $row[] = $this->wandalibs->rupiah($value['selling_price']);
       $row[] = $value['name_category'];
       $row[] = $value['name_unit'];
-      $row[] = $value['total'];
+      $row[] = $buttonAddStock;
       $row[] = $queryAction;
       $data[] = $row;
     }
@@ -104,7 +116,6 @@ class Product extends MX_Controller
       $code_product       = htmlspecialchars($this->input->post('code_product', true));
       $idcategory         = htmlspecialchars($this->input->post('idcategory', true));
       $idunit             = htmlspecialchars($this->input->post('idunit', true));
-      $idprice            = htmlspecialchars($this->input->post('idprice', true));
       $persentase         = htmlspecialchars($this->input->post('persentase', true));
       $buying_price       = htmlspecialchars($this->input->post('buying_price', true));
       $selling_price      = htmlspecialchars($this->input->post('selling_price', true));
@@ -114,21 +125,14 @@ class Product extends MX_Controller
         'code_product'      => $code_product,
         'idcategory'        => $idcategory,
         'idunit'            => $idunit,
-        'idprice'           => $idprice,
-        'date_created'           => date('Y-m-d h:i:s'),
-        'created_by'         => $this->session->userdata('nama')
-      ];
-
-      $dataPrice = [
-        'persentase'    => $persentase,
-        'buying_price'  => $buying_price,
-        'selling_price' => $selling_price,
-        'date_created'  => date('Y-m-d h:i:s'),
-        'created_by'    => $this->session->userdata('nama')
+        'buying_price'      => $buying_price,
+        'persentase'        => $persentase,
+        'selling_price'     => $selling_price,
+        'date_created'      => date('Y-m-d h:i:s'),
+        'created_by'        => $this->session->userdata('nama')
       ];
 
       $this->db->insert('product', $dataProduct);
-      $this->db->insert('price', $dataPrice);
       $this->session->set_flashdata('message', '<div class="alert alert-success alert-styled-left alert-arrow-left alert-bordered">
     <button type="button" class="close" data-dismiss="alert"><span>×</span><span class="sr-only">Close</span></button>
       <span class="text-semibold">Yeay!</span> Data produk ' . $name . ' berhasil ditambahkan. Silahkan isi stok produk <a href="' . base_url('product_stock/addFromProduct/') . $code_product . '">disini</a>
@@ -314,19 +318,18 @@ class Product extends MX_Controller
 
   function delete($idproduct)
   {
-    $query = $this->db->get_where('product_stock', ['idproduct' => $idproduct])->row_array();
-    // var_dump($query['idproduct_unit']);
+    // var_dump($idproduct);
     // die;
-    $queryproduct = $this->db->get_where('product', ['idproduct' => $idproduct])->row_array();
-    if ($query['idproduct'] == $idproduct) {
+    $queryproduct = $this->db->get_where('stock', ['idproduct' => $idproduct])->row_array();
+    if ($queryproduct['idproduct'] == $idproduct) {
       $this->session->set_flashdata('message', '<div class="alert alert-danger alert-styled-left alert-arrow-left alert-bordered">
       <button type="button" class="close" data-dismiss="alert"><span>×</span><span class="sr-only">Close</span></button>
-      <span class="text-semibold">Ups!</span> Anda tidak dapat menghapusnya. Data product <b><i>' . $queryproduct['name'] . '</i></b> sudah ada yang terjual!.
+      <span class="text-semibold">Ups!</span> Silakan hapus stock produck <b><i>' . $queryproduct['name'] . '</i></b> di menu stock masuk terlebih dahulu!.
     </div>');
       redirect('product/dataProduct');
     } else {
-      $this->db->where('idproduct', $idproduct);
-      $this->db->delete('product');
+      $this->db->delete('product', ['idproduct' => $idproduct]);
+      $this->db->delete('stock', ['idproduct' => $idproduct]);
       $this->session->set_flashdata('message', '<div class="alert alert-success alert-styled-left alert-arrow-left alert-bordered">
       <button type="button" class="close" data-dismiss="alert"><span>×</span><span class="sr-only">Close</span></button>
       <span class="text-semibold">Yeay!</span> Data produk ' . $queryproduct['name'] . 'berhasil dihapus!.

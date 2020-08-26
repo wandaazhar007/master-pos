@@ -14,7 +14,7 @@ class Supplier extends MX_Controller
   {
     $data['title']      = 'Data Supplier Master POS';
     // $data['contents']   = 'supplier';
-    $data['contents']   = 'supplier2';
+    $data['contents']   = 'supplier';
     $this->load->view('templates/core', $data);
     // $this->load->view('supplier2', $data);
   }
@@ -38,8 +38,9 @@ class Supplier extends MX_Controller
       $row = array();
       $row[] = $no++;
       // $row[] = $value['idsupplier'];
-      $row[] = $value['name'];
+      $row[] = $value['name_supplier'];
       $row[] = $value['phone'];
+      $row[] = $value['email'];
       $row[] = $value['address'];
       // $action = $queryAction;
       $row[] = $queryAction;
@@ -57,39 +58,44 @@ class Supplier extends MX_Controller
   function save()
   {
     $this->load->library('form_validation');
-    $this->form_validation->set_rules('name', 'Nama Supplier', 'required', [
+    $this->form_validation->set_rules('name_supplier', 'Nama Supplier', 'required', [
       'required'  => 'Nama supplier belum diisi!'
     ]);
     $this->form_validation->set_rules('phone', 'No Handphone', 'required|trim', [
       'required'  => 'Nomor Telepon/Handphone supplier belum diisi'
     ]);
-    $this->form_validation->set_rules('address', 'Alamat supplier', 'required', [
-      'required'  => 'Alamat supplier belum diisi'
+    $this->form_validation->set_rules('email', 'No Handphone', 'required|trim|valid_email', [
+      'required'  => 'Nomor Telepon/Handphone supplier belum diisi',
+      'vald_email'  => 'Format email tidak vaid!'
     ]);
 
     if ($this->form_validation->run() == true) {
-      $name   = htmlspecialchars($this->input->post('name', true));
-      $phone  = htmlspecialchars($this->input->post('phone', true));
-      $address = htmlspecialchars($this->input->post('address', true));
+      $name_supplier    = htmlspecialchars($this->input->post('name_supplier', true));
+      $phone            = htmlspecialchars($this->input->post('phone', true));
+      $email            = htmlspecialchars($this->input->post('email', true));
+      $description      = htmlspecialchars($this->input->post('description', true));
+      $address          = htmlspecialchars($this->input->post('address', true));
 
       $data = [
-        'name'      => $name,
-        'phone'     => $phone,
-        'address'   => $address,
-        // 'createdby' => $this->session->userdata('name'),
-        'created'   => date('Y-m-d h:i:s')
+        'name_supplier' => $name_supplier,
+        'phone'         => $phone,
+        'address'       => $address,
+        'email'         => $email,
+        'description'   => $description,
+        'created_by'     => $this->session->userdata('name'),
+        'date_created'       => date('Y-m-d h:i:s')
       ];
 
-      // $this->db->insert('supplier', $data);
+      $this->db->insert('supplier', $data);
       $this->session->set_flashdata('message', '<div class="alert alert-success alert-styled-left alert-arrow-left alert-bordered">
     <button type="button" class="close" data-dismiss="alert"><span>×</span><span class="sr-only">Close</span></button>
-    <span class="text-semibold">Yeay!</span> Data Supplier atas nama ' . $name . ' berhasil ditambahkan.
+    <span class="text-semibold">Yeay!</span> Data Supplier atas nama ' . $name_supplier . ' berhasil ditambahkan.
   </div>');
       redirect('supplier');
     } else {
       // redirect('supplier');
       $data['title']      = 'Data Supplier Master POS';
-      $data['contents']   = 'supplier2';
+      $data['contents']   = 'supplier';
       $this->load->view('templates/core', $data);
     }
   }
@@ -109,17 +115,27 @@ class Supplier extends MX_Controller
           <div class="col-sm-6">
             <label>Nama Supplier</label>
             <input type="hidden" name="idsupplier" value="' . $i['idsupplier'] . '" class="form-control" required>
-            <input type="text" name="name" value="' . $i['name'] . '" class="form-control" required>
+            <input type="text" name="name" value="' . $i['name_supplier'] . '" class="form-control" required>
           </div>
 
           <div class="col-sm-6">
             <label>No Handphone</label>
             <input type="text" name="phone" value="' . $i['phone'] . '" class="form-control" required>
           </div>
+          
+          <div class="col-sm-6">
+            <label>Email</label>
+            <input type="text" name="email" value="' . $i['email'] . '" class="form-control" required>
+          </div>
 
           <div class="col-sm-12">
+            <label>Deskripsi</label>
+            <textarea name="description" class="form-control" id="" cols="5" rows="5">' . $i['description'] . '</textarea>
+          </div>
+          
+          <div class="col-sm-12">
             <label>Alamat</label>
-            <textarea name="alamat" class="form-control" id="" cols="5" rows="5">' . $i['address'] . '</textarea>
+            <textarea name="address" class="form-control" id="" cols="5" rows="5">' . $i['address'] . '</textarea>
           </div>
           <div class="col-sm-12" style="margin-top: 10px;">
           <button type="submit" class="tombol-tambah pull-right"><i class="fa fa-save"></i>&nbsp;Update</button>
@@ -139,23 +155,28 @@ class Supplier extends MX_Controller
 
   function update()
   {
-    $idsupplier = htmlspecialchars($this->input->post('idsupplier', true));
-    $name       = htmlspecialchars($this->input->post('name', true));
-    $phone      = htmlspecialchars($this->input->post('phone', true));
-    $alamat     = htmlspecialchars($this->input->post('alamat', true));
+    $idsupplier       = htmlspecialchars($this->input->post('idsupplier', true));
+    $name_supplier    = htmlspecialchars($this->input->post('name_supplier', true));
+    $phone            = htmlspecialchars($this->input->post('phone', true));
+    $email            = htmlspecialchars($this->input->post('email', true));
+    $description      = htmlspecialchars($this->input->post('description', true));
+    $address          = htmlspecialchars($this->input->post('address', true));
 
     $data = [
-      'name'      => $name,
-      'phone'     => $phone,
-      'address'   => $alamat,
-      // 'createdby' => $this->session->userdata('name'),
+      'name_supplier' => $name_supplier,
+      'phone'         => $phone,
+      'address'       => $address,
+      'email'         => $email,
+      'description'   => $description,
+      'created_by'     => $this->session->userdata('name'),
+      'date_created'       => date('Y-m-d h:i:s')
     ];
 
     $this->db->where('idsupplier', $idsupplier);
     $this->db->update('supplier', $data);
     $this->session->set_flashdata('message', '<div class="alert alert-success alert-styled-left alert-arrow-left alert-bordered">
     <button type="button" class="close" data-dismiss="alert"><span>×</span><span class="sr-only">Close</span></button>
-    <span class="text-semibold">Yeay!</span> Data supplier atas nama ' . $name . ' berhasil diupdate.
+    <span class="text-semibold">Yeay!</span> Data supplier atas nama ' . $name_supplier . ' berhasil diupdate.
   </div>');
     redirect('supplier');
   }
@@ -171,7 +192,7 @@ class Supplier extends MX_Controller
           <div class="row">
           <div class="col-sm-12 text-center">
             <p>Apakah Anda yakin akan menghapus data supllier atas nama</p>
-            <h6 class="text-bold" style="margin-top: -10px;">' . $i['name'] . '</h6>
+            <h6 class="text-bold" style="margin-top: -10px;">' . $i['name_supplier'] . '</h6>
           </div>
             <div class="col-sm-12 text-center">
               <a href="' . base_url('supplier/delete/') . $i['idsupplier'] . '">
@@ -191,12 +212,12 @@ class Supplier extends MX_Controller
 
   function delete($idsupplier)
   {
-    $query = $this->db->get_where('product_stock', ['idsupplier' => $idsupplier])->row_array();
+    $query = $this->db->get_where('product', ['idsupplier' => $idsupplier])->row_array();
     $querySupplier = $this->db->get_where('supplier', ['idsupplier' => $idsupplier])->row_array();
     if ($query['idsupplier'] == $idsupplier) {
       $this->session->set_flashdata('message', '<div class="alert alert-danger alert-styled-left alert-arrow-left alert-bordered">
       <button type="button" class="close" data-dismiss="alert"><span>×</span><span class="sr-only">Close</span></button>
-      <span class="text-semibold">Ups!</span> Data supplier atas nama <b><i>' . $querySupplier['name'] . '</i></b> sudah masuk ke daftar stok produk!.
+      <span class="text-semibold">Ups!</span> Data supplier atas nama <b><i>' . $querySupplier['name_supplier'] . '</i></b> sudah masuk ke daftar stok produk!.
     </div>');
       redirect('supplier');
     } else {
