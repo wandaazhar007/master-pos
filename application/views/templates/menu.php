@@ -76,7 +76,7 @@
 
         <ul class="dropdown-menu dropdown-menu-right">
           <li><a href="<?= base_url('user'); ?>"><i class="icon-user"></i>Pengguna</a></li>
-          <li><a href="<?= base_url('option'); ?>"><i class="icon-gear"></i>Options</a></li>
+          <li><a href="<?= base_url('options'); ?>"><i class="icon-gear"></i>Options</a></li>
         </ul>
       </li>
     </ul>
