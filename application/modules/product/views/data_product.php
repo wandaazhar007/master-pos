@@ -74,40 +74,39 @@
                 <small class="text-danger"><?php echo form_error('name') ?></small>
               </div>
 
-              <?= $this->wandalibs->getBarcode(); ?>
               <div class="col-sm-3" style="margin-bottom: 10px;">
                 <label>Kode Barcode</label>
-                <input type="text" name="barcode" class="form-control" value="<?php echo 'AZ-' . $this->wandalibs->getBarcode() ?>" required readonly>
-                <small class="text-danger"><?php echo form_error('barcode') ?></small>
+                <input type="text" name="code_product" class="form-control" value="<?php echo 'AZ-' . $this->wandalibs->getBarcode() ?>" required readonly>
+                <small class="text-danger"><?php echo form_error('code_product') ?></small>
               </div>
 
               <div class="col-sm-3">
                 <label>Persentase</label>
-                <input type="number" name="persentase" id="persen" class="form-control" placeholder="0%" required>
+                <input type="number" name="persentase" id="persentase" class="form-control" placeholder="0%" required>
                 <small class="text-danger"><?php echo form_error('persentase') ?></small>
               </div>
 
 
               <div class="col-sm-6" style="margin-bottom: 10px;">
                 <label>Harga Asli</label>
-                <input type="text" name="price" id="hna" placeholder="Rp. ..." class="form-control" required>
-                <small class="text-danger"><?php echo form_error('price') ?></small>
+                <input type="text" name="buying_price" id="buying_price" placeholder="Rp. ..." class="form-control" required>
+                <small class="text-danger"><?php echo form_error('buying_price') ?></small>
               </div>
 
               <div class="col-sm-6" style="margin-bottom: 10px;">
                 <label>Harga Jual</label>
-                <input type="text" name="price_selling" id="hj" placeholder="Rp. ..." class="form-control" readonly>
-                <small class="text-danger"><?php echo form_error('price_selling') ?></small>
+                <input type="text" name="selling_price" id="selling_price" placeholder="Rp. ..." class="form-control" readonly>
+                <small class="text-danger"><?php echo form_error('selling_price') ?></small>
               </div>
 
               <div class="col-sm-6" style="margin-bottom: 10px;">
                 <div class="form-group">
                   <label>Kategori Produk</label>
-                  <select class="select-search select2-hidden-accessible" tabindex="-1" aria-hidden="true" name="idproduct_category">
+                  <select class="select-search select2-hidden-accessible" tabindex="-1" aria-hidden="true" name="idcategory">
                     <optgroup label="Pilih Kategory Produk">
                       <option value=""></option>
                       <?php foreach ($getCategoryProduct as $i) : ?>
-                        <option value="<?php echo $i['idproduct_category'] ?>"><?= $i['name']; ?></option>
+                        <option value="<?php echo $i['idcategory'] ?>"><?= $i['name_category']; ?></option>
                       <?php endforeach; ?>
                     </optgroup>
                   </select>
@@ -117,11 +116,11 @@
               <div class="col-sm-6" style="margin-bottom: 10px;">
                 <div class="form-group">
                   <label>Satuan Produk</label>
-                  <select class="select-search select2-hidden-accessible" tabindex="-1" aria-hidden="true" name="idproduct_unit">
+                  <select class="select-search select2-hidden-accessible" tabindex="-1" aria-hidden="true" name="idunit">
                     <optgroup label="Pilih Satuan Produk">
                       <option value=""></option>
                       <?php foreach ($getUnitProduct as $i) : ?>
-                        <option value="<?php echo $i['idproduct_unit'] ?>"><?= $i['name']; ?></option>
+                        <option value="<?php echo $i['idunit'] ?>"><?= $i['name_unit']; ?></option>
                       <?php endforeach; ?>
                     </optgroup>
                   </select>
@@ -177,16 +176,16 @@
 </div>
 
 <script>
-  document.getElementById('hna').addEventListener('keyup', function() {
-    const hna = parseInt(document.getElementById('hna').value);
-    const persen = parseInt(document.getElementById('persen').value);
-    const hj = document.getElementById('hj');
+  document.getElementById('buying_price').addEventListener('keyup', function() {
+    const buying_price = parseInt(document.getElementById('buying_price').value);
+    const persentase = parseInt(document.getElementById('persentase').value);
+    const selling_price = document.getElementById('selling_price');
 
-    const result1 = (hna * persen) / 100;
-    const result2 = result1 + hna;
+    const result1 = (buying_price * persentase) / 100;
+    const result2 = result1 + buying_price;
     const result3 = Math.round(result2);
 
-    hj.setAttribute('value', result3);
+    selling_price.setAttribute('value', result3);
     // hj.innerHTML = result2;
     // const inputHargaJual = document.createElement('input');
     // const teks = document.createTextNode('coba create element');
@@ -197,16 +196,16 @@
 
   })
 
-  document.getElementById('persen').addEventListener('keyup', function() {
-    const hna = parseInt(document.getElementById('hna').value);
-    const persen = parseInt(document.getElementById('persen').value);
-    const hj = document.getElementById('hj');
+  document.getElementById('persentase').addEventListener('keyup', function() {
+    const buying_price = parseInt(document.getElementById('buying_price').value);
+    const persentase = parseInt(document.getElementById('persentase').value);
+    const selling_price = document.getElementById('selling_price');
 
-    const result1 = (hna * persen) / 100;
-    const result2 = result1 + hna;
+    const result1 = (buying_price * persentase) / 100;
+    const result2 = result1 + buying_price;
     const result3 = Math.round(result2);
 
-    hj.setAttribute('value', result3);
+    selling_price.setAttribute('value', result3);
     // hj.innerHTML = result2;
     // const inputHargaJual = document.createElement('input');
     // const teks = document.createTextNode('coba create element');

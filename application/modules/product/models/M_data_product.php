@@ -5,8 +5,8 @@ class M_data_product extends CI_Model
   // DataTables list table
   function datatables_getAllTableDataProduct()
   {
-    $column_order   = ['product.idproduct', 'product.name', 'product.price', 'product.barcode', 'product.persentase', 'product.price_selling'];
-    $column_search  = ['product.idproduct', 'product.name', 'product.price', 'product.barcode', 'product.persentase', 'product.price_selling'];
+    $column_order   = ['product.idproduct', 'product.name'];
+    $column_search  = ['product.idproduct', 'product.name'];
     $def_order      = ['product.idproduct' => 'desc'];
 
     $this->_sql();
@@ -19,9 +19,13 @@ class M_data_product extends CI_Model
 
   function _sql()
   {
-    $this->db->select("`product`.`idproduct`,`product`.`name`,`product`.`barcode`,`product`.`persentase`,`product`.`description`,`product`.`price_selling`,`product`.`idproduct_unit`,`product`.`idproduct_category`,`product`.`price`,`product`.`created`,`product`.`createdBy`, `product_stock`.`total`", false);
+    $this->db->select("`product`.`idproduct`, `product`.`name`, `product`.`code_product`, `category`.`name_category`, `unit`.`name_unit`, `stock`.`total`, `price`.`buying_price`, `price`.`persentase`, `price`.`selling_price`", false);
     $this->db->from("product");
-    $this->db->join("product_stock", "product.idproduct_stock = product_stock.idproduct_stock", "left");
+    $this->db->join("category", "category.idcategory = product.idcategory");
+    $this->db->join("unit", "unit.idunit = product.idunit");
+    $this->db->join("price", "price.idprice = product.idprice");
+    $this->db->join("stock", "stock.idstock = product.idstock");
+    // $this->db->join("product_stock", "product.idproduct_stock = product_stock.idproduct_stock", "left");
     $this->db->order_by("product.idproduct", "desc");
   }
 
@@ -63,19 +67,12 @@ class M_data_product extends CI_Model
       'product.idproduct',
       'product.name',
       'product.price',
-      'product.barcode',
-      'product.persentase',
-      'product.price_selling',
-      'product.description'
+      'product.kode_product',
     ];
 
     $column_search = [
       'product.idproduct',
       'product.name',
-      'product.price',
-      'product.barcode',
-      'product.persentase',
-      'product.price_selling'
     ];
     $def_order          = ['idproduct' => 'desc'];
 

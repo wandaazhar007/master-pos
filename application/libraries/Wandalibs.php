@@ -495,12 +495,12 @@ class Wandalibs
 
   function getCategoryProduct()
   {
-    return $this->db->query("SELECT `product_category`.`idproduct_category`, `product_category`.`name` FROM `product_category`")->result_array();
+    return $this->db->query("SELECT `category`.`idcategory`, `category`.`name_category` FROM `category`")->result_array();
   }
 
   function getAllCategoryProductArray()
   {
-    $query = $this->db->query("SELECT `product_category`.`idproduct_category`, `product_category`.`name` FROM `product_category`")->result_array();
+    $query = $this->db->query("SELECT `category`.`idcategory`, `category`.`name_category` FROM `category`")->result_array();
     foreach ($query as $i) {
       $result[] = $i;
     }
@@ -509,16 +509,16 @@ class Wandalibs
 
   function getUnitProduct()
   {
-    return $this->db->query("SELECT `product_unit`.`idproduct_unit`, `product_unit`.`name` FROM `product_unit`")->result_array();
+    return $this->db->query("SELECT `unit`.`idunit`, `unit`.`name_unit` FROM `unit`")->result_array();
   }
 
   function getAllSupplier()
   {
-    return $this->db->query("SELECT `supplier`.`idsupplier`, `supplier`.`name` FROM `supplier`")->result_array();
+    return $this->db->query("SELECT `supplier`.`idsupplier`, `supplier`.`name_supplier` FROM `supplier`")->result_array();
   }
 
-  function getProductById($barcode)
+  function getProductById($kode_product)
   {
-    return $this->db->query("SELECT `product`.`idproduct`, `product`.`name`, `product`.`barcode` FROM `product` WHERE `product`.`barcode` = '$barcode'")->result_array();
+    return $this->db->query("SELECT `product`.`idproduct`, `product`.`name`, `product`.`kode_product` FROM `product` WHERE `product`.`kode_product` = '$kode_product'")->result_array();
   }
 }

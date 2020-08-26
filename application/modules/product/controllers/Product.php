@@ -23,7 +23,6 @@ class Product extends MX_Controller
 
   function getAllTable()
   {
-
     $list = $this->model->datatables_getAllTableDataProduct();
     $data = array();
     $no = 1;
@@ -37,32 +36,32 @@ class Product extends MX_Controller
         </a>
         ';
       // <button class="tombol-hapus view_delete_customer" id="tombol-delete-customer"><i class="fa fa-trash"></i>&nbsp;hapus</button>
-      $queryCategory  = $this->db->get_where('product_category', ['idproduct_category' => $value['idproduct_category']])->row_array();
-      $queryUnit      = $this->db->get_where('product_unit', ['idproduct_unit' => $value['idproduct_unit']])->row_array();
-      $category = $queryCategory['name'];
-      $unit = $queryUnit['name'];
-      $queryStock     = $this->db->get_where('product_stock', ['idproduct' => $value['idproduct']])->row_array();
+      // $queryCategory  = $this->db->get_where('category', ['idproduct_category' => $value['idproduct_category']])->row_array();
+      // $queryUnit      = $this->db->get_where('product_unit', ['idproduct_unit' => $value['idproduct_unit']])->row_array();
+      // $category = $queryCategory['name'];
+      // $unit = $queryUnit['name'];
+      // $queryStock     = $this->db->get_where('product_stock', ['idproduct' => $value['idproduct']])->row_array();
 
-      if ($queryStock['total'] == NULL) {
-        $stock = '<span class="badge badge-danger">Kosong</span> <a href="' . base_url('product_stock/addFromProduct/') . $value['barcode'] . '"><span class="badge badge-success"><i class="fa fa-plus"></i></span></a>';
-      } else {
-        if ($queryStock['total'] <= 10) {
-          $stock = '<span class="badge badge-warning">' . $queryStock['total'] . '</span> <a href="' . base_url('product_stock/addFromProduct/') . $value['barcode'] . '"><span class="badge badge-success"><i class="fa fa-plus"></i></span></a>';
-        } else {
-          $stock = '<span class="badge badge-success">' . $queryStock['total'] . '</span> <a href="' . base_url('product_stock/addFromProduct/') . $value['barcode'] . '"><span class="badge badge-success"><i class="fa fa-plus"></i></span></a>';
-        }
-      }
+      // if ($queryStock['total'] == NULL) {
+      //   $stock = '<span class="badge badge-danger">Kosong</span> <a href="' . base_url('product_stock/addFromProduct/') . $value['barcode'] . '"><span class="badge badge-success"><i class="fa fa-plus"></i></span></a>';
+      // } else {
+      //   if ($queryStock['total'] <= 10) {
+      //     $stock = '<span class="badge badge-warning">' . $queryStock['total'] . '</span> <a href="' . base_url('product_stock/addFromProduct/') . $value['barcode'] . '"><span class="badge badge-success"><i class="fa fa-plus"></i></span></a>';
+      //   } else {
+      //     $stock = '<span class="badge badge-success">' . $queryStock['total'] . '</span> <a href="' . base_url('product_stock/addFromProduct/') . $value['barcode'] . '"><span class="badge badge-success"><i class="fa fa-plus"></i></span></a>';
+      //   }
+      // }
 
       $row = array();
       $row[] = $no++;
-      $row[] = $value['barcode'];
+      $row[] = $value['code_product'];
       $row[] = $value['name'];
-      $row[] = $this->wandalibs->rupiah($value['price']);
+      $row[] = $this->wandalibs->rupiah($value['buying_price']);
       $row[] = $value['persentase'] . '%';
-      $row[] = $this->wandalibs->rupiah($value['price_selling']);
-      $row[] = $category;
-      $row[] = $unit;
-      $row[] = $stock;
+      $row[] = $this->wandalibs->rupiah($value['selling_price']);
+      $row[] = $value['name_category'];
+      $row[] = $value['name_unit'];
+      $row[] = $value['total'];
       $row[] = $queryAction;
       $data[] = $row;
     }
@@ -81,58 +80,66 @@ class Product extends MX_Controller
     $this->form_validation->set_rules('name', 'Nama Produk', 'required', [
       'required'  => 'Nama produk belum diisi!'
     ]);
-    $this->form_validation->set_rules('idproduct_unit', 'Unit Produk', 'required', [
+    $this->form_validation->set_rules('idunit', 'Unit Produk', 'required', [
       'required'  => 'Satuan produk belum diisi!'
     ]);
-    $this->form_validation->set_rules('idproduct_category', 'Kategori Produk', 'required', [
+    $this->form_validation->set_rules('idcategory', 'Kategori Produk', 'required', [
       'required'  => 'Kategori produk belum diisi!'
     ]);
-    $this->form_validation->set_rules('barcode', 'Kode Barcode', 'required|trim', [
+    $this->form_validation->set_rules('code_product', 'Kode Barcode', 'required|trim', [
       'required'  => 'Kode barcode belum terisi'
     ]);
-    $this->form_validation->set_rules('price', 'Harga Beli Produk', 'required|trim', [
+    $this->form_validation->set_rules('buying_price', 'Harga Beli Produk', 'required|trim', [
       'required'  => 'Harga belum dipilih'
     ]);
     $this->form_validation->set_rules('persentase', 'Persentase', 'required|trim', [
       'required'  => 'Persentase belum ditentukan'
     ]);
-    $this->form_validation->set_rules('price_selling', 'Harga Beli Produk', 'required|trim', [
+    $this->form_validation->set_rules('selling_price', 'Harga Beli Produk', 'required|trim', [
       'required'  => 'Harga Jual belum terisi'
     ]);
 
     if ($this->form_validation->run() == true) {
       $name               = htmlspecialchars($this->input->post('name', true));
-      $barcode            = htmlspecialchars($this->input->post('barcode', true));
-      $idproduct_unit     = htmlspecialchars($this->input->post('idproduct_unit', true));
-      $idproduct_category = htmlspecialchars($this->input->post('idproduct_category', true));
-      $price              = htmlspecialchars($this->input->post('price', true));
+      $code_product       = htmlspecialchars($this->input->post('code_product', true));
+      $idcategory         = htmlspecialchars($this->input->post('idcategory', true));
+      $idunit             = htmlspecialchars($this->input->post('idunit', true));
+      $idprice            = htmlspecialchars($this->input->post('idprice', true));
       $persentase         = htmlspecialchars($this->input->post('persentase', true));
-      $price_selling      = htmlspecialchars($this->input->post('price_selling', true));
+      $buying_price       = htmlspecialchars($this->input->post('buying_price', true));
+      $selling_price      = htmlspecialchars($this->input->post('selling_price', true));
 
-      $data = [
+      $dataProduct = [
         'name'              => $name,
-        'barcode'           => $barcode,
-        'idproduct_unit'    => $idproduct_unit,
-        'idproduct_category' => $idproduct_category,
-        'price'             => $price,
-        'persentase'        => $persentase,
-        'price_selling'     => $price_selling,
-        'createdby'         => $this->session->userdata('nama'),
-        'created'           => date('Y-m-d h:i:s')
+        'code_product'      => $code_product,
+        'idcategory'        => $idcategory,
+        'idunit'            => $idunit,
+        'idprice'           => $idprice,
+        'date_created'           => date('Y-m-d h:i:s'),
+        'created_by'         => $this->session->userdata('nama')
       ];
 
-      $this->db->insert('product', $data);
+      $dataPrice = [
+        'persentase'    => $persentase,
+        'buying_price'  => $buying_price,
+        'selling_price' => $selling_price,
+        'date_created'  => date('Y-m-d h:i:s'),
+        'created_by'    => $this->session->userdata('nama')
+      ];
+
+      $this->db->insert('product', $dataProduct);
+      $this->db->insert('price', $dataPrice);
       $this->session->set_flashdata('message', '<div class="alert alert-success alert-styled-left alert-arrow-left alert-bordered">
     <button type="button" class="close" data-dismiss="alert"><span>×</span><span class="sr-only">Close</span></button>
-      <span class="text-semibold">Yeay!</span> Data produk ' . $name . ' berhasil ditambahkan. Silahkan isi stok produk <a href="' . base_url('product_stock/addFromProduct/') . $barcode . '">disini</a>
+      <span class="text-semibold">Yeay!</span> Data produk ' . $name . ' berhasil ditambahkan. Silahkan isi stok produk <a href="' . base_url('product_stock/addFromProduct/') . $code_product . '">disini</a>
     </div>');
       redirect('product/dataProduct');
     } else {
-      $data['title']      = 'Data Produk Master POS';
-      $data['contents']   = 'data_product';
-      $data['getBarcode'] = $this->model->getBarcode();
+      $data['title']              = 'Data Produk Master POS';
+      $data['contents']           = 'data_product';
+      // $data['getcodeProduct']         = $this->model->getcodeProduct();
       $data['getCategoryProduct'] = $this->wandalibs->getCategoryProduct();
-      $data['getUnitProduct'] = $this->wandalibs->getUnitProduct();
+      $data['getUnitProduct']     = $this->wandalibs->getUnitProduct();
 
       $this->load->view('templates/core', $data);
     }

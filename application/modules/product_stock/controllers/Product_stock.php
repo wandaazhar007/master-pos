@@ -216,6 +216,7 @@ class Product_stock extends MX_Controller
 
   function addFromProduct($barcode)
   {
+
     $this->load->library('form_validation');
     $this->form_validation->set_rules('idproduct', 'Nama Produk', 'required', [
       'required' => 'Nama produk belum diisi'
@@ -239,31 +240,31 @@ class Product_stock extends MX_Controller
         'createdby'         => $this->session->userdata('nama'),
         'stock_date'        => date('Y-m-d h:i:s')
       ];
-      // $this->db->insert('product_stock', $data);
 
-      $query2 = $this->db->get_where('product_stock', ['idproduct_stock' => $idproduct])->row_array();
-      $idProdukStokTerakhir = $query2['idproduct_stock'];
-      var_dump($idProdukStokTerakhir);
-      die;
+      $query = $this->db->get_where('product_stock', ['barcode' => $barcode])->row_array();
+      $br = $query['idproduct'];
+      // var_dump($br);
+      // die;
 
-      $data2 = [
-        'idproduct_stock' => $idProdukStokTerakhir
-      ];
-      // $this->db->where('idproduct', $idproduct);
-      // $this->db->update('product', $data2);
-
+      if ($br == $idproduct) {
+        $this->db->where('idproduct', $idproduct);
+        $this->db->update('product_stock', $data);
+      } else {
+        $this->db->insert('product_stock', $data);
+      }
       $this->session->set_flashdata('message', '<div class="alert alert-success alert-styled-left alert-arrow-left alert-bordered">
       <button type="button" class="close" data-dismiss="alert"><span>×</span><span class="sr-only">Close</span></button>
         <span class="text-semibold">Yeay!</span> Stok Produk ' . $namaProduk . ' berhasil ditambah .
       </div>');
-      redirect('product/dataProduk');
+      redirect('product/dataProduct/');
     } else {
+      // $barcode = $this->input->post('barcode');
+      // redirect('product_stock/addFromProduct/' . $barcode);
       $data['title']          = 'Stok Produk Master POS';
       $data['contents']       = 'add_product_stock';
       $data['getAllProduct']  = $this->wandalibs->getAllProduct();
       $data['getAllSupplier'] = $this->wandalibs->getAllSupplier();
       $data['getProductById'] = $this->wandalibs->getProductById($barcode);
-
       $this->load->view('templates/core', $data);
     }
   }

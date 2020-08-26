@@ -35,7 +35,7 @@
     <div class="row">
       <div class="tengah">
         <div class="col-md-3">
-          <form action="<?php echo base_url('product_stock/save') ?>" method="post">
+          <form action="<?php echo base_url('product_stock/addFromProduct') ?>" method="post">
             <div class="modal-body">
               <div class="form-group">
                 <div class="row">
@@ -45,6 +45,7 @@
                       <h3 align="center" style="margin-bottom: 10px;"><?= $i['name']; ?></h3>
                       <div class="form-group">
                         <input type="hidden" name="idproduct" value="<?php echo $i['idproduct'] ?>" class="form-control" readonly>
+                        <input type="hidden" name="barcode" value="<?php echo $i['barcode'] ?>" class="form-control" readonly>
                         <input type="number" name="total" class="form-control" placeholder="Masukan jumlah stok disini" required>
                       </div>
 
