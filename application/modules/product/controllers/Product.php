@@ -129,7 +129,7 @@ class Product extends MX_Controller
         'persentase'        => $persentase,
         'selling_price'     => $selling_price,
         'date_created'      => date('Y-m-d h:i:s'),
-        'created_by'        => $this->session->userdata('nama')
+        'created_by'        => $this->session->userdata('name')
       ];
 
       $this->db->insert('product', $dataProduct);
@@ -304,7 +304,7 @@ class Product extends MX_Controller
       'buying_price'      => $buying_price,
       'persentase'        => $persentase,
       'selling_price'     => $selling_price,
-      'updated_by'        => $this->session->userdata('nama'),
+      'updated_by'        => $this->session->userdata('name'),
       'updated'           => date('Y-m-d h:i:s')
 
     ];

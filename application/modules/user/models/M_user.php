@@ -5,9 +5,9 @@ class M_user extends CI_Model
   // DataTables list table
   function datatables_getAllTable()
   {
-    $column_order   = ['iduser', 'name', 'phone', 'akses'];
-    $column_search  = ['iduser', 'name', 'phone', 'akses'];
-    $def_order      = ['iduser' => 'desc'];
+    $column_order   = ['iduser_admin', 'name', 'phone'];
+    $column_search  = ['iduser_admin', 'name', 'phone'];
+    $def_order      = ['iduser_admin' => 'desc'];
 
     $this->_sql();
     $this->query_datatables($column_order, $column_search, $def_order);
@@ -19,10 +19,10 @@ class M_user extends CI_Model
 
   function _sql()
   {
-    $this->db->select("`user`.`iduser`, `user`.`name`, `user`.`username`, `user`.`phone`, `user`.`created`, `user_group`.`idgroup`, `group`.`group_name`, `group`.`description`", false);
-    $this->db->from("user");
-    $this->db->join('user_group', 'user_group.iduser = user.iduser', 'inner');
-    $this->db->join('group', 'group.idgroup = user_group.idgroup', 'inner');
+    $this->db->select("`user_admin`.`iduser_admin`, `user_admin`.`name`, `user_admin`.`username`, `user_admin`.`email`, `user_admin`.`phone`, `user_admin`.`date_created`, `user_admin`.`created_by`, `user_admin`.`updated`, `user_admin`.`updated_by`, `user_access`.`name_access`, `user_access`.`description`", false);
+    $this->db->from("user_admin");
+    $this->db->join('user_access', 'user_access.iduser_access = user_admin.iduser_access', 'left');
+    $this->db->order_by("iduser_admin", "desc");
     // $this->db->select("iduser,name,address,phone,description,created", false);
     // $this->db->from("user");
     // $this->db->order_by("iduser", "desc");
@@ -49,6 +49,7 @@ class M_user extends CI_Model
     }
 
     if (isset($_POST['order'])) {
+      // $this->db->order_by($column_order[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
       $this->db->order_by($column_order[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
     } else if (isset($order)) {
       $order = $def_order;
@@ -64,13 +65,13 @@ class M_user extends CI_Model
 
   function countFiltered()
   {
-    $column_order       = ['iduser', 'name', 'phone'];
+    $column_order       = ['iduser_admin', 'name', 'phone'];
     $column_search      = [
-      'iduser',
+      'iduser_admin',
       'name',
       'phone'
     ];
-    $def_order          = ['iduser' => 'desc'];
+    $def_order          = ['iduser_admin' => 'desc'];
 
     $this->_sql();
     $this->query_datatables($column_order, $column_search, $def_order);
@@ -78,13 +79,13 @@ class M_user extends CI_Model
     return $query->num_rows();
   }
 
-  function getDetailById($iduser)
+  function getDetailById($iduser_admin)
   {
-    return $this->db->query("SELECT `user`.`iduser`, `user`.`name`, `user`.`username`, `user`.`phone`, `user_group`.`iduser`, `group`.`group_name` FROM `user` INNER JOIN `user_group` ON `user`.`iduser` = `user_group`.`iduser` INNER JOIN `group` ON `group`.`idgroup` = `user_group`.`idgroup` WHERE `user`.`iduser` = '$iduser'")->result_array();
+    return $this->db->query("SELECT `user_admin`.`iduser_admin`, `user_admin`.`name`, `user_admin`.`username`, `user_admin`.`phone`, `user_admin`.`email`, `user_access`.`name_access`, `user_access`.`iduser_access` FROM `user_admin` LEFT JOIN `user_access` ON `user_admin`.`iduser_access` = `user_access`.`iduser_access` WHERE `user_admin`.`iduser_admin` = '$iduser_admin'")->result_array();
   }
 
   function getAll()
   {
-    return $this->db->query("SELECT `user`.`iduser`, `user`.`name`, `user`.`username`, `user`.`phone`, `user`.`created`, `user`.`email`, `user_group`.`iduser`, `group`.`group_name` FROM `user` INNER JOIN `user_group` ON `user`.`iduser` = `user_group`.`iduser` INNER JOIN `group` ON `group`.`idgroup` = `user_group`.`idgroup`")->result_array();
+    return $this->db->query("SELECT `user_admin`.`iduser_admin`, `user_admin`.`name`, `user_admin`.`username`, `user_admin`.`phone`, `user_admin`.`email`, `user_admin`.`created_by`, `user_admin`.`date_created`, `user_access`.`name_access`, `user_access`.`description` FROM `user_admin` LEFT JOIN `user_access` ON `user_admin`.`iduser_access` = `user_access`.`iduser_access`")->result_array();
   }
 }

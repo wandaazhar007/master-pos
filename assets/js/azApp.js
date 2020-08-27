@@ -317,7 +317,13 @@ $(document).ready(function () {
 				"targets": [2],
 				"searchable": true,
 				"sortable": true
+			},
+			{
+				"targets": [3],
+				"searchable": true,
+				"sortable": true
 			}
+
 		],
 
 	});
@@ -483,12 +489,12 @@ $(document).ready(function () {
 /* Note: Function untuk modal User/Pengguna | Author: wandaazhar@gmail.com */
 $(document).ready(function () {
 	$('#tableUser').on('click', '.view_user', function () {
-		var iduser = $(this).attr('id');
+		var iduser_admin = $(this).attr('id');
 		$.ajax({
 			url: base_url + "user/showFormUpdate",
 			method: "POST",
 			data: {
-				iduser: iduser
+				iduser_admin: iduser_admin
 			},
 			success: function (data) {
 				console.log('yes');
@@ -677,12 +683,12 @@ $(document).ready(function () {
 // Note: Function untuk modal delete user/pengguna | Author: wandaazhar@gmail.com
 $(document).ready(function () {
 	$('#tableUser').on('click', '.view_hapus', function () {
-		var iduser = $(this).attr('id');
+		var iduser_admin = $(this).attr('id');
 		$.ajax({
 			url: base_url + "user/showModalDelete",
 			method: "POST",
 			data: {
-				iduser: iduser
+				iduser_admin: iduser_admin
 			},
 			success: function (data) {
 				console.log('yes');

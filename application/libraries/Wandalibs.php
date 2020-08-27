@@ -29,7 +29,7 @@ class Wandalibs
   function redirectLoginExist()
   {
     $CI = &get_instance();
-    if ($CI->session->userdata('nama')) {
+    if ($CI->session->userdata('name')) {
       redirect('dashboard');
     }
   }
@@ -39,17 +39,17 @@ class Wandalibs
   {
     $CI = &get_instance();
     $email      = htmlspecialchars($CI->input->post('email'), true);
-    $query = $CI->db->get_where('tb_user_admin', ['email' => $email])->row_array();
+    $query = $CI->db->get_where('user_admin', ['email' => $email])->row_array();
     $data = [
-      'id'                => $query['id'],
+      'iduser_admin'      => $query['iduser_admin'],
       'email'             => $query['email'],
-      'nama'              => $query['nama'],
-      'no_hp'             => $query['no_hp'],
-      'user_access'       => $query['user_access'],
-      'foto'              => $query['foto'],
-      'bidang'            => $query['bidang'],
+      'name'              => $query['name'],
+      'phone'             => $query['phone'],
+      'iduser_access'     => $query['iduser_access'],
+      'photo'             => $query['photo'],
       'active'            => $query['active'],
-      'date_created'      => $query['date_created']
+      'date_created'      => $query['date_created'],
+      'created_by'        => $query['created_by']
     ];
     $CI->session->set_userdata($data);
   }
@@ -59,11 +59,11 @@ class Wandalibs
   {
     $CI = &get_instance();
     $email      = htmlspecialchars($CI->input->post('email'), true);
-    $query = $CI->db->get_where('tb_user_admin', ['email' => $email])->row_array();
-    $nama = $query['nama'];
+    $query = $CI->db->get_where('user_admin', ['email' => $email])->row_array();
+    $nama = $query['name'];
 
     $data = [
-      'nama'          => $nama,
+      'name'          => $nama,
       'email'         => $email,
       'date_created'  => time()
     ];
@@ -78,8 +78,8 @@ class Wandalibs
     $email      = htmlspecialchars($CI->input->post('email'), true);
     $password   = htmlspecialchars($CI->input->post('password'), true);
 
-    $query = $CI->db->get_where('tb_user_admin', ['email' => $email])->row_array();
-    $nama = $query['nama'];
+    $query = $CI->db->get_where('user_admin', ['email' => $email])->row_array();
+    $nama = $query['name'];
 
     if ($query['active'] == 'tidak aktif') {
       $CI->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible">
@@ -120,8 +120,8 @@ class Wandalibs
     $email      = htmlspecialchars($CI->input->post('email'), true);
     $password   = htmlspecialchars($CI->input->post('password'), true);
 
-    $query = $CI->db->get_where('tb_user_admin', ['email' => $email])->row_array();
-    $nama = $query['nama'];
+    $query = $CI->db->get_where('user_admin', ['email' => $email])->row_array();
+    $nama = $query['name'];
 
     if ($query['active'] == 'tidak aktif') {
       $CI->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible">
@@ -157,23 +157,23 @@ class Wandalibs
   {
     $CI = &get_instance();
     $email  = $CI->session->userdata('email');
-    $query  = $CI->db->get_where('tb_user', ['email' => $email])->row_array();
+    $query  = $CI->db->get_where('user_admin', ['email' => $email])->row_array();
     $dataSession = [
-      'id'        => $query['id'],
-      'email'     => $query['email'],
-      'nama'      => $query['nama'],
-      'no_hp'      => $query['no_hp'],
-      'foto'      => $query['foto']
+      'iduser_admin' => $query['iduser_admin'],
+      'email'       => $query['email'],
+      'name'        => $query['name'],
+      'phone'       => $query['phone'],
+      'photo'       => $query['photo']
     ];
-    $CI->session->unset_userdata('id');
+    $CI->session->unset_userdata('iduser_admin');
     $CI->session->unset_userdata('email');
-    $CI->session->unset_userdata('nama');
-    $CI->session->unset_userdata('user_access');
-    $CI->session->unset_userdata('no_hp');
-    $CI->session->unset_userdata('bidang');
+    $CI->session->unset_userdata('name');
+    $CI->session->unset_userdata('iduser_access');
+    $CI->session->unset_userdata('photo');
     $CI->session->unset_userdata('active');
-    $CI->session->unset_userdata('foto');
+    $CI->session->unset_userdata('phone');
     $CI->session->unset_userdata('date_created');
+    $CI->session->unset_userdata('created_by');
     // $CI->session->sess_destroy($dataSession);
     $CI->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show">
             <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
@@ -505,6 +505,18 @@ class Wandalibs
     foreach ($query as $i) {
       $output .= '
         <option value="' . $i['idunit'] . '">' . $i['name_unit'] . '</option>
+      ';
+    }
+    return $output;
+  }
+
+  function getAllUserAccessArray()
+  {
+    $query = $this->db->query("SELECT `user_access`.`iduser_access`, `user_access`.`name_access` FROM `user_access` ORDER BY `iduser_access` DESC")->result_array();
+    $output = '';
+    foreach ($query as $i) {
+      $output .= '
+        <option value="' . $i['iduser_access'] . '">' . $i['name_access'] . '</option>
       ';
     }
     return $output;

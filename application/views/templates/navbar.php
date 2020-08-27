@@ -11,8 +11,8 @@
     <ul class="nav navbar-nav navbar-right">
       <li class="dropdown dropdown-user">
         <a class="dropdown-toggle" data-toggle="dropdown">
-          <img src="<?php echo base_url('assets/images/') . $this->session->userdata('foto') ?>" alt="">
-          <span><?php echo $this->session->userdata('nama') ?></span>
+          <img src="<?php echo base_url('assets/images/profile/') . $this->session->userdata('photo') ?>" alt="">
+          <span><?php echo $this->session->userdata('name') ?></span>
           <i class="caret"></i>
         </a>
 

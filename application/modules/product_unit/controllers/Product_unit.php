@@ -64,7 +64,7 @@ class Product_unit extends MX_Controller
 
       $data = [
         'name_unit'      => $name_unit,
-        'created_by'     => $this->session->userdata('nama'),
+        'created_by'     => $this->session->userdata('name'),
         'date_created'   => date('Y-m-d h:i:s')
       ];
 
@@ -121,7 +121,7 @@ class Product_unit extends MX_Controller
 
     $data = [
       'name_unit'      => $name_unit,
-      'updated_by' => $this->session->userdata('nama'),
+      'updated_by' => $this->session->userdata('name'),
       'updated'   => date('Y-m-d h:i:s')
     ];
 

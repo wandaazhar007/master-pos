@@ -91,7 +91,7 @@ class Product_stock extends MX_Controller
         'idproduct'         => $idproduct,
         'idsupplier'        => $idsupplier,
         'total'             => $total,
-        'createdby'         => $this->session->userdata('nama'),
+        'createdby'         => $this->session->userdata('name'),
         'stock_date'        => date('Y-m-d h:i:s')
       ];
 
@@ -151,7 +151,7 @@ class Product_stock extends MX_Controller
 
     $data = [
       'name'      => $name,
-      // 'createdby' => $this->session->userdata('name'),
+      'createdby' => $this->session->userdata('name'),
       'created'   => date('Y-m-d h:i:s')
     ];
 
@@ -240,7 +240,7 @@ class Product_stock extends MX_Controller
       $dataStock = [
         'idproduct'         => $idproduct,
         'total'             => $total,
-        'created_by'        => $this->session->userdata('nama'),
+        'created_by'        => $this->session->userdata('name'),
         'date_created'      => date('Y-m-d h:i:s')
       ];
 
@@ -250,7 +250,7 @@ class Product_stock extends MX_Controller
       $data = [
         'idstock'           => $lastIdStock,
         'stock_now'         => $stockNow,
-        'created_by'        => $this->session->userdata('nama'),
+        'created_by'        => $this->session->userdata('name'),
         'date_created'      => date('Y-m-d h:i:s')
       ];
       $this->db->where('idproduct', $idproduct);
@@ -294,7 +294,7 @@ class Product_stock extends MX_Controller
       $dataStock = [
         'idproduct'         => $idproduct,
         'total'             => $total,
-        'created_by'        => $this->session->userdata('nama'),
+        'created_by'        => $this->session->userdata('name'),
         'date_created'      => date('Y-m-d h:i:s')
       ];
 
@@ -303,7 +303,7 @@ class Product_stock extends MX_Controller
 
       $data = [
         'idstock'           => $lastIdStock,
-        'created_by'        => $this->session->userdata('nama'),
+        'created_by'        => $this->session->userdata('name'),
         'date_created'      => date('Y-m-d h:i:s')
       ];
       $this->db->where('idproduct', $idproduct);
@@ -359,7 +359,7 @@ class Product_stock extends MX_Controller
       $dataStock = [
         'idproduct'         => $idproduct,
         'total'             => $total,
-        'created_by'        => $this->session->userdata('nama'),
+        'created_by'        => $this->session->userdata('name'),
         'date_created'      => date('Y-m-d h:i:s')
       ];
 
@@ -369,7 +369,7 @@ class Product_stock extends MX_Controller
       $data = [
         'idstock'           => $lastIdStock,
         'stock_now'         => $stockNow,
-        'created_by'        => $this->session->userdata('nama'),
+        'created_by'        => $this->session->userdata('name'),
         'date_created'      => date('Y-m-d h:i:s')
       ];
       $this->db->where('idproduct', $idproduct);

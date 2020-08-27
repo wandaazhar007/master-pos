@@ -9,21 +9,22 @@ class Logout extends MX_Controller
   function logoutUser()
   {
     $email  = $this->session->userdata('email');
-    $nama  = $this->session->userdata('nama');
-    $query  = $this->db->get_where('tb_user_admin', ['email' => $email])->row_array();
+    $nama  = $this->session->userdata('name');
+    $query  = $this->db->get_where('user_admin', ['email' => $email])->row_array();
     $dataSession = [
-      'id'        => $query['id'],
+      'iduser_admin'        => $query['iduser_admin'],
       'email'     => $query['email'],
-      'nama'      => $query['nama'],
-      'no_hp'      => $query['no_hp'],
-      'foto'      => $query['foto']
+      'name'      => $query['name'],
+      'phone'      => $query['phone'],
+      'phone'      => $query['phone']
     ];
-    $this->session->unset_userdata('id');
+    $this->session->unset_userdata('iduser_admin');
     $this->session->unset_userdata('email');
-    $this->session->unset_userdata('nama');
-    $this->session->unset_userdata('no_hp');
-    $this->session->unset_userdata('foto');
+    $this->session->unset_userdata('name');
+    $this->session->unset_userdata('phone');
+    $this->session->unset_userdata('phonoe');
     $this->session->unset_userdata('date_created');
+    $this->session->unset_userdata('created_by');
     // $this->session->sess_destroy($dataSession);
     $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible">
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
