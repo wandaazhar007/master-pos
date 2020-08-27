@@ -90,7 +90,13 @@ var save_method; //for save method string
 var oTable;
 $(document).ready(function () {
 	oTable = $('#tableDataProduk').DataTable({
-		"processing": true,
+		// "sDom": 'prtp',
+		// "processing": true,
+		"processing": "<span class='fa-stack fa-lg' style='z-index: 1000000;'>\n\
+                    <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+               </span>&nbsp;&nbsp;&nbsp;&nbsp;Processing ...",
+
+		"bProcessing": true,
 		"serverSide": true,
 		//"lengthChange": false,
 		//"displayLength" : 20,
@@ -109,32 +115,50 @@ $(document).ready(function () {
 		"columnDefs": [{
 				"targets": [0],
 				"searchable": true,
-				"sortable": true
+				"sortable": true,
+				"processing": true,
+				"bProcessing": true
 			},
 			{
 				"targets": [1],
 				"searchable": true,
-				"sortable": true
+				"sortable": true,
+				"processing": true,
+				"bProcessing": true
 			},
 			{
 				"targets": [2],
 				"searchable": true,
-				"sortable": true
+				"sortable": true,
+				"processing": true,
+				"bProcessing": true
 			},
 			{
 				"targets": [3],
 				"searchable": true,
-				"sortable": true
+				"sortable": true,
+				"processing": true,
+				"bProcessing": true
 			},
 			{
 				"targets": [4],
 				"searchable": true,
-				"sortable": true
+				"sortable": true,
+				"processing": true,
+				"bProcessing": true
+			},
+			{
+				"targets": [5],
+				"searchable": true,
+				"sortable": true,
+				"processing": true,
+				"bProcessing": true
 			}
 		],
 
 	});
 });
+
 
 
 //~ Datatable serverside Kategori Produk ~//
@@ -448,7 +472,6 @@ $(document).ready(function () {
 				idproduct: idproduct
 			},
 			success: function (data) {
-				console.log('yes');
 				$('#product_result').html(data);
 				$('#modal_product').modal('show');
 			}

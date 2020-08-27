@@ -152,7 +152,8 @@ class Product extends MX_Controller
   function showFormUpdate()
   {
     $idproduct = $this->input->post('idproduct');
-    $category = $this->wandalibs->getCategoryProductArray();
+    $category = $this->wandalibs->getAllCategoryProductArray();
+    $unit = $this->wandalibs->getAllUnitProductArray();
     // $queryUnit = $this->wandalibs->getUnitProduct();
     // $queryCategory = $this->wandalibs->getCategoryProduct();
     // foreach ($queryCategory as $u) {
@@ -171,6 +172,7 @@ class Product extends MX_Controller
         <script type="text/javascript" src="' .  base_url() . 'assets/js/plugins/forms/selects/select2.min.js"></script>
         <script type="text/javascript" src="' .  base_url() . 'assets/js/pages/form_select2.js"></script>
         ';
+
         $output .= '
       
         <form action="' . base_url('product/update') . '" method="post">
@@ -179,40 +181,42 @@ class Product extends MX_Controller
             <div class="row">
               <div class="col-sm-6" style="margin-bottom: 10px;">
                 <label>Nama Produk</label>
+                <input type="hidden" name="idproduct" value="' . $i['idproduct'] . '" placeholder="Masukan Nama Produk" class="form-control" required>
                 <input type="text" name="name" value="' . $i['name'] . '" placeholder="Masukan Nama Produk" class="form-control" required>
                 <small class="text-danger">' . form_error('name') . '</small>
               </div>
 
               <div class="col-sm-3" style="margin-bottom: 10px;">
                 <label>Kode Barcode</label>
-                <input type="text" name="barcode" value="' . $i['barcode'] . '" class="form-control" value="" required readonly>
-                <small class="text-danger">' . form_error('barcode') . '</small>
+                <input type="text" name="code_product" value="' . $i['code_product'] . '" class="form-control" value="" required readonly>
+                <small class="text-danger">' . form_error('code_product') . '</small>
               </div>
 
               <div class="col-sm-3">
                 <label>Persentase</label>
-                <input type="number" name="pesentase" value="' . $i['persentase'] . '" class="form-control" placeholder="0%" required>
+                <input type="number" name="persentase" value="' . $i['persentase'] . '" id="persentase" class="form-control" placeholder="0%" min="0" required>
                 <small class="text-danger">' . form_error('persentase') . '</small>
               </div>
 
 
               <div class="col-sm-6" style="margin-bottom: 10px;">
                 <label>Harga Asli</label>
-                <input type="number" name="price" value="' . $this->wandalibs->rupiah($i['price']) . '" placeholder="Rp. ..." class="form-control" required>
+                <input type="number" name="buying_price" id="buying_price" value="' . $this->wandalibs->rupiah($i['buying_price']) . '" min="0" placeholder="Rp. ..." class="form-control" required>
                 <small class="text-danger">' . form_error('price') . '</small>
               </div>
 
               <div class="col-sm-6" style="margin-bottom: 10px;">
                 <label>Harga Jual</label>
-                <input type="text" name="price_selling" value="' . $this->wandalibs->rupiah($i['price_selling']) . '" placeholder="Rp. ..." class="form-control" required readonly>
+                <input type="text" name="selling_price" value="' . $this->wandalibs->rupiah($i['selling_price']) . '" id="selling_price" placeholder="Rp. ..." class="form-control" required readonly>
                 <small class="text-danger">' . form_error('price_selling') . '</small>
               </div>
 
               <div class="col-sm-6" style="margin-bottom: 10px;">
                 <div class="form-group">
                   <label>Kategori Produk</label>
-                  <select class="select-search select2-hidden-accessible" tabindex="-1" aria-hidden="true" name="idproduct_category">
+                  <select class="select-search select2-hidden-accessible" tabindex="-1" aria-hidden="true" name="idcategory" required>
                     <optgroup label="Pilih Kategory Produk">
+                        <option value="' .  $i['idcategory'] . '">' .  $i['name_category'] . '</option>
                         <option value="">' .  $category . '</option>
                     </optgroup>
                   </select>
@@ -222,10 +226,10 @@ class Product extends MX_Controller
               <div class="col-sm-6" style="margin-bottom: 10px;">
                 <div class="form-group">
                   <label>Satuan Produk</label>
-                  <select class="select-search select2-hidden-accessible" tabindex="-1" aria-hidden="true" name="idproduct_unit">
+                  <select class="select-search select2-hidden-accessible" tabindex="-1" aria-hidden="true" name="idunit" required>
                     <optgroup label="Pilih Satuan Produk">
-                      <option value=""></option>
-                      
+                      <option value="' .  $i['idunit'] . '">' .  $i['name_unit'] . '</option>
+                        <option value="">' .  $unit . '</option>
                     </optgroup>
                   </select>
                 </div>
@@ -245,8 +249,35 @@ class Product extends MX_Controller
         </div>
       </form>
                 ';
+      // $output .= '
+      //       <script  type="text/javascript">
+      //         document.getElementById("buying_price").addEventListener("keyup", function() {
+      //           const buying_price = parseInt(document.getElementById("buying_price").value);
+      //           const persentase = parseInt(document.getElementById("persentase").value);
+      //           const selling_price = document.getElementById("selling_price");
 
-      endforeach;;
+      //           const result1 = (buying_price * persentase) / 100;
+      //           const result2 = result1 + buying_price;
+      //           const result3 = Math.round(result2);
+
+      //           selling_price.setAttribute("value", result3);
+
+      //         })
+
+      //         document.getElementById("persentase").addEventListener("keyup", function() {
+      //           const buying_price = parseInt(document.getElementById("buying_price").value);
+      //           const persentase = parseInt(document.getElementById("persentase").value);
+      //           const selling_price = document.getElementById("selling_price");
+
+      //           const result1 = (buying_price * persentase) / 100;
+      //           const result2 = result1 + buying_price;
+      //           const result3 = Math.round(result2);
+
+      //           selling_price.setAttribute("value", result3);
+      //         })
+      //       </script>
+      //       ';
+      endforeach;
       echo $output;
     } else {
       echo 'not founds';
@@ -258,23 +289,23 @@ class Product extends MX_Controller
   {
     $idproduct          = htmlspecialchars($this->input->post('idproduct', true));
     $name               = htmlspecialchars($this->input->post('name', true));
-    $barcode            = htmlspecialchars($this->input->post('barcode', true));
-    $idproduct_unit     = htmlspecialchars($this->input->post('idproduct_unit', true));
-    $idproduct_category = htmlspecialchars($this->input->post('idproduct_category', true));
-    $price              = htmlspecialchars($this->input->post('price', true));
+    $code_product       = htmlspecialchars($this->input->post('code_product', true));
+    $idunit             = htmlspecialchars($this->input->post('idunit', true));
+    $idcategory         = htmlspecialchars($this->input->post('idcategory', true));
+    $buying_price       = htmlspecialchars($this->input->post('buying_price', true));
     $persentase         = htmlspecialchars($this->input->post('persentase', true));
-    $price_selling      = htmlspecialchars($this->input->post('price_selling', true));
+    $selling_price      = htmlspecialchars($this->input->post('selling_price', true));
 
     $data = [
       'name'              => $name,
-      'barcode'           => $barcode,
-      'idproduct_unit'    => $idproduct_unit,
-      'idproduct_category' => $idproduct_category,
-      'price'             => $price,
+      'code_product'      => $code_product,
+      'idunit'            => $idunit,
+      'idcategory'        => $idcategory,
+      'buying_price'      => $buying_price,
       'persentase'        => $persentase,
-      'price_selling'     => $price_selling,
-      'createdby'         => $this->session->userdata('nama'),
-      'created'           => date('Y-m-d h:i:s')
+      'selling_price'     => $selling_price,
+      'updated_by'        => $this->session->userdata('nama'),
+      'updated'           => date('Y-m-d h:i:s')
 
     ];
 
@@ -284,7 +315,7 @@ class Product extends MX_Controller
     <button type="button" class="close" data-dismiss="alert"><span>×</span><span class="sr-only">Close</span></button>
     <span class="text-semibold">Yeay!</span> Data product ' . $name . ' berhasil diupdate.
   </div>');
-    redirect('product');
+    redirect('product/dataProduct');
   }
 
   function showModalDelete()

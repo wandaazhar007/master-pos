@@ -87,7 +87,7 @@ class M_data_product extends CI_Model
 
   function getDetailById($idproduct)
   {
-    return $this->db->query("SELECT * FROM `product` WHERE `product`.`idproduct` = '$idproduct'")->result_array();
+    return $this->db->query("SELECT `product`.`idproduct`, `product`.`code_product`, `product`.`name`, `product`.`buying_price`, `product`.`persentase`, `product`.`selling_price`, `product`.`description`, `category`.`name_category`, `category`.`idcategory`, `unit`.`name_unit`, `unit`.`idunit`, `stock`.`total` FROM `product` LEFT JOIN `category` ON `category`.`idcategory` = `product`.`idcategory` LEFT JOIN `unit` ON `unit`.`idunit` = `product`.`idunit` LEFT JOIN `stock` ON `stock`.`idstock` = `product`.`idstock`  WHERE `product`.`idproduct` = '$idproduct'")->result_array();
   }
 
   // function getBarcode()

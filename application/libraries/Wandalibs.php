@@ -452,18 +452,6 @@ class Wandalibs
     foreach ($data as $i) {
       return $i['idproduct'] + 1;
     }
-    // echo $data->result_array();
-    // var_dump($data);
-    // die;
-    // return $data;
-    // echo json_encode($data);
-    // if ($data->num_rows() > 0) {
-    //   foreach ($data->result() as $row) {
-    //     $result[] = $row;
-    //   }
-
-    //   return $result;
-    // }
   }
 
   function getIdTransactionGroup()
@@ -501,10 +489,25 @@ class Wandalibs
   function getAllCategoryProductArray()
   {
     $query = $this->db->query("SELECT `category`.`idcategory`, `category`.`name_category` FROM `category`")->result_array();
+    $output = '';
     foreach ($query as $i) {
-      $result[] = $i;
+      $output .= '
+        <option value="' . $i['idcategory'] . '">' . $i['name_category'] . '</option>
+      ';
     }
-    return $result;
+    return $output;
+  }
+
+  function getAllUnitProductArray()
+  {
+    $query = $this->db->query("SELECT `unit`.`idunit`, `unit`.`name_unit` FROM `unit`")->result_array();
+    $output = '';
+    foreach ($query as $i) {
+      $output .= '
+        <option value="' . $i['idunit'] . '">' . $i['name_unit'] . '</option>
+      ';
+    }
+    return $output;
   }
 
   function getUnitProduct()
@@ -519,6 +522,6 @@ class Wandalibs
 
   function getProductById($kode_product)
   {
-    return $this->db->query("SELECT `product`.`idproduct`, `product`.`name`, `product`.`code_product` FROM `product` WHERE `product`.`code_product` = '$kode_product'")->result_array();
+    return $this->db->query("SELECT `product`.`idproduct`, `product`.`name`, `product`.`code_product`, `product`.`stock_now`, `unit`.`name_unit` FROM `product` JOIN `unit` ON `product`.`idunit` = `unit`.`idunit` WHERE `product`.`code_product` = '$kode_product'")->result_array();
   }
 }

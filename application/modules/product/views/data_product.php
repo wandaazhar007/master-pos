@@ -82,13 +82,13 @@
 
               <div class="col-sm-6" style="margin-bottom: 10px;">
                 <label>Harga Asli</label>
-                <input type="text" name="buying_price" id="buying_price" placeholder="Rp. ..." class="form-control" required>
+                <input type="text" name="buying_price" id="buying_price" min="0" placeholder="Rp. ..." class="form-control" required>
                 <small class="text-danger"><?php echo form_error('buying_price') ?></small>
               </div>
 
               <div class="col-sm-3">
                 <label>Persentase</label>
-                <input type="number" name="persentase" id="persentase" class="form-control" placeholder="0%" required>
+                <input type="number" name="persentase" id="persentase" class="form-control" min="0" placeholder="0%" required>
                 <small class="text-danger"><?php echo form_error('persentase') ?></small>
               </div>
 
@@ -140,7 +140,7 @@
                 </div>
               </div>
 
-              <div class="col-sm-12">
+              <div class="col-sm-6">
                 <label>Keterangan</label>
                 <textarea name="description" class="form-control" id="" cols="5" rows="5" placeholder="Masukan keterangan produk (Jika diperlukan)"></textarea>
                 <small class="text-danger"><?php echo form_error('description') ?></small>
@@ -199,13 +199,6 @@
     const result3 = Math.round(result2);
 
     selling_price.setAttribute('value', result3);
-    // hj.innerHTML = result2;
-    // const inputHargaJual = document.createElement('input');
-    // const teks = document.createTextNode('coba create element');
-    // inputHargaJual.appendChild(teks);
-    // const posisi = document.getElementById('hj');
-    // posisi.appendChild(inputHargaJual);
-    // console.log(inputHargaJual);
 
   })
 
@@ -219,12 +212,5 @@
     const result3 = Math.round(result2);
 
     selling_price.setAttribute('value', result3);
-    // hj.innerHTML = result2;
-    // const inputHargaJual = document.createElement('input');
-    // const teks = document.createTextNode('coba create element');
-    // inputHargaJual.appendChild(teks);
-    // const posisi = document.getElementById('hj');
-    // posisi.appendChild(inputHargaJual);
-    // console.log(inputHargaJual);
   })
 </script>

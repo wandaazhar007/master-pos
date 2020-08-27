@@ -35,7 +35,7 @@
           <th>Kode Barcode</th>
           <th>Nama Produk</th>
           <!-- <th>Keterangan</th> -->
-          <th>Nama Supplier</th>
+          <th>Tipe</th>
           <th>Stock</th>
           <th class="text-center">Aksi</th>
         </tr>
