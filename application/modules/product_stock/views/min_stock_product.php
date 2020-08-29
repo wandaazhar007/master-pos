@@ -28,7 +28,8 @@
 <div class="content-wrapper">
   <?php echo $this->session->flashdata('message') ?>
   <div class="text-danger" style="display: inline;">
-    <?php echo form_error('name') ?>
+    <?php echo form_error('total') ?>
+    <?php echo form_error('description') ?>
   </div>
   <div class="panel panel-flat col-md-6">
     <div class="panel-heading" style="text-decoration: none;">
@@ -61,7 +62,9 @@
                       <div class="form-group">
                         <input type="hidden" name="idproduct" value="<?php echo $i['idproduct'] ?>" class="form-control" readonly>
                         <input type="hidden" name="code_product" value="<?php echo $i['code_product'] ?>" class="form-control" readonly>
+                        <input type="hidden" name="type" value="keluar" class="form-control" readonly>
                         <input type="number" name="total" min="0" class="form-control" placeholder="Masukan jumlah pengurangan stok" required>
+                        <textarea style="margin-top: 10px;" name="description" class="form-control" cols="5" rows="5" placeholder="Masukan keterangan stok masuk (Jika diperlukan)"></textarea>
                       </div>
                     <?php endforeach; ?>
                   </div>

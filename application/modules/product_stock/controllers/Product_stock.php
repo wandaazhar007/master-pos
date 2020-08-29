@@ -32,7 +32,7 @@ class Product_stock extends MX_Controller
           <button class="tombol-hapus view_hapus pull-right" id="' . $value['idstock'] . '"><i class="fa fa-trash"></i>&nbsp;hapus</button>
         </a>
         <a href="#">
-          <button style="margin-right: 5px;" class="tombol-edit view_product_stock pull-right" id="' . $value['idstock'] . '"><i class="fa fa-pencil"></i>&nbsp;edit</button>
+          <button style="margin-right: 5px;" class="tombol-edit view_product_stock pull-right" id="' . $value['idstock'] . '"><i class="fa fa-search"></i>&nbsp;History</button>
         </a>
         ';
       $a = strtotime($value['date_created']);
@@ -51,14 +51,16 @@ class Product_stock extends MX_Controller
       }
 
       $row = array();
+
       $row[] = $no++;
       $row[] = $tgl;
       $row[] = $value['code_product'];
       $row[] = $value['name'];
-      // $row[] = $value['detail'];
-      $row[] = $value['name_supplier'];
-      $row[] = $stock;
+      $row[] = $value['type'];
+      // $row[] = $value['name_supplier'];
+      $row[] = $value['total'] . '&nbsp;' . $value['name_unit'] . '&nbsp;' . $value['description'];
       $row[] = $queryAction;
+
       $data[] = $row;
     }
     $output = array(
@@ -91,7 +93,7 @@ class Product_stock extends MX_Controller
         'idproduct'         => $idproduct,
         'idsupplier'        => $idsupplier,
         'total'             => $total,
-        'createdby'         => $this->session->userdata('name'),
+        'created_by'         => $this->session->userdata('name'),
         'stock_date'        => date('Y-m-d h:i:s')
       ];
 
@@ -174,8 +176,8 @@ class Product_stock extends MX_Controller
         $output .= '
           <div class="row">
           <div class="col-sm-12 text-center">
-            <p>Apakah Anda yakin akan menghapus kategori</p>
-            <h6 class="text-bold" style="margin-top: -10px;">' . $i['name'] . '</h6>
+            <p>Apakah Anda yakin akan menghapus riwayat stok</p>
+            <h6 class="text-bold" style="margin-top: -10px;">' . $i['name'] . ' ?</h6>
           </div>
             <div class="col-sm-12 text-center">
               <a href="' . base_url('product_stock/delete/') . $i['idstock'] . '">
@@ -232,6 +234,8 @@ class Product_stock extends MX_Controller
     if ($this->form_validation->run() == true) {
       $idproduct        = htmlspecialchars($this->input->post('idproduct', true));
       $total            = htmlspecialchars($this->input->post('total', true));
+      $description      = htmlspecialchars($this->input->post('description', true));
+      $type             = htmlspecialchars($this->input->post('type', true));
 
       $query = $this->db->get_where('product', ['idproduct' => $idproduct])->row_array();
       $namaProduk = $query['name'];
@@ -240,6 +244,8 @@ class Product_stock extends MX_Controller
       $dataStock = [
         'idproduct'         => $idproduct,
         'total'             => $total,
+        'description'       => $description,
+        'type'              => $type,
         'created_by'        => $this->session->userdata('name'),
         'date_created'      => date('Y-m-d h:i:s')
       ];
@@ -277,9 +283,6 @@ class Product_stock extends MX_Controller
   {
 
     $this->load->library('form_validation');
-    $this->form_validation->set_rules('idproduct', 'Nama Produk', 'required', [
-      'required' => 'Nama produk belum diisi'
-    ]);
     $this->form_validation->set_rules('total', 'Jumlah', 'required|trim', [
       'required'  => 'Jumlah stock belum diisi'
     ]);
@@ -287,15 +290,20 @@ class Product_stock extends MX_Controller
     if ($this->form_validation->run() == true) {
       $idproduct        = htmlspecialchars($this->input->post('idproduct', true));
       $total            = htmlspecialchars($this->input->post('total', true));
+      $description      = htmlspecialchars($this->input->post('description', true));
+      $type             = htmlspecialchars($this->input->post('type', true));
 
       $query = $this->db->get_where('product', ['idproduct' => $idproduct])->row_array();
       $namaProduk = $query['name'];
+      $stockNow = $query['stock_now'] + $total;
 
       $dataStock = [
         'idproduct'         => $idproduct,
         'total'             => $total,
-        'created_by'        => $this->session->userdata('name'),
-        'date_created'      => date('Y-m-d h:i:s')
+        'description'       => $description,
+        'type'              => $type,
+        'updated_by'        => $this->session->userdata('name'),
+        'updated'           => date('Y-m-d h:i:s')
       ];
 
       $this->db->insert('stock', $dataStock);
@@ -303,8 +311,9 @@ class Product_stock extends MX_Controller
 
       $data = [
         'idstock'           => $lastIdStock,
-        'created_by'        => $this->session->userdata('name'),
-        'date_created'      => date('Y-m-d h:i:s')
+        'stock_now'         => $stockNow,
+        'updated_by'        => $this->session->userdata('name'),
+        'created'           => date('Y-m-d h:i:s')
       ];
       $this->db->where('idproduct', $idproduct);
       $this->db->update('product', $data);
@@ -343,6 +352,8 @@ class Product_stock extends MX_Controller
     if ($this->form_validation->run() == true) {
       $idproduct        = htmlspecialchars($this->input->post('idproduct', true));
       $total            = htmlspecialchars($this->input->post('total', true));
+      $description      = htmlspecialchars($this->input->post('description', true));
+      $type             = htmlspecialchars($this->input->post('type', true));
 
       $query = $this->db->get_where('product', ['idproduct' => $idproduct])->row_array();
       $namaProduk = $query['name'];
@@ -359,6 +370,8 @@ class Product_stock extends MX_Controller
       $dataStock = [
         'idproduct'         => $idproduct,
         'total'             => $total,
+        'description'       => $description,
+        'type'              => $type,
         'created_by'        => $this->session->userdata('name'),
         'date_created'      => date('Y-m-d h:i:s')
       ];

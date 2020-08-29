@@ -210,7 +210,7 @@ class Supplier extends MX_Controller
           <div class="row">
           <div class="col-sm-12 text-center">
             <p>Apakah Anda yakin akan menghapus data supllier atas nama</p>
-            <h6 class="text-bold" style="margin-top: -10px;">' . $i['name_supplier'] . '</h6>
+            <h6 class="text-bold" style="margin-top: -10px;">' . $i['name_supplier'] . ' ?</h6>
           </div>
             <div class="col-sm-12 text-center">
               <a href="' . base_url('supplier/delete/') . $i['idsupplier'] . '">

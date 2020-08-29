@@ -31,13 +31,12 @@
       <thead>
         <tr>
           <th style="width: 10px;">No</th>
-          <th>Tanggal</th>
-          <th>Kode Barcode</th>
-          <th>Nama Produk</th>
-          <!-- <th>Keterangan</th> -->
-          <th>Tipe</th>
-          <th>Stock</th>
-          <th class="text-center">Aksi</th>
+          <th style="width: 100px;">Tanggal</th>
+          <th style="width: 100px;">Kode Barcode</th>
+          <th style="width: 200px;">Nama Produk</th>
+          <th style="width: 100px;">Tipe</th>
+          <th style="width: 400px;">Keterangan</th>
+          <th class="text-center" style="width: 150px;">Aksi</th>
         </tr>
       </thead>
     </table>

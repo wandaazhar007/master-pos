@@ -145,7 +145,7 @@ class Product_category extends MX_Controller
           <div class="row">
           <div class="col-sm-12 text-center">
             <p>Apakah Anda yakin akan menghapus kategori</p>
-            <h6 class="text-bold" style="margin-top: -10px;">' . $i['name_category'] . '</h6>
+            <h6 class="text-bold" style="margin-top: -10px;">' . $i['name_category'] . ' ?</h6>
           </div>
             <div class="col-sm-12 text-center">
               <a href="' . base_url('product_category/delete/') . $i['idcategory'] . '">

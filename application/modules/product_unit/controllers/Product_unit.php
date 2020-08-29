@@ -145,7 +145,7 @@ class Product_unit extends MX_Controller
           <div class="row">
           <div class="col-sm-12 text-center">
             <p>Apakah Anda yakin akan menghapus Satuan Produk</p>
-            <h6 class="text-bold" style="margin-top: -10px;">' . $i['name_unit'] . '</h6>
+            <h6 class="text-bold" style="margin-top: -10px;">' . $i['name_unit'] . ' ?</h6>
           </div>
             <div class="col-sm-12 text-center">
               <a href="' . base_url('product_unit/delete/') . $i['idunit'] . '">

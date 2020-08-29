@@ -10,41 +10,38 @@
       </li>
 
       <li class="dropdown mega-menu mega-menu-wide">
-        <a href="<?php echo base_url('supplier') ?>">Supplier</a>
+        <a href="<?php echo base_url('supplier') ?>"><i class="fa fa-car position-left"></i>Supplier</a>
       </li>
 
       <li class="dropdown mega-menu mega-menu-wide">
-        <a href="<?php echo base_url('customer') ?>">Pelanggan</a>
+        <a href="<?php echo base_url('customer') ?>"><i class="fa fa-user position-left"></i>Pelanggan</a>
       </li>
 
       <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-          <i class="icon-make-group position-left"></i>Produk <span class="caret"></span>
+          <i class="fa fa-gift position-left"></i>Produk <span class="caret"></span>
         </a>
         <ul class="dropdown-menu width-250">
-          <li><a href="<?php echo base_url('product/dataProduct') ?>"><i class="icon-align-center-horizontal"></i>Data Produk</a></li>
+          <li><a href="<?php echo base_url('product/dataProduct') ?>"><i class="icon-align-center-horizontal"></i>Data Semua Produk</a></li>
           <li><a href="<?php echo base_url('product_category') ?>"><i class="icon-align-center-horizontal"></i>Kategori Produk</a></li>
           <li><a href="<?php echo base_url('product_unit') ?>"><i class="icon-flip-vertical3"></i>Satuan Produk</a></li>
         </ul>
       </li>
 
-      <li class="dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-          <i class="icon-make-group position-left"></i>Stok <span class="caret"></span>
-        </a>
-        <ul class="dropdown-menu width-250">
-          <li><a href="<?php echo base_url('product_stock') ?>"><i class="icon-align-center-horizontal"></i>Stok Masuk</a></li>
-          <li><a href="<?php echo base_url('product_stock/out') ?>"><i class="icon-align-center-horizontal"></i>Stok Keluar</a></li>
-        </ul>
-      </li>
+
 
       <li class="active">
-        <a href="<?php echo base_url('transaksi') ?>">Transaksi</a>
+        <a href="<?php echo base_url('transaksi') ?>"><i class="fa fa-money position-left"></i>Transaksi</a>
+      </li>
+
+
+      <li class="dropdown mega-menu mega-menu-wide">
+        <a href="<?php echo base_url('product_stock') ?>"><i class="fa fa-history position-left"></i>Riwayat Stok</a>
       </li>
 
       <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-          <i class="icon-strategy position-left"></i>Laporan<span class="caret"></span>
+          <i class="fa fa-file position-left"></i>Laporan<span class="caret"></span>
         </a>
 
         <ul class="dropdown-menu width-200">
