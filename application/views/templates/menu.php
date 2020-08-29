@@ -31,7 +31,7 @@
 
 
       <li class="active">
-        <a href="<?php echo base_url('transaksi') ?>"><i class="fa fa-money position-left"></i>Transaksi</a>
+        <a href="<?php echo base_url('transaction') ?>"><i class="fa fa-money position-left"></i>Transaksi</a>
       </li>
 
 

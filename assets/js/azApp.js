@@ -505,6 +505,26 @@ $(document).ready(function () {
 	});
 });
 
+
+/* Note: Function untuk modal edit transaction | Author: wandaazhar@gmail.com */
+$(document).ready(function () {
+	$('#list-transaction').on('click', '.view_edit_transaction', function () {
+		var idtemp_transaction = $(this).attr('id');
+		$.ajax({
+			url: base_url + "transaction/showFormEditTransaction",
+			method: "POST",
+			data: {
+				idtemp_transaction: idtemp_transaction
+			},
+			success: function (data) {
+				console.log('yes');
+				$('#edit_transaction_result').html(data);
+				$('#modal_edit_transaction').modal('show');
+			}
+		}); //end ajax
+	});
+});
+
 // Note: Function untuk modal konfirmasi delete supplier | Author: wandaazhar@gmail.com
 // $(document).ready(function () {
 // 	$('#tombol-delete-supplier').on('click', function () {
@@ -694,6 +714,26 @@ $(document).ready(function () {
 				console.log('yes');
 				$('#delete_user_result').html(data);
 				$('#modal_delete_user').modal('show');
+			}
+		}); //end ajax
+	});
+});
+
+
+// Note: Function untuk modal delete user/pengguna | Author: wandaazhar@gmail.com
+$(document).ready(function () {
+	$('#list-transaction').on('click', '.view_hapus', function () {
+		var idtemp_transaction = $(this).attr('id');
+		$.ajax({
+			url: base_url + "transaction/showModalDelete",
+			method: "POST",
+			data: {
+				idtemp_transaction: idtemp_transaction
+			},
+			success: function (data) {
+				console.log('yes');
+				$('#delete_list_transaction_result').html(data);
+				$('#modal_delete_list_transaction').modal('show');
 			}
 		}); //end ajax
 	});

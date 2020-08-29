@@ -536,4 +536,17 @@ class Wandalibs
   {
     return $this->db->query("SELECT `product`.`idproduct`, `product`.`name`, `product`.`code_product`, `product`.`stock_now`, `unit`.`name_unit` FROM `product` JOIN `unit` ON `product`.`idunit` = `unit`.`idunit` WHERE `product`.`code_product` = '$kode_product'")->result_array();
   }
+
+  function getCodeTransaction($par, $length = 6)
+  {
+    $keyHash = '';
+    $chars     = "ABCDEFGHJKLMNPQRSTUVWXYZ";
+    for ($i = 0; $i < $length; $i++) {
+      $x = mt_rand(0, strlen($chars) - 1);
+      $keyHash .= $chars{
+        $x};
+    }
+    $return = '' . $par . '_' . $keyHash . '';
+    return $return;
+  }
 }

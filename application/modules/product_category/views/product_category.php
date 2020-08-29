@@ -88,7 +88,7 @@
   </div>
 </div>
 
-<!-- Note: Modal Form Edit Customer | Author: wandaazhar@gmail.com -->
+<!-- Note: Modal Delete Kategori Produk | Author: wandaazhar@gmail.com -->
 <div class="modal fade" id="modal_delete_product_category">
   <div class="modal-dialog">
     <div class="modal-content">
