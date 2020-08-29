@@ -46,11 +46,11 @@
 
         <ul class="dropdown-menu width-200">
           <li class="dropdown-header">Laporan Penjualan</li>
-          <li><a href="<?php echo base_url('laporan/penjualan') ?>"><i class="icon-align-center-horizontal"></i>Laporan Penjualan</a></li>
-          <li><a href="<?php echo base_url('laporan/labaRugi') ?>"><i class="icon-align-center-horizontal"></i>Laporan Laba Rugi</a></li>
+          <li><a href="<?php echo base_url('report_transaction') ?>">Laporan Penjualan</a></li>
+          <li><a href="<?php echo base_url('laporan/labaRugi') ?>">Laporan Laba Rugi</a></li>
           <li class="dropdown-header">Laporan Stok</li>
-          <li><a href="<?php echo base_url('report_stock_in') ?>"><i class="icon-align-center-horizontal"></i>Stok Masuk</a></li>
-          <li><a href="<?php echo base_url('report_stock_out') ?>"><i class="icon-align-center-horizontal"></i>Stok Keluar</a></li>
+          <li><a href="<?php echo base_url('report_stock_in') ?>">Stok Masuk</a></li>
+          <li><a href="<?php echo base_url('report_stock_out') ?>">Stok Keluar</a></li>
         </ul>
       </li>
     </ul>
