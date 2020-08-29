@@ -4,7 +4,6 @@
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/plugins/forms/selects/select2.min.js"></script>
 
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/core/libraries/jquery_ui/interactions.min.js"></script>
-<script type="text/javascript" src="<?php echo base_url() ?>assets/js/plugins/forms/selects/select2.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/core/app.js"></script>
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/pages/datatables_responsive.js"></script>
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/pages/form_select2.js"></script>
@@ -21,7 +20,6 @@
           </ul>
         </div>
       </div>
-
       <div class="container-fluid">
         <div class="row">
           <div class="col-lg-12">
@@ -32,24 +30,35 @@
                     <div class="col-sm-6" id="form-tambah">
                       <div class="form-group">
                         <label>Nama Produk</label>
-                        <select class="select-search select2-hidden-accessible" tabindex="-1" aria-hidden="true" name="idproduct" onchange="addProduct()">
+                        <!-- <select class="select-search select2-hidden-accessible" tabindex="-1" aria-hidden="true" name="idproduct" id="product">
                           <optgroup label="Pilih Nama Produk">
                             <option value=""></option>
-                            <?php foreach ($getProduct as $i) : ?>
-                              <option value="<?php echo $i['idproduct'] ?>" value_harga="<?php echo $i['selling_price'] ?>" class="option_harga"><?= $i['name']; ?></option>
-                            <?php endforeach; ?>
+                            <?php// foreach ($getProduct as $i) : ?>
+                              <option value="<?php// echo $i['idproduct'] ?>" value_harga="<?php// echo $i['selling_price'] ?>"><?php //echo $i['name']; 
+                                                                                                                                ?></option>
+                            <?php //endforeach; 
+                            ?>
                           </optgroup>
+                        </select> -->
+                        <select id="product" class="" tabindex="-1" aria-hidden="true">
+                          <?php foreach ($getProduct as $i) : ?>
+                            <option value="<?php echo $i['idproduct'] ?>" data-harga="<?php echo $i['selling_price'] ?>"><?php echo $i['name'] ?></option>
+                          <?php endforeach; ?>
                         </select>
-                        <small class="text-danger"><?php echo form_error('name') ?></small>
                       </div>
+
+
                     </div>
 
-                    <div id="selling_price"></div>
-
+                    <!-- <div id="div_selling_price"></div> -->
+                    <!-- <input type="text" size="30" name="harga" id="harga" /> -->
+                    <div class="col-sm-6">
+                      <label>Harga</label>
+                      <input type="text" name="harga" id="harga" placeholder="0" class="form-control">
+                    </div>
                     <div class="col-sm-2">
                       <label>Jumlah</label>
                       <input type="number" name="qty" id="qty" placeholder="0" class="form-control" min="1" value="1">
-                      <small class="text-danger"><?php echo form_error('qty') ?></small>
                     </div>
                     <div class="col-sm-4" style="margin-top: 25px;">
                       <button type="submit" class="tombol-tambah"><i class="fa fa-plus"></i>&nbsp; Tambah</button>
@@ -81,14 +90,12 @@
             <td style="padding: 10px;">No Nota</td>
             <td style="padding: 10px;">:</td>
             <td style="padding: 10px;"><?php echo $this->wandalibs->getCodeTransaction(date('dmyhi')) ?></td>
-
           </tr>
         </table>
       </div>
     </div>
   </div>
 </div>
-
 <div class="row">
   <?php echo $this->session->flashdata('message') ?>
   <div class="col-lg-12">
@@ -130,7 +137,6 @@
     </div>
   </div>
 </div>
-
 <!-- Note: Modal Form Edit transaksi | Author: wandaazhar@gmail.com -->
 <div class="modal fade" id="modal_edit_transaction">
   <div class="modal-dialog">
@@ -145,8 +151,6 @@
     </div>
   </div>
 </div>
-
-
 <!-- Note: Modal Delete list transaksi | Author: wandaazhar@gmail.com -->
 <div class="modal fade" id="modal_delete_list_transaction">
   <div class="modal-dialog">
@@ -162,38 +166,44 @@
   </div>
 </div>
 
-<script>
-  const selling_price = document.getElementById('selling_price');
-  // const idproduct = document.getElementById('idproduct');
+<script type="text/javascript">
+  // var selectsearch = document.querySelector('.select-search');
+  var product = document.getElementById('product');
+  var harga = document.getElementById('harga');
 
-  // function ambilHarga() {
-  //   console.log('test');
+  function getSelectedOptionProduct(harga) {
+    var opt;
+    for (var i = 0, len = harga.options.length; i < len; i++) {
+      opt = harga.options[i];
+      if (opt.selected === true) {
+        break;
+      }
+    }
+    return opt;
+  }
+
+  product.addEventListener('change', function() {
+    console.log('test');
+    harga.value = product.harga;
+  })
+
+  // const div_selling_price = document.getElementById('div_selling_price');
+  // const qty = document.getElementById('qty');
+  // // const select_product = document.getElementById('select_product').value;
+
+
+  // function addProduct() {
+  //   const select_product = document.getElementById('select_product');
+  //   const tagHarga = document.createElement('input');
+  //   // const harga = document.getAttribute('value');
+  //   tagHarga.setAttribute('class', 'form-control');
+  //   tagHarga.setAttribute('readonly', '');
+  //   tagHarga.setAttribute('readonly', '');
+  //   tagHarga.setAttribute('value', );
+  //   // const harga = select_product.getAttribute('value');
+  //   console.log(tagHarga);
+
+  //   const formTambah = document.getElementById('form-tambah');
+  //   formTambah.appendChild(tagHarga);
   // }
-
-  // idproduct.addEventListener('change', tambah());
-  qty.addEventListener("change", function() {
-    // result_qty.innerHTML = qty.value;
-    console.log('tester qty');
-  });
-
-  function addProduct() {
-    const option_harga = document.querySelectorAll('.option_harga')
-    const tagHarga = document.createElement('input');
-    tagHarga.setAttribute('class', 'form-control');
-    const harga = option_harga.getAttribute('value');
-    tagHarga.setAttribute('value', harga);
-    // const attributeTagHarga = document.createTextNode('Harga Product');
-    // tagHarga.appendChild(attributeTagHarga);
-
-    const formTambah = document.getElementById('form-tambah');
-    formTambah.appendChild(tagHarga);
-
-    // selling_price.createElement('h1');
-    // selling_price.innerHTML = 'test';
-  }
-
-  function ambilHarga() {
-    // tagHarga.setAttribute = option_harga.getAttribute("value_harga");
-    // tagHarga.setAttribute = option_harga.setAttribute("value", "value_harga");
-  }
 </script>
