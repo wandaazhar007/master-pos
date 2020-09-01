@@ -19,6 +19,8 @@ class Report_transaction extends MX_Controller
   {
     $start_date = htmlspecialchars($this->input->post('start_date', true));
     $end_date   = htmlspecialchars($this->input->post('end_date', true));
+    // var_dump($end_date);
+    // die;
 
     $this->model->getAllDataTransaction($start_date, $end_date);
   }

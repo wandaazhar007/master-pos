@@ -549,4 +549,14 @@ class Wandalibs
     $return = '' . $par . '_' . $keyHash . '';
     return $return;
   }
+
+  function getIdTransaction()
+  {
+    $query = $this->db->query("SELECT MAX(`id`) AS `id_trans` FROM `transaction`")->result_array();
+    $output = '';
+    foreach ($query as $i) {
+      $output .= $i['id_trans'];
+    }
+    return $output;
+  }
 }

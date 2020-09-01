@@ -13,16 +13,29 @@ class Transaction extends MX_Controller
   {
     $idtransaction =  htmlspecialchars($this->input->post('idtransaction', true));
     $code_transaction =  $this->wandalibs->getCodeTransaction($idtransaction);
-    // var_dump($idtransaction_group);
-    // die;
     $data['title']            = 'Transaksi Master POS';
     $data['contents']         = 'transaction';
-    // $data['getIdTransactionGroup']  = $this->model->getIdTransactionGroup();
     $data['getProduct']       = $this->model->getProduct();
     $data['getAddProduct']    = $this->model->getAddProduct();
 
     $this->load->view('templates/core', $data);
   }
+
+
+  function getProduct()
+  {
+    $search = $this->input->get('search');
+    $query = $this->db->query("SELECT `product`.`idproduct`, `product`.`name`, `product`.`selling_price` FROM `product` WHERE `product`.`name` LIKE '%$search%'")->result_array();
+
+    $output = [];
+    foreach ($query as $i) {
+      $output[0]['id'] = $i['idproduct'];
+      $output[0]['data-harga'] = $i['selling_price'];
+      $output[0]['text'] = $i['name'];
+    }
+    echo json_encode($output);
+  }
+
 
   function tambah()
   {
@@ -35,28 +48,27 @@ class Transaction extends MX_Controller
     ]);
 
     if ($this->form_validation->run() == false) {
-      // $idtransaction_group =  $this->input->post('idtransaction_group');
+
       $data['title']      = 'Transaksi Master POS';
       $data['contents']   = 'transaction';
       $data['getProduct']  = $this->model->getProduct();
-      $data['getIdTransactionGroup']  = $this->model->getIdTransactionGroup();
       $data['getAddProduct']  = $this->model->getAddProduct();
       $this->load->view('templates/core', $data);
     } else {
       $idproduct            = htmlspecialchars($this->input->post('idproduct', true));
-      $idtransaction_group  =  htmlspecialchars($this->input->post('idtransaction_group'));
+      $id_transaction       =  htmlspecialchars($this->input->post('id_transaction', true));
       $qty                  = htmlspecialchars($this->input->post('qty', true));
       $selling_price        = htmlspecialchars($this->input->post('selling_price', true));
       $final_price          = htmlspecialchars($this->input->post('final_price', true));
 
       $data = [
-        'code_transaction'  => $this->wandalibs->getCodeTransaction(),
+        'id_transaction'  => $id_transaction,
         'idproduct'     => $idproduct,
         'qty'           => $qty,
         'selling_price'    => $selling_price,
         'final_price'   => $final_price,
         'status'        => 'PROCESS',
-        'created'       => date('Y-m-d h:i:s'),
+        'date_created'       => date('Y-m-d h:i:s'),
         'created_by'    => $this->session->userdata('name')
       ];
       $this->db->insert('temp_transaction', $data);
@@ -66,12 +78,25 @@ class Transaction extends MX_Controller
 
   function bayar()
   {
-    $this->db->query("INSERT INTO `transaction`(`idtransaction`, `code_transaction` `idproduct`, `qty`, `final_price`) SELECT `idtransaction`, `code_transaction` `idproduct`, `qty`, `final_price` FROM `temp_transaction`");
+    $this->db->query("INSERT INTO `transaction`(`id_transaction`, `idproduct`, `qty`, `final_price`, `date_created`, `created_by`) SELECT `id_transaction`, `idproduct`, `qty`, `final_price`, `date_created`, `created_by` FROM `temp_transaction`");
+    $code_transaction = $this->wandalibs->getCodeTransaction(date('dmyhi'));
+    $id_transaction = htmlspecialchars($this->input->post('id_transaction', true));
+    $data = [
+      'code_transaction' => $code_transaction
+    ];
+    $this->db->where('id_transaction', $id_transaction);
+    $this->db->update('transaction', $data);
     $this->db->empty_table('temp_transaction');
     $this->session->set_flashdata('message', '<div class="alert alert-success bg-teal alert-styled-left">
       <button type="button" class="close" data-dismiss="alert"><span>×</span><span class="sr-only">Close</span></button>
       <span class="text-semibold">Berhasil!</span> Transaksi sukses.
       </div>');
+    redirect('transaction');
+  }
+
+  function resetTransaction()
+  {
+    $this->db->empty_table('temp_transaction');
     redirect('transaction');
   }
 

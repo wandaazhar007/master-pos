@@ -13,7 +13,7 @@ class M_transaction extends CI_Model
 
   function getAddProduct()
   {
-    return $this->db->query("SELECT `temp_transaction`.`idtemp_transaction`, `temp_transaction`.`idtransaction`, `temp_transaction`.`qty`, `temp_transaction`.`discount`, `temp_transaction`.`selling_price`, `temp_transaction`.`final_price`, `product`.`name` FROM `temp_transaction` INNER JOIN `product` ON `product`.`idproduct` = `temp_transaction`.`idproduct`")->result_array();
+    return $this->db->query("SELECT `temp_transaction`.`idtemp_transaction`,  `temp_transaction`.`qty`, `temp_transaction`.`discount`, `temp_transaction`.`selling_price`, `temp_transaction`.`final_price`, `product`.`name` FROM `temp_transaction` INNER JOIN `product` ON `product`.`idproduct` = `temp_transaction`.`idproduct`")->result_array();
   }
 
   function getDetailById($idtemp_transaction)
