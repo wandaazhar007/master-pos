@@ -17,7 +17,7 @@
         </a>
 
         <ul class="dropdown-menu dropdown-menu-right">
-          <li><a href="#"><i class="icon-user-plus"></i> My profile</a></li>
+          <li><a href="<?php echo base_url('profile/myProfile/') . $this->session->userdata('iduser_admin') ?>"><i class="icon-user-plus"></i> My profile</a></li>
           <li><a href="<?php echo base_url('logout/logoutUser'); ?>"><i class="icon-switch2"></i> Logout</a></li>
         </ul>
       </li>
