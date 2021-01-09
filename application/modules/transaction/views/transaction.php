@@ -33,8 +33,7 @@
                     <div class="col-md-6">
                       <div class="form-group">
                         <label>Nama Produk</label>
-                        <select class="select2 form-control" name="idproduct">
-                        </select>
+                        <select class="select2 form-control" name="idproduct" required></select>
                       </div>
                     </div>
                     <div class="col-md-12">
@@ -82,6 +81,8 @@
     </div>
   </div>
 </div>
+
+
 <div class="row">
   <?php echo $this->session->flashdata('message') ?>
   <div class="col-lg-12">
@@ -151,6 +152,7 @@
     </div>
   </div>
 </div>
+
 
 <script>
   $(function() {

@@ -168,10 +168,10 @@ class Product extends MX_Controller
       $output = '';
       foreach ($query as $i) :
 
-        $output .= '
-        <script type="text/javascript" src="' .  base_url() . 'assets/js/plugins/forms/selects/select2.min.js"></script>
-        <script type="text/javascript" src="' .  base_url() . 'assets/js/pages/form_select2.js"></script>
-        ';
+        // $output .= '
+        // <script type="text/javascript" src="' .  base_url() . 'assets/js/plugins/forms/selects/select2.min.js"></script>
+        // <script type="text/javascript" src="' .  base_url() . 'assets/js/pages/form_select2.js"></script>
+        // ';
 
         $output .= '
       

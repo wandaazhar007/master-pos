@@ -29,9 +29,9 @@ class Transaction extends MX_Controller
 
     $output = [];
     foreach ($query as $i) {
-      $output[0]['id'] = $i['idproduct'];
-      $output[0]['data-harga'] = $i['selling_price'];
-      $output[0]['text'] = $i['name'];
+      $output['id'] = $i['idproduct'];
+      // $output['data-harga'] = $i['selling_price'];
+      $output['text'] = $i['name'];
     }
     echo json_encode($output);
   }
@@ -71,8 +71,24 @@ class Transaction extends MX_Controller
         'date_created'       => date('Y-m-d h:i:s'),
         'created_by'    => $this->session->userdata('name')
       ];
-      $this->db->insert('temp_transaction', $data);
-      redirect('transaction');
+
+      $query = $this->db->get_where('temp_transaction', ['idproduct' => $idproduct])->row_array();
+      $productExiting = $query['idproduct'];
+      $qtyExiting = $query['qty'];
+
+      if ($idproduct == $productExiting) {
+        $dataUpdate = [
+          'qty' => $qty + $qtyExiting
+        ];
+        $this->db->where('idproduct', $idproduct);
+        $this->db->update('temp_transaction', $dataUpdate);
+        redirect('transaction');
+      } else {
+        $this->db->insert('temp_transaction', $data);
+        redirect('transaction');
+      }
+      // var_dump($productExiting);
+      // die;
     }
   }
 

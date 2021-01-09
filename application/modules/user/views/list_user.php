@@ -1,11 +1,10 @@
 <!-- Theme JS files -->
-<script type="text/javascript" src="<?php echo base_url() ?>assets/js/plugins/tables/datatables/datatables.min.js"></script>
-<script type="text/javascript" src="<?php echo base_url() ?>assets/js/plugins/tables/datatables/extensions/responsive.min.js"></script>
-<script type="text/javascript" src="<?php echo base_url() ?>assets/js/core/libraries/jquery_ui/interactions.min.js"></script>
-<script type="text/javascript" src="<?php echo base_url() ?>assets/js/plugins/forms/selects/select2.min.js"></script>
-<script type="text/javascript" src="<?php echo base_url() ?>assets/js/core/app.js"></script>
-<script type="text/javascript" src="<?php echo base_url() ?>assets/js/pages/datatables_responsive.js"></script>
-<script type="text/javascript" src="<?php echo base_url() ?>assets/js/pages/form_select2.js"></script>
+<script type="text/javascript" src="<?php echo base_url() ?>assets/admin/js/plugins/tables/datatables/datatables.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url() ?>assets/admin/js/plugins/tables/datatables/extensions/responsive.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url() ?>assets/admin/js/plugins/forms/selects/select2.min.js"></script>
+
+<script type="text/javascript" src="<?php echo base_url() ?>assets/admin/js/core/app.js"></script>
+<script type="text/javascript" src="<?php echo base_url() ?>assets/admin/js/pages/datatables_responsive.js"></script>
 <!-- /theme JS files -->
 <style>
   .notif .col-md-12 {
