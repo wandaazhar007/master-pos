@@ -193,7 +193,7 @@
       <!-- Account settings -->
       <div class="panel panel-flat">
         <div class="panel-heading">
-          <h6 class="panel-title">Account settings</h6>
+          <h6 class="panel-title">Profil Pengguna</h6>
           <div class="heading-elements">
             <ul class="icons-list">
               <li><a data-action="collapse"></a></li>
@@ -205,31 +205,33 @@
 
         <div class="panel-body">
           <?php foreach ($getUser as $i) : ?>
-            <form action="#">
+            <form action="<?php echo base_url('profile/updateProfile') ?>" method="post" enctype="multipart/form-data">
               <div class="form-group">
                 <div class="row">
-                  <div class="col-md-6">
+                  <div class="col-md-3">
                     <label>Nama Lengkap</label>
-                    <input type="text" name="name" value="<?php echo $i['name'] ?>" readonly="readonly" class="form-control">
+                    <input type="hidden" name="iduser_admin" value="<?php echo $i['iduser_admin'] ?>" class="form-control">
+                    <input type="text" name="name" value="<?php echo $i['name'] ?>" class="form-control">
                   </div>
 
-                  <div class="col-md-6">
+                  <div class="col-md-3">
                     <label>Username</label>
                     <input type="text" name="username" value="<?php echo $i['username'] ?>" readonly="readonly" class="form-control">
                   </div>
+
                 </div>
               </div>
 
               <div class="form-group">
                 <div class="row">
-                  <div class="col-md-6">
+                  <div class="col-md-3">
                     <label>Email</label>
                     <input type="text" name="email" value="<?php echo $i['email'] ?>" readonly="readonly" class="form-control">
                   </div>
 
-                  <div class="col-md-6">
+                  <div class="col-md-3">
                     <label>No HP</label>
-                    <input type="text" name="phone" value="<?php echo $i['phone'] ?>" readonly="readonly" class="form-control">
+                    <input type="text" name="phone" value="<?php echo $i['phone'] ?>" class="form-control">
                   </div>
                 </div>
               </div>
@@ -302,8 +304,8 @@
                 </div>
               </div> -->
 
-              <div class="text-right">
-                <button type="submit" class="tombol-tambah">Update <i class="icon-arrow-right14 position-right"></i></button>
+              <div class="text-right col-md-6">
+                <button type="submit" class="tombol-tambah"><i class="fa fa-save"></i> &nbsp; Update </button>
               </div>
             </form>
           <?php endforeach; ?>

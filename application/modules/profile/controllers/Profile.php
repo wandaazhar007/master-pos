@@ -17,4 +17,21 @@ class Profile extends MX_Controller
 
     $this->load->view('templates/core', $data);
   }
+
+  function updateProfile()
+  {
+    $iduser_admin       = htmlspecialchars($this->input->post('iduser_admin', true));
+    $name               = htmlspecialchars($this->input->post('name', true));
+    $phone              = htmlspecialchars($this->input->post('phone', true));
+    $name_sesssion      = $this->session->userdata('name');
+
+    $data = [
+      'name'      => $name,
+      'phone'     => $phone,
+      'updated'   => $name_sesssion
+    ];
+
+    $this->db->where('user_admin');
+    $this->db->update('user_admin');
+  }
 }

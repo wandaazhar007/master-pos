@@ -5,7 +5,7 @@ class Product_stock extends MX_Controller
   function __construct()
   {
     parent::__construct();
-    // $this->wandalibs->_checkLoginSession();
+    $this->wandalibs->_checkLoginSession();
     $this->load->library('datatables');
     $this->load->model('m_product_stock', 'model');
   }
